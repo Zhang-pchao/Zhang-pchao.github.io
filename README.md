@@ -24,7 +24,10 @@ npm run dev
 npm run build
 ```
 
-The build copies `index.html` to `404.html` so client-side routes work when served by GitHub Pages.
+The source application lives in `site/`. The build writes the deployable site to
+`dist/` and synchronizes the generated entry files and assets to the repository
+root. This supports both GitHub Actions deployment and repositories configured
+to publish from `main` at `/`.
 
 ## Publishing
 

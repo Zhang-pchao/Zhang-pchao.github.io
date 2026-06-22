@@ -19,7 +19,7 @@ Information and assets collected or supplied on 2026-06-22.
 ## Portrait
 
 - User-provided source: `/Users/pengchao/CouldFile/figure/me.png`
-- Website copy: `public/assets/pengchao-zhang.jpg`
+- Website copy: `assets/pengchao-zhang.jpg`
 
 ## Publications and research archives
 
@@ -39,7 +39,7 @@ Verified preprint links:
 
 ## Article PDFs
 
-Eight user-provided article PDFs from `/Users/pengchao/CouldFile/paper` are copied into `public/papers` under stable ASCII filenames. The website retains DOI links alongside the local PDF links. Public availability should continue to follow applicable publisher sharing policies.
+Eight user-provided article PDFs from `/Users/pengchao/CouldFile/paper` are copied into `papers/` under stable ASCII filenames. The website retains DOI links alongside the local PDF links. Public availability should continue to follow applicable publisher sharing policies.
 
 ## Tutorials and learning resources
 

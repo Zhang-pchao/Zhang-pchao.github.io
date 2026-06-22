@@ -38,7 +38,7 @@ No actionable P0, P1, or P2 findings remain.
 - Copy and content: the website is English-first and integrates the supplied education, appointment, visiting research, patent, talk, honor, and publication details.
 - Publications and PDFs: eight author-provided PDFs are exposed as same-origin downloads. DOI and code/data links remain available. Two arXiv links were added only after verification in repository README files.
 - Interaction and responsiveness: active navigation states work, the mobile menu opens into a six-link grid, route changes scroll to the top, and direct production URLs are supported. At 390 px, document and body widths remain 390 px with no horizontal overflow.
-- Deployment behavior: the production build generates both `index.html` and `404.html` so GitHub Pages can serve direct client-side routes.
+- Deployment behavior: the production build generates `dist/index.html` and `dist/404.html`, then synchronizes the deployable entry files and hashed assets to the repository root. Both GitHub Actions and `main/root` Pages configurations are supported.
 
 ## Patches made during QA
 
