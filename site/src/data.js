@@ -136,6 +136,7 @@ export const publications = [
     doi: "https://doi.org/10.1039/D5TA09029F",
     pdf: "/papers/jmca-2026-solvent-effect-nrr.pdf",
     code: "https://github.com/Zhang-pchao/research/tree/main/OPES-DPMD-NRR",
+    toc: "/assets/toc/jmca-2026-solvent-effect-nrr.webp",
   },
   {
     year: "2025",
@@ -236,6 +237,7 @@ export const publications = [
     details: "Renewable Energy 139, 730–738.",
     doi: "https://doi.org/10.1016/j.renene.2019.02.119",
     pdf: "/papers/renewable-energy-2019-shrimp-shell-pyrolysis.pdf",
+    toc: "/assets/toc/renewable-energy-2019-shrimp-shell-pyrolysis.webp",
   },
 ];
 
