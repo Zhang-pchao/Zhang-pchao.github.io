@@ -261,6 +261,36 @@ h3 {
   border-top: 1px solid var(--line);
 }
 
+.publication-section + .publication-section {
+  margin-top: 42px;
+}
+
+.publication-section > h2 {
+  margin-bottom: 12px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+  padding-top: 20px;
+}
+
+.pagination button {
+  min-width: 32px;
+  padding: 4px 9px;
+  border: 1px solid var(--line);
+  color: var(--link);
+  background: #fff;
+  cursor: pointer;
+}
+
+.pagination button.active {
+  border-color: var(--link);
+  color: #fff;
+  background: var(--link);
+}
+
 .publication-entry {
   display: grid;
   grid-template-columns: 62px minmax(0, 1fr);
@@ -307,9 +337,38 @@ h3 {
 
 .publication-toc {
   width: 220px;
-  max-height: 150px;
+  max-height: 160px;
   align-self: center;
   object-fit: contain;
+}
+
+.patent-list {
+  border-top: 1px solid var(--line);
+}
+
+.patent-list article {
+  display: grid;
+  grid-template-columns: 62px minmax(0, 1fr);
+  gap: 20px;
+  padding: 18px 0 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.patent-year {
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.patent-list h3 {
+  margin-bottom: 5px;
+  font-size: 1.02rem;
+}
+
+.patent-list p {
+  margin-bottom: 4px;
+  color: var(--muted);
+  font-size: 0.91rem;
 }
 
 .publication-entry.compact h2 {
@@ -542,7 +601,8 @@ h3 {
   }
 
   .publication-entry,
-  .timeline-entry {
+  .timeline-entry,
+  .patent-list article {
     grid-template-columns: 1fr;
     gap: 5px;
   }

@@ -189,7 +189,7 @@ function HomePage() {
         <div className="home-text">
           <h1>Pengchao Zhang</h1>
           <p className="position">
-            Postdoctoral Fellow and Assistant Researcher<br />
+            Postdoctoral Fellow<br />
             Center for Combustion Energy, Tsinghua University
           </p>
           <p>
@@ -281,15 +281,62 @@ function ResearchPage() {
 }
 
 function PublicationsPage() {
+  const papersPerPage = 10;
+  const [paperPage, setPaperPage] = useState(1);
+  const pageCount = Math.ceil(publications.length / papersPerPage);
+  const visiblePapers = publications.slice(
+    (paperPage - 1) * papersPerPage,
+    paperPage * papersPerPage,
+  );
+
   return (
     <main>
       <PageTitle>Publications</PageTitle>
       <div className="section-shell page-content">
-        <div className="publication-stack full">
-          {publications.map((publication) => (
-            <PublicationEntry key={publication.doi} publication={publication} />
-          ))}
-        </div>
+        <section className="publication-section" id="papers">
+          <h2>Papers</h2>
+          <div className="publication-stack full">
+            {visiblePapers.map((publication) => (
+              <PublicationEntry key={publication.doi} publication={publication} />
+            ))}
+          </div>
+          {pageCount > 1 && (
+            <nav className="pagination" aria-label="Paper pages">
+              {Array.from({ length: pageCount }, (_, index) => index + 1).map(
+                (page) => (
+                  <button
+                    key={page}
+                    type="button"
+                    className={page === paperPage ? "active" : undefined}
+                    aria-current={page === paperPage ? "page" : undefined}
+                    onClick={() => {
+                      setPaperPage(page);
+                      document.querySelector("#papers")?.scrollIntoView();
+                    }}
+                  >
+                    {page}
+                  </button>
+                ),
+              )}
+            </nav>
+          )}
+        </section>
+
+        <section className="publication-section" id="patents">
+          <h2>Patents</h2>
+          <div className="patent-list">
+            {patents.map((patent) => (
+              <article key={patent.number}>
+                <div className="patent-year">{patent.date.slice(0, 4)}</div>
+                <div>
+                  <h3>{patent.title}</h3>
+                  <p>{patent.authors}</p>
+                  <p>{patent.number}; granted {patent.date}.</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
       </div>
     </main>
   );
@@ -325,7 +372,7 @@ function CvPage() {
         <CvSection id="appointments" title="Appointments">
           <TimelineEntry
             period="Jul 2025–present"
-            title="Postdoctoral Fellow and Assistant Researcher"
+            title="Postdoctoral Fellow"
             institution="Center for Combustion Energy, Tsinghua University"
           >
             <p>Shuimu Tsinghua Scholar. Postdoctoral advisor: Prof. Chao Sun.</p>
@@ -369,18 +416,6 @@ function CvPage() {
               water-self-ion-mediated glycine tautomerism.
             </p>
           </TimelineEntry>
-        </CvSection>
-
-        <CvSection id="patents" title="Granted Patents">
-          <div className="record-list">
-            {patents.map((patent) => (
-              <article key={patent.number}>
-                <h3>{patent.title}</h3>
-                <p>{patent.authors}</p>
-                <p>{patent.number}; granted {patent.date}.</p>
-              </article>
-            ))}
-          </div>
         </CvSection>
 
         <CvSection id="talks" title="Academic Exchange">

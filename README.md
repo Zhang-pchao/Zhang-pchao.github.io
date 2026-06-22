@@ -6,8 +6,8 @@ An English-language personal academic website with a compact, information-first 
 
 - `/` — concise biography, research interests, and selected publications
 - `/research` — research themes and computational archives
-- `/publications` — publications with DOI, PDF, code/data, preprint links, and available graphical abstracts
-- `/cv` — education, appointments, visiting research, patents, academic exchange, and honors
+- `/publications` — papers and patents, with DOI, PDF, code/data, preprint links, and graphical abstracts
+- `/cv` — education, appointments, visiting research, academic exchange, and honors
 - `/resources` — tutorials, recommended learning resources, and future technical notes
 - `/contact` — affiliation, email, academic profiles, and social links
 
