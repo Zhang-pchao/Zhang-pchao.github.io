@@ -269,6 +269,11 @@ h3 {
   border-bottom: 1px solid var(--line);
 }
 
+.publication-entry.has-toc {
+  grid-template-columns: 62px minmax(0, 1fr) 220px;
+  gap: 20px 24px;
+}
+
 .publication-year {
   color: var(--muted);
   font-size: 0.88rem;
@@ -298,6 +303,13 @@ h3 {
 
 .publication-entry.compact {
   padding: 16px 0 18px;
+}
+
+.publication-toc {
+  width: 220px;
+  max-height: 150px;
+  align-self: center;
+  object-fit: contain;
 }
 
 .publication-entry.compact h2 {
@@ -446,8 +458,7 @@ h3 {
 
 .footer-inner {
   display: flex;
-  justify-content: space-between;
-  gap: 30px;
+  justify-content: center;
   padding: 22px 0;
   font-size: 0.82rem;
 }
@@ -536,13 +547,23 @@ h3 {
     gap: 5px;
   }
 
+  .publication-entry.has-toc {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .publication-toc {
+    width: min(100%, 320px);
+    max-height: 190px;
+    margin-top: 5px;
+  }
+
   .publication-year,
   .timeline-period {
     color: #777;
   }
 
   .footer-inner {
-    display: grid;
-    gap: 4px;
+    display: flex;
   }
 }

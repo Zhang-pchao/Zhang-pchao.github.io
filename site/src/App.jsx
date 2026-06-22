@@ -113,7 +113,6 @@ function Footer() {
     <footer className="site-footer">
       <div className="section-shell footer-inner">
         <span>© {new Date().getFullYear()} Pengchao Zhang</span>
-        <span>Center for Combustion Energy, Tsinghua University</span>
       </div>
     </footer>
   );
@@ -153,9 +152,15 @@ function LinkGroup({ publication }) {
 
 function PublicationEntry({ publication, compact = false }) {
   return (
-    <article className={compact ? "publication-entry compact" : "publication-entry"}>
+    <article
+      className={[
+        "publication-entry",
+        compact ? "compact" : "",
+        !compact && publication.toc ? "has-toc" : "",
+      ].filter(Boolean).join(" ")}
+    >
       <div className="publication-year">{publication.year}</div>
-      <div>
+      <div className="publication-copy">
         <h2>{publication.title}</h2>
         {!compact && <p>{publication.authors}</p>}
         <p className="publication-details">
@@ -163,6 +168,14 @@ function PublicationEntry({ publication, compact = false }) {
         </p>
         <LinkGroup publication={publication} />
       </div>
+      {!compact && publication.toc && (
+        <img
+          className="publication-toc"
+          src={publication.toc}
+          alt={`Graphical abstract for ${publication.title}`}
+          loading="lazy"
+        />
+      )}
     </article>
   );
 }

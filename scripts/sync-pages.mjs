@@ -10,25 +10,22 @@ const distAssets = resolve(dist, "assets");
 await copyFile(resolve(dist, "index.html"), resolve(dist, "404.html"));
 await writeFile(resolve(dist, ".nojekyll"), "");
 
-await mkdir(distAssets, { recursive: true });
-await copyFile(
-  resolve(rootAssets, "pengchao-zhang.jpg"),
-  resolve(distAssets, "pengchao-zhang.jpg"),
-);
-await cp(resolve(root, "papers"), resolve(dist, "papers"), { recursive: true });
-
-await copyFile(resolve(dist, "index.html"), resolve(root, "index.html"));
-await copyFile(resolve(dist, "404.html"), resolve(root, "404.html"));
-await writeFile(resolve(root, ".nojekyll"), "");
-
 for (const file of await readdir(rootAssets)) {
   if (/^index-.*\.(css|js)$/.test(file)) {
     await rm(resolve(rootAssets, file));
   }
 }
 
+await mkdir(distAssets, { recursive: true });
+await cp(rootAssets, distAssets, { recursive: true });
+await cp(resolve(root, "papers"), resolve(dist, "papers"), { recursive: true });
+
+await copyFile(resolve(dist, "index.html"), resolve(root, "index.html"));
+await copyFile(resolve(dist, "404.html"), resolve(root, "404.html"));
+await writeFile(resolve(root, ".nojekyll"), "");
+
 for (const file of await readdir(distAssets)) {
-  if (file !== "pengchao-zhang.jpg") {
+  if (/^index-.*\.(css|js)$/.test(file)) {
     await copyFile(resolve(distAssets, file), resolve(rootAssets, file));
   }
 }

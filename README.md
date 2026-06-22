@@ -6,7 +6,7 @@ An English-language personal academic website with a compact, information-first 
 
 - `/` — concise biography, research interests, and selected publications
 - `/research` — research themes and computational archives
-- `/publications` — selected publications with DOI, PDF, code/data, and verified preprint links
+- `/publications` — publications with DOI, PDF, code/data, preprint links, and available graphical abstracts
 - `/cv` — education, appointments, visiting research, patents, academic exchange, and honors
 - `/resources` — tutorials, recommended learning resources, and future technical notes
 - `/contact` — affiliation, email, academic profiles, and social links
@@ -36,7 +36,3 @@ The included GitHub Actions workflow deploys the `dist` directory to GitHub Page
 ```text
 Zhang-pchao.github.io
 ```
-
-## Source provenance
-
-See [CONTENT_SOURCES.md](./CONTENT_SOURCES.md).

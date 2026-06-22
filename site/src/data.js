@@ -123,6 +123,7 @@ export const publications = [
     pdf: "/papers/jacs-2026-anatase-nanobubble.pdf",
     code: "https://github.com/Zhang-pchao/research/tree/main/OPES-DPMD-Bubble-TiO2",
     freeAccess: "https://pubs.acs.org/articlesonrequest/AOR-BDZI3EDX8DYQMRPCX5I8",
+    toc: "/assets/toc/jacs-2026-anatase-nanobubble.webp",
     featured: true,
   },
   {
@@ -147,6 +148,7 @@ export const publications = [
     doi: "https://doi.org/10.1021/acsami.5c17584",
     pdf: "/papers/acs-ami-2025-freeze-thaw-nanobubbles.pdf",
     code: "https://github.com/Zhang-pchao/research/tree/main/GMX_Ethanol_N2_H2O_Slab",
+    toc: "/assets/toc/acs-ami-2025-freeze-thaw-nanobubbles.webp",
   },
   {
     year: "2025",
@@ -158,6 +160,7 @@ export const publications = [
     pdf: "/papers/jctc-2025-electric-field-interface.pdf",
     code: "https://github.com/Zhang-pchao/research/tree/main/GlycineEfield",
     freeAccess: "https://pubs.acs.org/articlesonrequest/AOR-NMVU6VAHH7GKQHZNMPMC",
+    toc: "/assets/toc/jctc-2025-electric-field-interface.webp",
     featured: true,
   },
   {
@@ -171,6 +174,7 @@ export const publications = [
     pdf: "/papers/langmuir-2025-water-self-ions.pdf",
     code: "https://github.com/Zhang-pchao/OilWaterInterface",
     preprint: { label: "arXiv", href: "https://arxiv.org/abs/2404.07027" },
+    toc: "/assets/toc/langmuir-2025-water-self-ions.webp",
   },
   {
     year: "2024",
@@ -181,6 +185,7 @@ export const publications = [
     doi: "https://doi.org/10.1021/jacs.4c06641",
     pdf: "/papers/jacs-2024-nanobubble-ions.pdf",
     code: "https://github.com/Zhang-pchao/N2BubbleIon",
+    toc: "/assets/toc/jacs-2024-nanobubble-ions.webp",
     featured: true,
   },
   {
@@ -193,6 +198,7 @@ export const publications = [
     pdf: "/papers/jcim-2024-glycine-tautomerism.pdf",
     code: "https://github.com/Zhang-pchao/GlycineTautomerism",
     preprint: { label: "arXiv", href: "https://arxiv.org/abs/2311.05917" },
+    toc: "/assets/toc/jcim-2024-glycine-tautomerism.webp",
   },
   {
     year: "2024",
@@ -203,6 +209,11 @@ export const publications = [
     doi: "https://doi.org/10.1021/acsphyschemau.3c00076",
     pdf: "/papers/acs-phys-chem-au-2024-air-water-ions.pdf",
     code: "https://github.com/Zhang-pchao/DoubleLayerAirWater",
+    preprint: {
+      label: "ChemRxiv",
+      href: "https://chemrxiv.org/doi/full/10.26434/chemrxiv-2023-5l2wf-v2",
+    },
+    toc: "/assets/toc/acs-phys-chem-au-2024-air-water-ions.webp",
   },
   {
     year: "2022",
@@ -212,6 +223,8 @@ export const publications = [
     authors: "Wenbo Chen, Pengchao Zhang, Donald G. Truhlar, Jingjing Zheng*, and Xuefei Xu*",
     details: "Journal of Chemical Theory and Computation 18(12), 7671–7682.",
     doi: "https://doi.org/10.1021/acs.jctc.2c00952",
+    pdf: "/papers/jctc-2022-torsional-modes.pdf",
+    toc: "/assets/toc/jctc-2022-torsional-modes.webp",
   },
   {
     year: "2019",
@@ -221,7 +234,8 @@ export const publications = [
     authors:
       "Pengchao Zhang, Hongyun Hu*, Hong Tang, Yanjun Yang, Hong Liu, Qiang Lu, Xiaoqian Li, Nakorn Worasuwannarak, and Hong Yao*",
     details: "Renewable Energy 139, 730–738.",
-    doi: "https://doi.org/10.1016/j.renene.2019.02.056",
+    doi: "https://doi.org/10.1016/j.renene.2019.02.119",
+    pdf: "/papers/renewable-energy-2019-shrimp-shell-pyrolysis.pdf",
   },
 ];
 
