@@ -12,8 +12,11 @@ import {
   patents,
   profileLinks,
   publications,
+  recommendedResources,
   researchAreas,
   researchProjects,
+  socialLinks,
+  tutorials,
 } from "./data.js";
 
 function ScrollToTop() {
@@ -29,10 +32,11 @@ function ScrollToTop() {
 function DocumentTitle() {
   const { pathname } = useLocation();
   const pageTitles = {
-    "/": "Pengchao Zhang | Computational Chemistry",
+    "/": "Pengchao Zhang",
     "/research": "Research | Pengchao Zhang",
     "/publications": "Publications | Pengchao Zhang",
     "/cv": "CV | Pengchao Zhang",
+    "/resources": "Resources | Pengchao Zhang",
     "/contact": "Contact | Pengchao Zhang",
   };
 
@@ -64,17 +68,16 @@ function Header() {
     ["/research", "Research"],
     ["/publications", "Publications"],
     ["/cv", "CV"],
+    ["/resources", "Resources"],
     ["/contact", "Contact"],
   ];
 
   return (
     <header className="site-header">
       <div className="header-inner">
-        <Link className="site-identity" to="/" aria-label="Pengchao Zhang home">
-          <strong>Pengchao Zhang</strong>
-          <span>Computational Chemistry · Molecular Simulation</span>
+        <Link className="site-identity" to="/">
+          Pengchao Zhang
         </Link>
-
         <button
           className="menu-button"
           type="button"
@@ -84,7 +87,6 @@ function Header() {
         >
           {menuOpen ? "Close" : "Menu"}
         </button>
-
         <nav
           id="primary-navigation"
           className={`primary-navigation ${menuOpen ? "is-open" : ""}`}
@@ -109,42 +111,19 @@ function Header() {
 function Footer() {
   return (
     <footer className="site-footer">
-      <div className="section-shell footer-main">
-        <div>
-          <p className="eyebrow">Pengchao Zhang</p>
-          <p className="footer-statement">
-            Molecular simulation, enhanced sampling, and machine-learned atomistic models.
-          </p>
-        </div>
-        <div className="footer-contact">
-          <a href="mailto:zhangpengchao@mail.tsinghua.edu.cn">
-            zhangpengchao@mail.tsinghua.edu.cn
-          </a>
-          <p>Center for Combustion Energy, Tsinghua University</p>
-          <p>Beijing 100084, China</p>
-        </div>
-      </div>
-      <div className="section-shell footer-base">
-        <p>© {new Date().getFullYear()} Pengchao Zhang</p>
-        <div>
-          <ExternalLink href="https://orcid.org/0000-0002-6556-6588">ORCID</ExternalLink>
-          <ExternalLink href="https://github.com/Zhang-pchao">GitHub</ExternalLink>
-          <ExternalLink href="https://scholar.google.com/citations?user=ixSzxT8AAAAJ&hl=en">
-            Google Scholar
-          </ExternalLink>
-        </div>
+      <div className="section-shell footer-inner">
+        <span>© {new Date().getFullYear()} Pengchao Zhang</span>
+        <span>Center for Combustion Energy, Tsinghua University</span>
       </div>
     </footer>
   );
 }
 
-function PageIntro({ eyebrow, title, description }) {
+function PageTitle({ children }) {
   return (
-    <section className="page-intro section-shell">
-      <p className="eyebrow">{eyebrow}</p>
-      <h1>{title}</h1>
-      {description && <p>{description}</p>}
-    </section>
+    <div className="section-shell page-title">
+      <h1>{children}</h1>
+    </div>
   );
 }
 
@@ -157,27 +136,33 @@ function LinkGroup({ publication }) {
           PDF
         </a>
       )}
-      {publication.code && <ExternalLink href={publication.code}>Code & data</ExternalLink>}
       {publication.preprint && (
         <ExternalLink href={publication.preprint.href}>
           {publication.preprint.label}
         </ExternalLink>
       )}
       {publication.freeAccess && (
-        <ExternalLink href={publication.freeAccess}>Author share</ExternalLink>
+        <ExternalLink href={publication.freeAccess}>Shared copy</ExternalLink>
+      )}
+      {publication.code && (
+        <ExternalLink href={publication.code}>Code &amp; data</ExternalLink>
       )}
     </div>
   );
 }
 
-function CompactPublication({ publication }) {
+function PublicationEntry({ publication, compact = false }) {
   return (
-    <article className="compact-publication">
-      <p className="publication-kicker">
-        {publication.year} · {publication.journal}
-      </p>
-      <h3>{publication.title}</h3>
-      <LinkGroup publication={publication} />
+    <article className={compact ? "publication-entry compact" : "publication-entry"}>
+      <div className="publication-year">{publication.year}</div>
+      <div>
+        <h2>{publication.title}</h2>
+        {!compact && <p>{publication.authors}</p>}
+        <p className="publication-details">
+          {compact ? publication.journal : publication.details}
+        </p>
+        <LinkGroup publication={publication} />
+      </div>
     </article>
   );
 }
@@ -186,89 +171,59 @@ function HomePage() {
   const featured = publications.filter((publication) => publication.featured);
 
   return (
-    <main>
-      <section className="home-hero section-shell">
-        <div className="home-copy">
-          <p className="eyebrow">Postdoctoral fellow · Assistant researcher</p>
-          <h1>
-            Pengchao Zhang
-            <span>Computational chemistry at aqueous interfaces</span>
-          </h1>
-          <p className="home-summary">
-            I study ion distributions, nanobubble dynamics, and interfacial reaction
-            mechanisms using deep-potential molecular dynamics and enhanced sampling.
+    <main className="section-shell">
+      <section className="home-intro">
+        <div className="home-text">
+          <h1>Pengchao Zhang</h1>
+          <p className="position">
+            Postdoctoral Fellow and Assistant Researcher<br />
+            Center for Combustion Energy, Tsinghua University
           </p>
-          <div className="action-row">
-            <Link className="primary-action" to="/research">Research overview</Link>
-            <Link className="secondary-action" to="/publications">Publications & PDFs</Link>
-          </div>
-          <div className="profile-links" aria-label="Academic profiles">
-            {profileLinks.map((link) => (
-              <ExternalLink key={link.label} href={link.href}>{link.label}</ExternalLink>
-            ))}
-          </div>
-        </div>
-
-        <figure className="profile-figure">
-          <img
-            src="/assets/pengchao-zhang.jpg"
-            alt="Portrait of Pengchao Zhang"
-            width="1000"
-            height="1400"
-          />
-          <figcaption>
-            <strong>Pengchao Zhang, Ph.D.</strong>
-            <span>Tsinghua University · Beijing, China</span>
-          </figcaption>
-        </figure>
-      </section>
-
-      <section className="home-band">
-        <div className="section-shell home-band-grid">
-          <div>
-            <p className="eyebrow">Current appointment</p>
-            <h2>Shuimu Tsinghua Scholar</h2>
-          </div>
           <p>
-            Postdoctoral Fellow and Assistant Researcher at the Center for Combustion
-            Energy, Department of Energy and Power Engineering, Tsinghua University.
+            I am a Shuimu Tsinghua Scholar working on computational chemistry and
+            molecular simulation. My research focuses on aqueous interfaces,
+            water self-ions, nanobubble dynamics, and reaction mechanisms using
+            machine-learned potentials and enhanced sampling.
           </p>
-        </div>
-      </section>
-
-      <section className="section-shell home-section">
-        <div className="section-title-row">
-          <div>
-            <p className="eyebrow">Research focus</p>
-            <h2>Interfaces, rare events, and molecular models</h2>
-          </div>
-          <Link to="/research">View all research themes</Link>
-        </div>
-        <div className="home-focus-grid">
-          {researchAreas.slice(0, 3).map((area) => (
-            <article key={area.number}>
-              <span>{area.number}</span>
-              <h3>{area.title}</h3>
-              <p>{area.description}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="home-publications">
-        <div className="section-shell">
-          <div className="section-title-row">
-            <div>
-              <p className="eyebrow">Selected work</p>
-              <h2>Recent publications</h2>
-            </div>
-            <Link to="/publications">All publications</Link>
-          </div>
-          <div className="compact-publication-grid">
-            {featured.map((publication) => (
-              <CompactPublication key={publication.doi} publication={publication} />
+          <div className="inline-links" aria-label="Academic profiles">
+            {profileLinks.map((link) => (
+              <ExternalLink key={link.label} href={link.href}>
+                {link.label}
+              </ExternalLink>
             ))}
           </div>
+        </div>
+        <img
+          className="profile-photo"
+          src="/assets/pengchao-zhang.jpg"
+          alt="Pengchao Zhang"
+          width="1000"
+          height="1400"
+        />
+      </section>
+
+      <section className="content-section">
+        <h2>Research Interests</h2>
+        <ul className="plain-list">
+          {researchAreas.map((area) => (
+            <li key={area.number}>{area.title}</li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="content-section">
+        <div className="section-heading">
+          <h2>Selected Publications</h2>
+          <Link to="/publications">Full list</Link>
+        </div>
+        <div className="publication-stack">
+          {featured.map((publication) => (
+            <PublicationEntry
+              key={publication.doi}
+              publication={publication}
+              compact
+            />
+          ))}
         </div>
       </section>
     </main>
@@ -278,47 +233,36 @@ function HomePage() {
 function ResearchPage() {
   return (
     <main>
-      <PageIntro
-        eyebrow="Research"
-        title="Molecular mechanisms across aqueous interfaces"
-        description="My research combines accurate atomistic models with enhanced sampling to resolve interfacial structures, free-energy landscapes, and rare reaction pathways."
-      />
-
-      <section className="section-shell research-page-grid">
-        {researchAreas.map((area) => (
-          <article className="research-page-card" key={area.number}>
-            <span>{area.number}</span>
-            <div>
+      <PageTitle>Research</PageTitle>
+      <div className="section-shell page-content">
+        <section className="research-list">
+          {researchAreas.map((area) => (
+            <article key={area.number}>
               <h2>{area.title}</h2>
               <p>{area.description}</p>
-            </div>
-          </article>
-        ))}
-      </section>
+            </article>
+          ))}
+        </section>
 
-      <section className="project-section">
-        <div className="section-shell">
-          <div className="section-title-row">
-            <div>
-              <p className="eyebrow">Reproducible research</p>
-              <h2>Selected computational archives</h2>
-            </div>
+        <section className="content-section">
+          <div className="section-heading">
+            <h2>Research Repositories</h2>
             <ExternalLink href="https://github.com/Zhang-pchao/research">
               Complete archive
             </ExternalLink>
           </div>
-          <div className="project-grid">
+          <div className="resource-list">
             {researchProjects.map((project) => (
               <article key={project.title}>
-                <p>{project.topic}</p>
-                <h3>{project.title}</h3>
-                <span>{project.description}</span>
-                <ExternalLink href={project.href}>Repository</ExternalLink>
+                <h3>
+                  <ExternalLink href={project.href}>{project.title}</ExternalLink>
+                </h3>
+                <p>{project.description}</p>
               </article>
             ))}
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
     </main>
   );
 }
@@ -326,40 +270,14 @@ function ResearchPage() {
 function PublicationsPage() {
   return (
     <main>
-      <PageIntro
-        eyebrow="Publications"
-        title="Articles, preprints, and reproducibility records"
-        description="Selected publications are listed with DOI records, author-provided PDF copies when available, and companion code or data repositories."
-      />
-
-      <section className="section-shell publications-page">
-        <div className="publication-note">
-          <p>
-            For the complete and current citation record, see{" "}
-            <ExternalLink href="https://scholar.google.com/citations?user=ixSzxT8AAAAJ&hl=en">
-              Google Scholar
-            </ExternalLink>
-            . PDF availability may be updated to reflect publisher sharing policies.
-          </p>
-        </div>
-
-        <ol className="publication-list">
+      <PageTitle>Publications</PageTitle>
+      <div className="section-shell page-content">
+        <div className="publication-stack full">
           {publications.map((publication) => (
-            <li key={publication.doi}>
-              <div className="publication-meta">
-                <span>{publication.year}</span>
-                <span>{publication.journal}</span>
-              </div>
-              <div className="publication-body">
-                <h2>{publication.title}</h2>
-                <p>{publication.authors}</p>
-                <p className="publication-details">{publication.details}</p>
-                <LinkGroup publication={publication} />
-              </div>
-            </li>
+            <PublicationEntry key={publication.doi} publication={publication} />
           ))}
-        </ol>
-      </section>
+        </div>
+      </div>
     </main>
   );
 }
@@ -367,128 +285,160 @@ function PublicationsPage() {
 function TimelineEntry({ period, title, institution, children }) {
   return (
     <article className="timeline-entry">
-      <p>{period}</p>
+      <div className="timeline-period">{period}</div>
       <div>
         <h3>{title}</h3>
-        <h4>{institution}</h4>
+        <p className="institution">{institution}</p>
         {children}
       </div>
     </article>
   );
 }
 
+function CvSection({ id, title, children }) {
+  return (
+    <section id={id} className="cv-section">
+      <h2>{title}</h2>
+      {children}
+    </section>
+  );
+}
+
 function CvPage() {
   return (
     <main>
-      <PageIntro
-        eyebrow="Curriculum vitae"
-        title="Education, appointments, and recognition"
-        description="A concise academic record focused on computational chemistry, molecular simulation, and interfacial science."
-      />
+      <PageTitle>Curriculum Vitae</PageTitle>
+      <div className="section-shell page-content cv-content">
+        <CvSection id="appointments" title="Appointments">
+          <TimelineEntry
+            period="Jul 2025–present"
+            title="Postdoctoral Fellow and Assistant Researcher"
+            institution="Center for Combustion Energy, Tsinghua University"
+          >
+            <p>Shuimu Tsinghua Scholar. Postdoctoral advisor: Prof. Chao Sun.</p>
+          </TimelineEntry>
+        </CvSection>
 
-      <div className="section-shell cv-layout">
-        <aside className="cv-index" aria-label="CV sections">
-          <a href="#appointments">Appointments</a>
-          <a href="#education">Education</a>
-          <a href="#visiting">Visiting research</a>
-          <a href="#patents">Patents</a>
-          <a href="#talks">Academic exchange</a>
-          <a href="#honors">Honors</a>
-        </aside>
+        <CvSection id="education" title="Education">
+          <TimelineEntry
+            period="Sep 2020–Jun 2025"
+            title="Ph.D. in Power Engineering and Engineering Thermophysics"
+            institution="Tsinghua University"
+          >
+            <p>
+              Focus: theoretical and computational chemistry. Advisor: Prof.
+              Xuefei Xu.
+            </p>
+            <p>
+              Dissertation: Theoretical Computational Study of Water Self-Ion
+              Distributions at Aqueous Interfaces and Their Effects on
+              Physicochemical Processes.
+            </p>
+          </TimelineEntry>
+          <TimelineEntry
+            period="Sep 2016–Jun 2020"
+            title="B.Eng. in New Energy Science and Engineering"
+            institution="Huazhong University of Science and Technology"
+          >
+            <p>Research mentor: Prof. Hongyun Hu.</p>
+          </TimelineEntry>
+        </CvSection>
 
-        <div className="cv-content">
-          <section id="appointments">
-            <p className="eyebrow">Appointments</p>
-            <TimelineEntry
-              period="Jul 2025–present"
-              title="Postdoctoral Fellow and Assistant Researcher"
-              institution="Center for Combustion Energy, Tsinghua University"
-            >
-              <p>Shuimu Tsinghua Scholar. Postdoctoral advisor: Prof. Chao Sun.</p>
-            </TimelineEntry>
-          </section>
+        <CvSection id="visiting" title="Visiting Research">
+          <TimelineEntry
+            period="Nov 2022–Nov 2023"
+            title="Visiting Ph.D. Researcher"
+            institution="Italian Institute of Technology"
+          >
+            <p>Host: Prof. Michele Parrinello, Atomistic Simulations.</p>
+            <p>
+              Enhanced sampling and deep-potential molecular simulation of
+              water-self-ion-mediated glycine tautomerism.
+            </p>
+          </TimelineEntry>
+        </CvSection>
 
-          <section id="education">
-            <p className="eyebrow">Education</p>
-            <TimelineEntry
-              period="Sep 2020–Jun 2025"
-              title="Ph.D. in Power Engineering and Engineering Thermophysics"
-              institution="Tsinghua University"
-            >
-              <p>
-                Focus: theoretical and computational chemistry. Advisor: Associate
-                Professor Xuefei Xu.
-              </p>
-              <p>
-                Dissertation: Theoretical Computational Study of Water Self-Ion
-                Distributions at Aqueous Interfaces and Their Effects on Physicochemical
-                Processes.
-              </p>
-            </TimelineEntry>
-            <TimelineEntry
-              period="Sep 2016–Jun 2020"
-              title="B.Eng. in New Energy Science and Engineering"
-              institution="Huazhong University of Science and Technology"
-            >
-              <p>Research mentor: Associate Professor Hongyun Hu.</p>
-            </TimelineEntry>
-          </section>
-
-          <section id="visiting">
-            <p className="eyebrow">Visiting research</p>
-            <TimelineEntry
-              period="Nov 2022–Nov 2023"
-              title="Visiting Ph.D. Researcher"
-              institution="Italian Institute of Technology"
-            >
-              <p>Host: Prof. Michele Parrinello, Atomistic Simulations.</p>
-              <p>
-                Collaborative project: enhanced sampling and deep-potential molecular
-                simulation of water-self-ion-mediated glycine tautomerism.
-              </p>
-            </TimelineEntry>
-          </section>
-
-          <section id="patents">
-            <p className="eyebrow">Granted invention patents</p>
-            <div className="record-list">
-              {patents.map((patent) => (
-                <article key={patent.number}>
-                  <h3>{patent.title}</h3>
-                  <p>{patent.authors}</p>
-                  <p>{patent.number} · Granted {patent.date}</p>
-                </article>
-              ))}
-            </div>
-          </section>
-
-          <section id="talks">
-            <p className="eyebrow">Academic exchange</p>
-            <div className="record-list">
-              <article>
-                <h3>Invited oral presentation, 5th ABACUS Developer Conference</h3>
-                <p>2025</p>
-                <p>
-                  Electric Field and Interface Modulation of Glycine Tautomerism in
-                  Solution: A Study Using ABACUS, DeePKS, DeePMD, and OPES with Voronoi
-                  CVs.
-                </p>
+        <CvSection id="patents" title="Granted Patents">
+          <div className="record-list">
+            {patents.map((patent) => (
+              <article key={patent.number}>
+                <h3>{patent.title}</h3>
+                <p>{patent.authors}</p>
+                <p>{patent.number}; granted {patent.date}.</p>
               </article>
-            </div>
-          </section>
+            ))}
+          </div>
+        </CvSection>
 
-          <section id="honors">
-            <p className="eyebrow">Honors and awards</p>
-            <div className="honor-list">
-              {honors.map((honor) => (
-                <div key={`${honor.year}-${honor.title}`}>
-                  <span>{honor.year}</span>
-                  <p>{honor.title}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-        </div>
+        <CvSection id="talks" title="Academic Exchange">
+          <div className="record-list">
+            <article>
+              <h3>Invited oral presentation, 5th ABACUS Developer Conference</h3>
+              <p>2025</p>
+              <p>
+                Electric Field and Interface Modulation of Glycine Tautomerism in
+                Solution: A Study Using ABACUS, DeePKS, DeePMD, and OPES with
+                Voronoi CVs.
+              </p>
+            </article>
+          </div>
+        </CvSection>
+
+        <CvSection id="honors" title="Honors and Awards">
+          <div className="honor-list">
+            {honors.map((honor) => (
+              <div key={`${honor.year}-${honor.title}`}>
+                <span>{honor.year}</span>
+                <p>{honor.title}</p>
+              </div>
+            ))}
+          </div>
+        </CvSection>
+      </div>
+    </main>
+  );
+}
+
+function ResourcesPage() {
+  return (
+    <main>
+      <PageTitle>Resources</PageTitle>
+      <div className="section-shell page-content">
+        <section className="content-section first">
+          <h2>Tutorials</h2>
+          <div className="resource-list">
+            {tutorials.map((tutorial) => (
+              <article key={tutorial.href}>
+                <h3>
+                  <ExternalLink href={tutorial.href}>{tutorial.title}</ExternalLink>
+                </h3>
+                <p>{tutorial.description}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="content-section">
+          <h2>Recommended Learning Resources</h2>
+          <div className="resource-list">
+            {recommendedResources.map((resource) => (
+              <article key={resource.href}>
+                <h3>
+                  <ExternalLink href={resource.href}>{resource.title}</ExternalLink>
+                </h3>
+                <p>{resource.description}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="content-section notes-section">
+          <h2>Notes</h2>
+          <p>
+            Technical notes and longer-form tutorials will be published here as
+            the collection develops.
+          </p>
+        </section>
       </div>
     </main>
   );
@@ -497,43 +447,49 @@ function CvPage() {
 function ContactPage() {
   return (
     <main>
-      <PageIntro
-        eyebrow="Contact"
-        title="Research conversations and collaboration"
-        description="I welcome discussions related to molecular simulation, enhanced sampling, aqueous interfaces, and reproducible computational workflows."
-      />
+      <PageTitle>Contact</PageTitle>
+      <div className="section-shell page-content contact-content">
+        <section>
+          <h2>Email</h2>
+          <p>
+            <a href="mailto:zhangpengchao@mail.tsinghua.edu.cn">
+              zhangpengchao@mail.tsinghua.edu.cn
+            </a>
+          </p>
+          <p>
+            <a href="mailto:pczhang1997@gmail.com">pczhang1997@gmail.com</a>
+          </p>
+        </section>
 
-      <section className="section-shell contact-grid">
-        <div className="contact-primary">
-          <p className="eyebrow">Email</p>
-          <a href="mailto:zhangpengchao@mail.tsinghua.edu.cn">
-            zhangpengchao@mail.tsinghua.edu.cn
-          </a>
-        </div>
+        <section>
+          <h2>Affiliation</h2>
+          <p>Center for Combustion Energy</p>
+          <p>Department of Energy and Power Engineering</p>
+          <p>Tsinghua University, Beijing 100084, China</p>
+        </section>
 
-        <div className="contact-details">
-          <article>
-            <p className="eyebrow">Affiliation</p>
-            <h2>Center for Combustion Energy</h2>
-            <p>Department of Energy and Power Engineering</p>
-            <p>Tsinghua University</p>
-          </article>
-          <article>
-            <p className="eyebrow">Office</p>
-            <h2>Lee Shau Kee Science and Technology Building</h2>
-            <p>Room B-530</p>
-            <p>Beijing 100084, China</p>
-          </article>
-          <article>
-            <p className="eyebrow">Profiles</p>
-            <div className="contact-links">
-              {profileLinks.map((link) => (
-                <ExternalLink key={link.label} href={link.href}>{link.label}</ExternalLink>
-              ))}
-            </div>
-          </article>
-        </div>
-      </section>
+        <section>
+          <h2>Academic Profiles</h2>
+          <div className="link-list">
+            {profileLinks.map((link) => (
+              <ExternalLink key={link.label} href={link.href}>
+                {link.label}
+              </ExternalLink>
+            ))}
+          </div>
+        </section>
+
+        <section>
+          <h2>Social</h2>
+          <div className="link-list">
+            {socialLinks.map((link) => (
+              <ExternalLink key={link.label} href={link.href}>
+                {link.label}
+              </ExternalLink>
+            ))}
+          </div>
+        </section>
+      </div>
     </main>
   );
 }
@@ -541,13 +497,11 @@ function ContactPage() {
 function NotFoundPage() {
   return (
     <main>
-      <PageIntro
-        eyebrow="404"
-        title="Page not found"
-        description="The page you requested does not exist."
-      />
-      <div className="section-shell not-found-link">
-        <Link className="primary-action" to="/">Return home</Link>
+      <PageTitle>Page Not Found</PageTitle>
+      <div className="section-shell page-content">
+        <p>
+          <Link to="/">Return to the home page.</Link>
+        </p>
       </div>
     </main>
   );
@@ -564,6 +518,7 @@ function AppLayout() {
         <Route path="/research" element={<ResearchPage />} />
         <Route path="/publications" element={<PublicationsPage />} />
         <Route path="/cv" element={<CvPage />} />
+        <Route path="/resources" element={<ResourcesPage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

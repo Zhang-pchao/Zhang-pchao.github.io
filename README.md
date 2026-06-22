@@ -1,14 +1,15 @@
 # Pengchao Zhang — Personal Academic Website
 
-An English-language academic website for presenting research themes, publications, downloadable article PDFs, reproducibility resources, academic experience, and professional profiles.
+An English-language personal academic website with a compact, information-first layout.
 
 ## Site structure
 
-- `/` — concise home page and current appointment
+- `/` — concise biography, research interests, and selected publications
 - `/research` — research themes and computational archives
 - `/publications` — selected publications with DOI, PDF, code/data, and verified preprint links
 - `/cv` — education, appointments, visiting research, patents, academic exchange, and honors
-- `/contact` — affiliation, office, email, and scholarly profiles
+- `/resources` — tutorials, recommended learning resources, and future technical notes
+- `/contact` — affiliation, email, academic profiles, and social links
 
 ## Local development
 

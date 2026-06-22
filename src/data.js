@@ -5,7 +5,57 @@ export const profileLinks = [
   },
   { label: "ORCID", href: "https://orcid.org/0000-0002-6556-6588" },
   { label: "GitHub", href: "https://github.com/Zhang-pchao" },
+  {
+    label: "ResearchGate",
+    href: "https://www.researchgate.net/profile/Pengchao-Zhang-3/research",
+  },
   { label: "Research archive", href: "https://github.com/Zhang-pchao/research" },
+];
+
+export const socialLinks = [
+  { label: "X", href: "https://x.com/Pengchao1997" },
+  {
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/in/pengchao-zhang-9a6262261/",
+  },
+];
+
+export const tutorials = [
+  {
+    title: "From DFT to DeePKS to DeePMD | DeePKS Basics",
+    href: "https://nb.bohrium.dp.tech/detail/8742877753",
+    description: "An introductory notebook on the DeePKS workflow.",
+  },
+  {
+    title: "From DFT to DeePKS to DeePMD | DeePKS Tutorials",
+    href: "https://nb.bohrium.dp.tech/detail/7144731675",
+    description: "Practical notebooks connecting DFT, DeePKS, and DeePMD.",
+  },
+  {
+    title: "OPES (On-the-Fly Probability Enhanced Sampling)",
+    href: "https://bohrium.dp.tech/notebooks/9874998164",
+    description: "A notebook introduction to OPES enhanced sampling.",
+  },
+  {
+    title: "Voronoi CVs for Enhanced Sampling Autoionization and Tautomerism",
+    href: "https://bohrium.dp.tech/notebooks/83327491785",
+    description: "Collective-variable construction for reactive aqueous systems.",
+  },
+];
+
+export const recommendedResources = [
+  {
+    title: "Theory and Computing Physics Guide",
+    href: "https://chriswenchen.github.io/theory-computing-physics-guide/",
+    description:
+      "A practical guide to computing environments and software for theoretical and computational physics.",
+  },
+  {
+    title: "CS Self-Learning Guide",
+    href: "https://csdiy.wiki/",
+    description:
+      "A structured collection of computer-science courses and self-study pathways.",
+  },
 ];
 
 export const researchAreas = [
