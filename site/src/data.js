@@ -14,6 +14,7 @@ export const profileLinks = [
 
 export const socialLinks = [
   { label: "X", href: "https://x.com/Pengchao1997" },
+  { label: "Zhihu", href: "https://www.zhihu.com/people/zhang-pc-60" },
   {
     label: "LinkedIn",
     href: "https://www.linkedin.com/in/pengchao-zhang-9a6262261/",
@@ -43,18 +44,77 @@ export const tutorials = [
   },
 ];
 
-export const recommendedResources = [
+export const recommendedResourceGroups = [
   {
-    title: "Theory and Computing Physics Guide",
-    href: "https://chriswenchen.github.io/theory-computing-physics-guide/",
-    description:
-      "A practical guide to computing environments and software for theoretical and computational physics.",
+    title: "Foundations and Self-Study",
+    resources: [
+      {
+        title: "Theory and Computing Physics Guide",
+        href: "https://chriswenchen.github.io/theory-computing-physics-guide/",
+        description:
+          "Computing environments and software for theoretical and computational physics.",
+      },
+      {
+        title: "CS Self-Learning Guide",
+        href: "https://csdiy.wiki/",
+        description: "Computer-science courses and structured self-study pathways.",
+      },
+    ],
   },
   {
-    title: "CS Self-Learning Guide",
-    href: "https://csdiy.wiki/",
-    description:
-      "A structured collection of computer-science courses and self-study pathways.",
+    title: "Molecular Dynamics",
+    resources: [
+      {
+        title: "LAMMPS",
+        href: "https://www.lammps.org/",
+        description: "A general-purpose molecular dynamics simulation package.",
+      },
+      {
+        title: "GROMACS Documentation",
+        href: "https://manual.gromacs.org/documentation/current/index.html",
+        description:
+          "Current documentation for molecular dynamics simulations with GROMACS.",
+      },
+    ],
+  },
+  {
+    title: "Enhanced Sampling",
+    resources: [
+      {
+        title: "PLUMED",
+        href: "https://www.plumed.org/download",
+        description:
+          "Software and documentation for free-energy calculations and enhanced sampling.",
+      },
+    ],
+  },
+  {
+    title: "Electronic-Structure Methods",
+    resources: [
+      {
+        title: "CP2K",
+        href: "https://www.cp2k.org/about",
+        description:
+          "An electronic-structure and atomistic simulation software package.",
+      },
+    ],
+  },
+  {
+    title: "Machine-Learned Atomistic Modeling",
+    resources: [
+      {
+        title: "DeepModeling",
+        href: "https://deepmodeling.com/",
+        description:
+          "Open-source tools for machine-learning-assisted molecular modeling.",
+      },
+      {
+        title: "Matbench Discovery",
+        href: "https://matbench-discovery.materialsproject.org/",
+        description:
+          "A benchmark for machine-learning models in materials discovery.",
+      },
+    ],
   },
 ];
 

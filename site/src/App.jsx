@@ -12,7 +12,7 @@ import {
   patents,
   profileLinks,
   publications,
-  recommendedResources,
+  recommendedResourceGroups,
   researchAreas,
   researchProjects,
   socialLinks,
@@ -193,10 +193,12 @@ function HomePage() {
             Center for Combustion Energy, Tsinghua University
           </p>
           <p>
-            I am a Shuimu Tsinghua Scholar working on computational chemistry and
-            molecular simulation. My research focuses on aqueous interfaces,
-            water self-ions, nanobubble dynamics, and reaction mechanisms using
-            machine-learned potentials and enhanced sampling.
+            I am working on computational chemistry and molecular simulation. My
+            research focuses on aqueous interfaces, water self-ions, nanobubble
+            dynamics, and reaction mechanisms using machine-learned potentials
+            and enhanced sampling. I received my Ph.D. from Tsinghua University
+            and was a visiting Ph.D. researcher at the Italian Institute of
+            Technology.
           </p>
           <div className="inline-links" aria-label="Academic profiles">
             {profileLinks.map((link) => (
@@ -375,7 +377,13 @@ function CvPage() {
             title="Postdoctoral Fellow"
             institution="Center for Combustion Energy, Tsinghua University"
           >
-            <p>Shuimu Tsinghua Scholar. Postdoctoral advisor: Prof. Chao Sun.</p>
+            <p>
+              Shuimu Tsinghua Scholar. Postdoctoral advisor:{" "}
+              <ExternalLink href="https://sungroup-thu.com/">
+                Prof. Chao Sun
+              </ExternalLink>
+              .
+            </p>
           </TimelineEntry>
         </CvSection>
 
@@ -386,8 +394,11 @@ function CvPage() {
             institution="Tsinghua University"
           >
             <p>
-              Focus: theoretical and computational chemistry. Advisor: Prof.
-              Xuefei Xu.
+              Focus: theoretical and computational chemistry. Advisor:{" "}
+              <ExternalLink href="https://xuxlab.com/">
+                Prof. Xuefei Xu
+              </ExternalLink>
+              .
             </p>
             <p>
               Dissertation: Theoretical Computational Study of Water Self-Ion
@@ -400,7 +411,13 @@ function CvPage() {
             title="B.Eng. in New Energy Science and Engineering"
             institution="Huazhong University of Science and Technology"
           >
-            <p>Research mentor: Prof. Hongyun Hu.</p>
+            <p>
+              Research mentor:{" "}
+              <ExternalLink href="http://sklccyao.energy.hust.edu.cn/info/1079/1297.htm">
+                Prof. Hongyun Hu
+              </ExternalLink>
+              .
+            </p>
           </TimelineEntry>
         </CvSection>
 
@@ -410,7 +427,13 @@ function CvPage() {
             title="Visiting Ph.D. Researcher"
             institution="Italian Institute of Technology"
           >
-            <p>Host: Prof. Michele Parrinello, Atomistic Simulations.</p>
+            <p>
+              Host:{" "}
+              <ExternalLink href="https://www.iit.it/people-details/-/people/michele-parrinello">
+                Prof. Michele Parrinello
+              </ExternalLink>
+              , Atomistic Simulations.
+            </p>
             <p>
               Enhanced sampling and deep-potential molecular simulation of
               water-self-ion-mediated glycine tautomerism.
@@ -468,14 +491,23 @@ function ResourcesPage() {
 
         <section className="content-section">
           <h2>Recommended Learning Resources</h2>
-          <div className="resource-list">
-            {recommendedResources.map((resource) => (
-              <article key={resource.href}>
-                <h3>
-                  <ExternalLink href={resource.href}>{resource.title}</ExternalLink>
-                </h3>
-                <p>{resource.description}</p>
-              </article>
+          <div className="resource-groups">
+            {recommendedResourceGroups.map((group) => (
+              <section key={group.title} className="resource-group">
+                <h3>{group.title}</h3>
+                <div className="resource-list">
+                  {group.resources.map((resource) => (
+                    <article key={resource.href}>
+                      <h4>
+                        <ExternalLink href={resource.href}>
+                          {resource.title}
+                        </ExternalLink>
+                      </h4>
+                      <p>{resource.description}</p>
+                    </article>
+                  ))}
+                </div>
+              </section>
             ))}
           </div>
         </section>
