@@ -46,7 +46,7 @@ export const tutorials = [
 
 export const recommendedResourceGroups = [
   {
-    title: "Foundations and Self-Study",
+    title: "Foundations, Computing, and Academic Workflow",
     resources: [
       {
         title: "Theory and Computing Physics Guide",
@@ -58,6 +58,16 @@ export const recommendedResourceGroups = [
         title: "CS Self-Learning Guide",
         href: "https://csdiy.wiki/",
         description: "Computer-science courses and structured self-study pathways.",
+      },
+      {
+        title: "Liu Group Tutorials",
+        href: "http://jianliugroup.pku.edu.cn/tutorials.html",
+        description: "Tutorials on computational chemistry and molecular simulation.",
+      },
+      {
+        title: "Cheng Group Wiki",
+        href: "https://wiki.cheng-group.net/",
+        description: "Group notes on computational chemistry and atomistic simulation.",
       },
       {
         title: "Overleaf",
@@ -82,7 +92,7 @@ export const recommendedResourceGroups = [
     ],
   },
   {
-    title: "Molecular Simulation",
+    title: "Molecular Simulation Engines and Atomistic Workflows",
     resources: [
       {
         title: "LAMMPS",
@@ -113,7 +123,7 @@ export const recommendedResourceGroups = [
     ],
   },
   {
-    title: "Enhanced Sampling",
+    title: "Enhanced Sampling and Free-Energy Methods",
     resources: [
       {
         title: "PLUMED",
@@ -129,7 +139,7 @@ export const recommendedResourceGroups = [
     ],
   },
   {
-    title: "Electronic Structure and Materials",
+    title: "Electronic Structure and Quantum Chemistry",
     resources: [
       {
         title: "CP2K",
@@ -148,31 +158,41 @@ export const recommendedResourceGroups = [
         description: "Quantum chemistry software and documentation.",
       },
       {
-        title: "Materials Project",
-        href: "https://next-gen.materialsproject.org/",
-        description: "Materials data, structures, and computational property records.",
-      },
-      {
         title: "Truhlar Software",
         href: "https://truhlar.chem.umn.edu/computational-tools/software",
         description: "Computational chemistry software from the Truhlar group.",
       },
+      {
+        title: "Atomistic Software",
+        href: "https://atomistic.software/#/table",
+        description: "Searchable table of atomistic modeling software.",
+      },
     ],
   },
   {
-    title: "Machine-Learned Atomistic Modeling",
+    title: "Materials Databases and Benchmarking",
     resources: [
       {
-        title: "DeepModeling",
-        href: "https://deepmodeling.com/",
-        description:
-          "Open-source tools for machine-learning-assisted molecular modeling.",
+        title: "Materials Project",
+        href: "https://next-gen.materialsproject.org/",
+        description: "Materials data, structures, and computational property records.",
       },
       {
         title: "Matbench Discovery",
         href: "https://matbench-discovery.materialsproject.org/",
         description:
           "A benchmark for machine-learning models in materials discovery.",
+      },
+    ],
+  },
+  {
+    title: "Machine-Learned Atomistic Modeling and AI for Science",
+    resources: [
+      {
+        title: "DeepModeling",
+        href: "https://deepmodeling.com/",
+        description:
+          "Open-source tools for machine-learning-assisted molecular modeling.",
       },
       {
         title: "DeePMD-kit",
@@ -184,23 +204,13 @@ export const recommendedResourceGroups = [
         href: "https://www.aissquare.com/",
         description: "AI-for-science platform and workflow resources.",
       },
-      {
-        title: "Atomistic Software",
-        href: "https://atomistic.software/#/table",
-        description: "Searchable table of atomistic modeling software.",
-      },
-      {
-        title: "Cheng Group Wiki",
-        href: "https://wiki.cheng-group.net/",
-        description: "Group notes on computational chemistry and atomistic simulation.",
-      },
     ],
   },
   {
-    title: "Visualization and Analysis",
+    title: "Visualization and Trajectory Analysis",
     resources: [
       {
-        title: "OVITO Python",
+        title: "OVITO",
         href: "https://docs.ovito.org/python/index.html",
         description: "Python interface for atomistic visualization and analysis.",
       },
@@ -209,11 +219,21 @@ export const recommendedResourceGroups = [
         href: "https://www.ks.uiuc.edu/Research/vmd/",
         description: "Molecular visualization and trajectory analysis.",
       },
+    ],
+  },
+  {
+    title: "Continuum and Multiscale Simulation",
+    resources: [
       {
         title: "Basilisk",
         href: "https://basilisk.fr/",
         description: "Tools for computational fluid dynamics and interfacial flows.",
       },
+    ],
+  },
+  {
+    title: "Coding and Local Development Assistance",
+    resources: [
       {
         title: "OpenAI Codex",
         href: "https://openai.com/codex/",
