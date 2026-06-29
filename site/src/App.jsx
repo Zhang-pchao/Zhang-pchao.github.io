@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 import {
   honors,
+  outreachLinks,
   patents,
   profileLinks,
   publications,
@@ -277,6 +278,20 @@ function ResearchPage() {
             ))}
           </div>
         </section>
+
+        <section className="content-section">
+          <h2>Outreach and Notes</h2>
+          <div className="resource-list">
+            {outreachLinks.map((item) => (
+              <article key={item.href}>
+                <h3>
+                  <ExternalLink href={item.href}>{item.title}</ExternalLink>
+                </h3>
+                <p>{item.description}</p>
+              </article>
+            ))}
+          </div>
+        </section>
       </div>
     </main>
   );
@@ -375,14 +390,18 @@ function CvPage() {
           <TimelineEntry
             period="Jul 2025–present"
             title="Postdoctoral Fellow"
-            institution="Center for Combustion Energy, Tsinghua University"
+            institution="Center for Combustion Energy, Department of Energy and Power Engineering, Tsinghua University"
           >
             <p>
-              Shuimu Tsinghua Scholar. Postdoctoral advisor:{" "}
+              Postdoctoral advisor:{" "}
               <ExternalLink href="https://sungroup-thu.com/">
                 Prof. Chao Sun
               </ExternalLink>
               .
+            </p>
+            <p>
+              Focus: molecular-level understanding of micro- and nanobubbles in
+              aqueous environments.
             </p>
           </TimelineEntry>
         </CvSection>
@@ -391,25 +410,24 @@ function CvPage() {
           <TimelineEntry
             period="Sep 2020–Jun 2025"
             title="Ph.D. in Power Engineering and Engineering Thermophysics"
-            institution="Tsinghua University"
+            institution="Center for Combustion Energy, Department of Energy and Power Engineering, Tsinghua University"
           >
             <p>
-              Focus: theoretical and computational chemistry. Advisor:{" "}
-              <ExternalLink href="https://xuxlab.com/">
+              Advisor:{" "}
+              <ExternalLink href="https://xux-group.github.io/">
                 Prof. Xuefei Xu
               </ExternalLink>
               .
             </p>
             <p>
-              Dissertation: Theoretical Computational Study of Water Self-Ion
-              Distributions at Aqueous Interfaces and Their Effects on
-              Physicochemical Processes.
+              Focus: water self-ion distributions at aqueous interfaces and
+              their effects on physicochemical processes.
             </p>
           </TimelineEntry>
           <TimelineEntry
             period="Sep 2016–Jun 2020"
             title="B.Eng. in New Energy Science and Engineering"
-            institution="Huazhong University of Science and Technology"
+            institution="School of Energy and Power Engineering, Huazhong University of Science and Technology"
           >
             <p>
               Research mentor:{" "}
@@ -418,6 +436,10 @@ function CvPage() {
               </ExternalLink>
               .
             </p>
+            <p>
+              Focus: high-value utilization of solid waste and biomass energy
+              conversion.
+            </p>
           </TimelineEntry>
         </CvSection>
 
@@ -425,18 +447,18 @@ function CvPage() {
           <TimelineEntry
             period="Nov 2022–Nov 2023"
             title="Visiting Ph.D. Researcher"
-            institution="Italian Institute of Technology"
+            institution="Atomistic Simulations, Italian Institute of Technology"
           >
             <p>
               Host:{" "}
               <ExternalLink href="https://www.iit.it/people-details/-/people/michele-parrinello">
                 Prof. Michele Parrinello
               </ExternalLink>
-              , Atomistic Simulations.
+              .
             </p>
             <p>
-              Enhanced sampling and deep-potential molecular simulation of
-              water-self-ion-mediated glycine tautomerism.
+              Focus: enhanced sampling and deep-potential molecular simulation
+              of water-self-ion-mediated glycine tautomerism.
             </p>
           </TimelineEntry>
         </CvSection>
@@ -444,12 +466,22 @@ function CvPage() {
         <CvSection id="talks" title="Academic Exchange">
           <div className="record-list">
             <article>
-              <h3>Invited oral presentation, 5th ABACUS Developer Conference</h3>
-              <p>2025</p>
+              <h3>Oral presentation, 5th ABACUS Developer Conference</h3>
+              <p>Jul 2025, Beijing, China</p>
               <p>
                 Electric Field and Interface Modulation of Glycine Tautomerism in
                 Solution: A Study Using ABACUS, DeePKS, DeePMD, and OPES with
                 Voronoi CVs.
+              </p>
+            </article>
+            <article>
+              <h3>
+                Oral presentation, 14th National Conference on Fluid Mechanics
+              </h3>
+              <p>Aug 2026, Qingdao, China</p>
+              <p>
+                Molecular Mechanisms of Ion-Microenvironment-Regulated
+                Micro/Nanobubble Evolution.
               </p>
             </article>
           </div>

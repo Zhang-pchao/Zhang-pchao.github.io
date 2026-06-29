@@ -59,10 +59,30 @@ export const recommendedResourceGroups = [
         href: "https://csdiy.wiki/",
         description: "Computer-science courses and structured self-study pathways.",
       },
+      {
+        title: "Overleaf",
+        href: "https://www.overleaf.com/",
+        description: "Online LaTeX writing and collaboration.",
+      },
+      {
+        title: "GitHub",
+        href: "https://github.com/",
+        description: "Code hosting, version control, and collaboration.",
+      },
+      {
+        title: "Google Scholar",
+        href: "https://scholar.google.com/",
+        description: "Academic literature search and citation tracking.",
+      },
+      {
+        title: "Academic Tree",
+        href: "https://academictree.org/chemistry/index.php",
+        description: "Academic genealogy for chemistry researchers.",
+      },
     ],
   },
   {
-    title: "Molecular Dynamics",
+    title: "Molecular Simulation",
     resources: [
       {
         title: "LAMMPS",
@@ -70,10 +90,25 @@ export const recommendedResourceGroups = [
         description: "A general-purpose molecular dynamics simulation package.",
       },
       {
-        title: "GROMACS Documentation",
+        title: "GROMACS",
         href: "https://manual.gromacs.org/documentation/current/index.html",
         description:
           "Current documentation for molecular dynamics simulations with GROMACS.",
+      },
+      {
+        title: "i-PI",
+        href: "https://docs.ipi-code.org/",
+        description: "A Python interface for path-integral and atomistic simulations.",
+      },
+      {
+        title: "ASE",
+        href: "https://docs.ase-lib.org/",
+        description: "Python tools for setting up, running, and analyzing atomistic simulations.",
+      },
+      {
+        title: "Atomistic Cookbook",
+        href: "https://atomistic-cookbook.org/index.html",
+        description: "Worked examples for atomistic simulation workflows.",
       },
     ],
   },
@@ -86,16 +121,41 @@ export const recommendedResourceGroups = [
         description:
           "Software and documentation for free-energy calculations and enhanced sampling.",
       },
+      {
+        title: "MLcolvar",
+        href: "https://mlcolvar.readthedocs.io/en/latest/index.html",
+        description: "Machine-learning collective variables for enhanced sampling.",
+      },
     ],
   },
   {
-    title: "Electronic-Structure Methods",
+    title: "Electronic Structure and Materials",
     resources: [
       {
         title: "CP2K",
         href: "https://www.cp2k.org/about",
         description:
           "An electronic-structure and atomistic simulation software package.",
+      },
+      {
+        title: "ABACUS",
+        href: "https://abacus.deepmodeling.com/en/latest/",
+        description: "Open-source electronic-structure package for first-principles calculations.",
+      },
+      {
+        title: "ORCA",
+        href: "https://www.faccts.de/docs#orca",
+        description: "Quantum chemistry software and documentation.",
+      },
+      {
+        title: "Materials Project",
+        href: "https://next-gen.materialsproject.org/",
+        description: "Materials data, structures, and computational property records.",
+      },
+      {
+        title: "Truhlar Software",
+        href: "https://truhlar.chem.umn.edu/computational-tools/software",
+        description: "Computational chemistry software from the Truhlar group.",
       },
     ],
   },
@@ -113,6 +173,51 @@ export const recommendedResourceGroups = [
         href: "https://matbench-discovery.materialsproject.org/",
         description:
           "A benchmark for machine-learning models in materials discovery.",
+      },
+      {
+        title: "DeePMD-kit",
+        href: "https://docs.deepmodeling.com/projects/deepmd/en/master/index.html",
+        description: "Deep-potential model training and molecular dynamics.",
+      },
+      {
+        title: "AI for Science Square",
+        href: "https://www.aissquare.com/",
+        description: "AI-for-science platform and workflow resources.",
+      },
+      {
+        title: "Atomistic Software",
+        href: "https://atomistic.software/#/table",
+        description: "Searchable table of atomistic modeling software.",
+      },
+      {
+        title: "Cheng Group Wiki",
+        href: "https://wiki.cheng-group.net/",
+        description: "Group notes on computational chemistry and atomistic simulation.",
+      },
+    ],
+  },
+  {
+    title: "Visualization and Analysis",
+    resources: [
+      {
+        title: "OVITO Python",
+        href: "https://docs.ovito.org/python/index.html",
+        description: "Python interface for atomistic visualization and analysis.",
+      },
+      {
+        title: "VMD",
+        href: "https://www.ks.uiuc.edu/Research/vmd/",
+        description: "Molecular visualization and trajectory analysis.",
+      },
+      {
+        title: "Basilisk",
+        href: "https://basilisk.fr/",
+        description: "Tools for computational fluid dynamics and interfacial flows.",
+      },
+      {
+        title: "OpenAI Codex",
+        href: "https://openai.com/codex/",
+        description: "Coding assistant for local development workflows.",
       },
     ],
   },
@@ -169,6 +274,49 @@ export const researchProjects = [
     title: "Nanobubble evolution near anatase (101)",
     description: "OPES-DPMD inputs and analysis across interfacial ionic microenvironments.",
     href: "https://github.com/Zhang-pchao/research/tree/main/OPES-DPMD-Bubble-TiO2",
+  },
+];
+
+export const outreachLinks = [
+  {
+    title: "JACS nanobubble ion regulation highlight",
+    href: "https://mp.weixin.qq.com/s/ZiB_C1laE76r4SwGh6_hHQ",
+    description: "A Chinese-language introduction to ion-regulated nitrogen nanobubble dynamics.",
+  },
+  {
+    title: "Nanobubble evolution near anatase-water interfaces",
+    href: "https://mp.weixin.qq.com/s/qIgB2yBWz_ABVNwwTsz4SQ",
+    description: "A Chinese-language summary of interfacial nanobubble simulations.",
+  },
+  {
+    title: "Tsinghua CCE research news",
+    href: "https://www.cce.tsinghua.edu.cn/info/1012/4070.htm",
+    description: "Research news from the Center for Combustion Energy.",
+  },
+  {
+    title: "Deep potential and enhanced sampling notes",
+    href: "https://zhuanlan.zhihu.com/p/2032423240954541351",
+    description: "Technical notes on molecular simulation workflows.",
+  },
+  {
+    title: "Aqueous-interface simulation notes",
+    href: "https://zhuanlan.zhihu.com/p/695737327",
+    description: "Notes related to interfacial water and ion simulations.",
+  },
+  {
+    title: "Computational chemistry workflow notes",
+    href: "https://zhuanlan.zhihu.com/p/20844844357",
+    description: "Long-form notes on computational chemistry practice.",
+  },
+  {
+    title: "Enhanced sampling notes",
+    href: "https://zhuanlan.zhihu.com/p/705998273",
+    description: "Notes on rare-event and free-energy simulation methods.",
+  },
+  {
+    title: "Atomistic simulation tutorial notes",
+    href: "https://zhuanlan.zhihu.com/p/695839138",
+    description: "Tutorial-style notes for atomistic modeling.",
   },
 ];
 
@@ -317,6 +465,10 @@ export const patents = [
 ];
 
 export const honors = [
+  {
+    year: "2025",
+    title: "Shuimu Tsinghua Scholar, Tsinghua University",
+  },
   {
     year: "2025",
     title: "Outstanding Doctoral Dissertation, Tsinghua University",
