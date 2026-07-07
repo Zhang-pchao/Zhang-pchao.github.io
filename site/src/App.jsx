@@ -198,9 +198,9 @@ function HomePage() {
             research focuses on aqueous interfaces, water self-ions, nanobubble
             dynamics, and reaction mechanisms using machine-learned potentials
             and enhanced sampling. I received my Ph.D. from Tsinghua University
-            and my B.Eng. in New Energy Science and Engineering from Huazhong
-            University of Science and Technology. I was also a visiting Ph.D.
-            researcher at the Italian Institute of Technology.
+            and my Bachelor of Engineering from Huazhong University of Science
+            and Technology. I was also a visiting Ph.D. researcher at the
+            Italian Institute of Technology.
           </p>
           <div className="inline-links" aria-label="Academic profiles">
             {profileLinks.map((link) => (

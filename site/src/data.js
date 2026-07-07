@@ -299,32 +299,32 @@ export const researchProjects = [
 
 export const outreachLinks = [
   {
-    title: "Ion-regulated nitrogen nanobubble dynamics",
+    title: "Ion-regulated nitrogen nanobubble evolution",
     href: "https://mp.weixin.qq.com/s/ZiB_C1laE76r4SwGh6_hHQ",
-    description: "A Chinese-language introduction to how hydronium and hydroxide ions regulate nitrogen nanobubbles in water.",
+    description: "Chinese-language article on how hydronium and hydroxide ions modulate nitrogen nanobubble dynamics in water.",
   },
   {
-    title: "Nanobubble evolution near anatase-water interfaces",
+    title: "Nanobubble nucleation and dissolution near anatase-water interfaces",
     href: "https://mp.weixin.qq.com/s/qIgB2yBWz_ABVNwwTsz4SQ",
-    description: "A Chinese-language summary of molecular simulations of nanobubble nucleation and dissolution near anatase-water interfaces.",
+    description: "Chinese-language article on molecular simulations of nanobubble evolution near anatase-water interfaces.",
   },
   {
-    title: "Interfacial nanobubble research news",
+    title: "Electric-field and interface effects on glycine tautomerism",
     href: "https://www.cce.tsinghua.edu.cn/info/1012/4070.htm",
-    description: "Center for Combustion Energy news on molecular mechanisms of interfacial nanobubble evolution.",
+    description: "Tsinghua CCE research news on deep-potential simulations of solvated glycine under electric-field and interface effects.",
   },
   {
-    title: "Glycine tautomerism under electric-field and interface effects",
+    title: "Video report: glycine tautomerism in solution",
     href: "https://www.bilibili.com/video/BV1D2b5zEEYx/",
-    description: "Video report on electric-field and interface modulation of glycine tautomerism in solution.",
+    description: "Bilibili video report on electric-field and interface modulation of glycine tautomerism in solution.",
   },
   {
-    title: "Deep-potential and enhanced-sampling workflow",
+    title: "Deep-potential and enhanced-sampling workflows",
     href: "https://zhuanlan.zhihu.com/p/2032423240954541351",
-    description: "Technical notes on building molecular simulation workflows with deep potentials and enhanced sampling.",
+    description: "Technical notes on molecular simulation workflows that combine deep potentials with enhanced sampling.",
   },
   {
-    title: "Water self-ions at aqueous interfaces",
+    title: "Aqueous-interface self-ion simulations",
     href: "https://zhuanlan.zhihu.com/p/695737327",
     description: "Notes on simulating interfacial water, hydronium, and hydroxide ion distributions.",
   },
@@ -334,12 +334,12 @@ export const outreachLinks = [
     description: "Long-form notes on computational chemistry practice.",
   },
   {
-    title: "Enhanced sampling and free-energy methods",
+    title: "Enhanced sampling and free-energy notes",
     href: "https://zhuanlan.zhihu.com/p/705998273",
     description: "Notes on rare-event and free-energy simulation methods.",
   },
   {
-    title: "Atomistic simulation tutorials",
+    title: "Atomistic simulation tutorial notes",
     href: "https://zhuanlan.zhihu.com/p/695839138",
     description: "Tutorial-style notes for atomistic modeling.",
   },
