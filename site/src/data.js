@@ -299,29 +299,34 @@ export const researchProjects = [
 
 export const outreachLinks = [
   {
-    title: "JACS nanobubble ion regulation highlight",
+    title: "Ion-regulated nitrogen nanobubble dynamics",
     href: "https://mp.weixin.qq.com/s/ZiB_C1laE76r4SwGh6_hHQ",
-    description: "A Chinese-language introduction to ion-regulated nitrogen nanobubble dynamics.",
+    description: "A Chinese-language introduction to how hydronium and hydroxide ions regulate nitrogen nanobubbles in water.",
   },
   {
     title: "Nanobubble evolution near anatase-water interfaces",
     href: "https://mp.weixin.qq.com/s/qIgB2yBWz_ABVNwwTsz4SQ",
-    description: "A Chinese-language summary of interfacial nanobubble simulations.",
+    description: "A Chinese-language summary of molecular simulations of nanobubble nucleation and dissolution near anatase-water interfaces.",
   },
   {
-    title: "Tsinghua CCE research news",
+    title: "Interfacial nanobubble research news",
     href: "https://www.cce.tsinghua.edu.cn/info/1012/4070.htm",
-    description: "Research news from the Center for Combustion Energy.",
+    description: "Center for Combustion Energy news on molecular mechanisms of interfacial nanobubble evolution.",
   },
   {
-    title: "Deep potential and enhanced sampling notes",
+    title: "Glycine tautomerism under electric-field and interface effects",
+    href: "https://www.bilibili.com/video/BV1D2b5zEEYx/",
+    description: "Video report on electric-field and interface modulation of glycine tautomerism in solution.",
+  },
+  {
+    title: "Deep-potential and enhanced-sampling workflow",
     href: "https://zhuanlan.zhihu.com/p/2032423240954541351",
-    description: "Technical notes on molecular simulation workflows.",
+    description: "Technical notes on building molecular simulation workflows with deep potentials and enhanced sampling.",
   },
   {
-    title: "Aqueous-interface simulation notes",
+    title: "Water self-ions at aqueous interfaces",
     href: "https://zhuanlan.zhihu.com/p/695737327",
-    description: "Notes related to interfacial water and ion simulations.",
+    description: "Notes on simulating interfacial water, hydronium, and hydroxide ion distributions.",
   },
   {
     title: "Computational chemistry workflow notes",
@@ -329,12 +334,12 @@ export const outreachLinks = [
     description: "Long-form notes on computational chemistry practice.",
   },
   {
-    title: "Enhanced sampling notes",
+    title: "Enhanced sampling and free-energy methods",
     href: "https://zhuanlan.zhihu.com/p/705998273",
     description: "Notes on rare-event and free-energy simulation methods.",
   },
   {
-    title: "Atomistic simulation tutorial notes",
+    title: "Atomistic simulation tutorials",
     href: "https://zhuanlan.zhihu.com/p/695839138",
     description: "Tutorial-style notes for atomistic modeling.",
   },
