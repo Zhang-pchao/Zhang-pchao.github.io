@@ -183,6 +183,7 @@ function PublicationEntry({ publication, compact = false }) {
 
 function HomePage() {
   const featured = publications.filter((publication) => publication.featured);
+  const featuredOutreach = outreachLinks.slice(0, 4);
 
   return (
     <main className="section-shell">
@@ -240,6 +241,23 @@ function HomePage() {
               publication={publication}
               compact
             />
+          ))}
+        </div>
+      </section>
+
+      <section className="content-section">
+        <div className="section-heading">
+          <h2>Outreach and Notes</h2>
+          <Link to="/research">More</Link>
+        </div>
+        <div className="resource-list">
+          {featuredOutreach.map((item) => (
+            <article key={item.href}>
+              <h3>
+                <ExternalLink href={item.href}>{item.title}</ExternalLink>
+              </h3>
+              <p>{item.description}</p>
+            </article>
           ))}
         </div>
       </section>
