@@ -8,6 +8,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import {
+  codeResources,
   honors,
   outreachLinks,
   patents,
@@ -527,6 +528,20 @@ function ResourcesPage() {
       <PageTitle>Resources</PageTitle>
       <div className="section-shell page-content">
         <section className="content-section first">
+          <h2>Codes</h2>
+          <div className="resource-list">
+            {codeResources.map((resource) => (
+              <article key={resource.href}>
+                <h3>
+                  <ExternalLink href={resource.href}>{resource.title}</ExternalLink>
+                </h3>
+                <p>{resource.description}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="content-section">
           <h2>Tutorials</h2>
           <div className="resource-list">
             {tutorials.map((tutorial) => (

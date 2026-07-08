@@ -44,6 +44,27 @@ export const tutorials = [
   },
 ];
 
+export const codeResources = [
+  {
+    title: "Voronoi CVs for glycine tautomerism",
+    href: "https://github.com/Zhang-pchao/GlycineTautomerism/tree/main/Voronoi_collective_variables",
+    description:
+      "PLUMED source files for Voronoi-based solvation, proton-transfer, and autoionization CVs used in solvated glycine tautomerism.",
+  },
+  {
+    title: "Voronoi CVs for water self-ions at interfaces",
+    href: "https://github.com/Zhang-pchao/OilWaterInterface/tree/main/Voronoi_CVs",
+    description:
+      "PLUMED CVs for ion charge, OH-/H3O+ distance, ion identity, and ion location in slab systems.",
+  },
+  {
+    title: "Voronoi CVs for OPES-DPMD nitrogen reduction",
+    href: "https://github.com/Zhang-pchao/research/tree/main/OPES-DPMD-NRR/Voronoi_collective_variables",
+    description:
+      "Custom PLUMED VoronoiD3 code for reactive Voronoi environments in OPES-DPMD simulations of nitrogen reduction.",
+  },
+];
+
 export const recommendedResourceGroups = [
   {
     title: "Foundations, Computing, and Academic Workflow",
