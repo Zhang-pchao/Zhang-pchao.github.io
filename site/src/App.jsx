@@ -20,6 +20,79 @@ import {
   tutorials,
 } from "./data.js";
 
+const movieGroups = [
+  {
+    key: "glycine",
+    sourceHref: "https://pubs.acs.org/doi/10.1021/acs.jcim.4c00273",
+    title: {
+      en: "Glycine proton-transfer movies",
+      zh: "甘氨酸质子转移视频",
+    },
+    source: {
+      en: "From Supporting Information videos for Intramolecular and Water Mediated Tautomerism of Solvated Glycine.",
+      zh: "来自论文 Intramolecular and Water Mediated Tautomerism of Solvated Glycine 的 Supporting Information 视频。",
+    },
+    videos: [
+      {
+        src: "/assets/videos/glycine-intramolecular.mp4",
+        title: {
+          en: "Intramolecular proton transfer",
+          zh: "分子内质子转移",
+        },
+      },
+      {
+        src: "/assets/videos/glycine-hydronium.mp4",
+        title: {
+          en: "Hydronium-mediated transfer",
+          zh: "水合氢离子介导转移",
+        },
+      },
+      {
+        src: "/assets/videos/glycine-hydroxide.mp4",
+        title: {
+          en: "Hydroxide-mediated transfer",
+          zh: "氢氧根离子介导转移",
+        },
+      },
+    ],
+  },
+  {
+    key: "nanobubble",
+    sourceHref: "https://pubs.acs.org/doi/10.1021/jacs.4c06641",
+    title: {
+      en: "Nitrogen nanobubble movies",
+      zh: "氮气纳米气泡视频",
+    },
+    source: {
+      en: "From Supporting Information videos for Hydroxide and Hydronium Ions Modulate the Dynamic Evolution of Nitrogen Nanobubbles in Water.",
+      zh: "来自论文 Hydroxide and Hydronium Ions Modulate the Dynamic Evolution of Nitrogen Nanobubbles in Water 的 Supporting Information 视频。",
+    },
+    videos: [
+      {
+        src: "/assets/videos/bubble-pure-water-a.mp4",
+        title: {
+          en: "Pure water system A",
+          zh: "纯水体系 A",
+        },
+      },
+      {
+        src: "/assets/videos/bubble-acidic-b.mp4",
+        title: {
+          en: "Acidic system B",
+          zh: "酸性体系 B",
+        },
+      },
+      {
+        src: "/assets/videos/bubble-more-alkaline-d.mp4",
+        title: {
+          en: "More alkaline system D",
+          zh: "强碱性体系 D",
+        },
+      },
+    ],
+  },
+];
+
 const COPY = {
   en: {
     htmlLang: "en",
@@ -62,6 +135,9 @@ const COPY = {
       researchInterests: "Research Interests",
       selectedPublications: "Selected Publications",
       fullList: "Full list",
+      movies: "Research Movies",
+      movieIntro:
+        "Looped, muted previews of proton-transfer and nanobubble dynamics from published Supporting Information videos.",
       outreach: "Outreach and Notes",
       more: "More",
     },
@@ -160,12 +236,12 @@ const COPY = {
   zh: {
     htmlLang: "zh-CN",
     pageTitles: {
-      "/": "张鹏超",
-      "/research": "研究 | 张鹏超",
-      "/publications": "论文 | 张鹏超",
-      "/cv": "简历 | 张鹏超",
-      "/resources": "资源 | 张鹏超",
-      "/contact": "联系 | 张鹏超",
+      "/": "章鹏超",
+      "/research": "研究 | 章鹏超",
+      "/publications": "论文 | 章鹏超",
+      "/cv": "简历 | 章鹏超",
+      "/resources": "资源 | 章鹏超",
+      "/contact": "联系 | 章鹏超",
     },
     nav: [
       ["/", "首页"],
@@ -188,13 +264,16 @@ const COPY = {
       graphicalAbstract: "图文摘要：",
     },
     home: {
-      name: "张鹏超",
+      name: "章鹏超",
       position: ["博士后", "清华大学燃烧能源中心"],
       bio: "我从事计算化学与分子模拟研究，关注水相界面、水自解离离子、纳米气泡动力学以及反应机理，主要使用机器学习势能面与增强采样方法。我在清华大学获得博士学位，在华中科技大学获得能源与动力工程学士学位，并曾在意大利理工学院进行博士访问研究。",
       academicProfiles: "学术主页",
       researchInterests: "研究方向",
       selectedPublications: "代表论文",
       fullList: "完整列表",
+      movies: "研究视频",
+      movieIntro:
+        "来自已发表论文 Supporting Information 的质子转移和纳米气泡动力学循环静音预览视频。",
       outreach: "科普与笔记",
       more: "更多",
     },
@@ -445,6 +524,43 @@ function PublicationEntry({ publication, copy, compact = false }) {
   );
 }
 
+function MovieShowcase({ copy, language }) {
+  return (
+    <section className="content-section movie-section">
+      <h2>{copy.home.movies}</h2>
+      <p className="section-note">{copy.home.movieIntro}</p>
+      <div className="movie-groups">
+        {movieGroups.map((group) => (
+          <article key={group.key} className="movie-group">
+            <div className="section-heading">
+              <h3>{group.title[language]}</h3>
+              <ExternalLink href={group.sourceHref}>DOI</ExternalLink>
+            </div>
+            <p>{group.source[language]}</p>
+            <div className="movie-grid">
+              {group.videos.map((movie) => (
+                <figure key={movie.src} className="movie-card">
+                  <video
+                    src={movie.src}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    controls
+                    preload="metadata"
+                    aria-label={movie.title[language]}
+                  />
+                  <figcaption>{movie.title[language]}</figcaption>
+                </figure>
+              ))}
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function HomePage({ copy }) {
   const featured = publications.filter((publication) => publication.featured);
   const featuredOutreach = outreachLinks.slice(0, 4);
@@ -475,6 +591,8 @@ function HomePage({ copy }) {
           height="1400"
         />
       </section>
+
+      <MovieShowcase copy={copy} language={copy.htmlLang === "zh-CN" ? "zh" : "en"} />
 
       <section className="content-section">
         <h2>{copy.home.researchInterests}</h2>
