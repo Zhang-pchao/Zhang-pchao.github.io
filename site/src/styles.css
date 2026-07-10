@@ -115,6 +115,12 @@ h3 {
   text-decoration: none;
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
 .primary-navigation {
   display: flex;
   align-items: center;
@@ -136,6 +142,22 @@ h3 {
 .primary-navigation a.active {
   border-bottom-color: var(--link);
   color: var(--link);
+}
+
+.language-toggle {
+  padding: 4px 10px;
+  border: 1px solid #b9c7d8;
+  border-radius: 999px;
+  color: var(--link);
+  background: #fff;
+  font-size: 0.84rem;
+  cursor: pointer;
+}
+
+.language-toggle:hover,
+.language-toggle:focus-visible {
+  border-color: var(--link);
+  text-decoration: none;
 }
 
 .menu-button {
@@ -549,6 +571,10 @@ h3 {
   .header-inner {
     position: relative;
     min-height: 56px;
+  }
+
+  .header-actions {
+    gap: 14px;
   }
 
   .menu-button {

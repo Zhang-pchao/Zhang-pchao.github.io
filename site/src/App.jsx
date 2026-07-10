@@ -15,11 +15,277 @@ import {
   profileLinks,
   publications,
   recommendedResourceGroups,
-  researchAreas,
   researchProjects,
   socialLinks,
   tutorials,
 } from "./data.js";
+
+const COPY = {
+  en: {
+    htmlLang: "en",
+    pageTitles: {
+      "/": "Pengchao Zhang",
+      "/research": "Research | Pengchao Zhang",
+      "/publications": "Publications | Pengchao Zhang",
+      "/cv": "CV | Pengchao Zhang",
+      "/resources": "Resources | Pengchao Zhang",
+      "/contact": "Contact | Pengchao Zhang",
+    },
+    nav: [
+      ["/", "Home"],
+      ["/research", "Research"],
+      ["/publications", "Publications"],
+      ["/cv", "CV"],
+      ["/resources", "Resources"],
+      ["/contact", "Contact"],
+    ],
+    header: {
+      menuOpen: "Close",
+      menuClosed: "Menu",
+      navLabel: "Primary navigation",
+      switchLabel: "Switch language to Chinese",
+      switchText: "中文",
+    },
+    publicationLinks: {
+      sharedCopy: "Shared copy",
+      codeData: "Code & data",
+      graphicalAbstract: "Graphical abstract for",
+    },
+    home: {
+      name: "Pengchao Zhang",
+      position: [
+        "Postdoctoral Fellow",
+        "Center for Combustion Energy, Tsinghua University",
+      ],
+      bio: "I am working on computational chemistry and molecular simulation. My research focuses on aqueous interfaces, water self-ions, nanobubble dynamics, and reaction mechanisms using machine-learned potentials and enhanced sampling. I received my Ph.D. from Tsinghua University and my Bachelor of Engineering from Huazhong University of Science and Technology. I was also a visiting Ph.D. researcher at the Italian Institute of Technology.",
+      academicProfiles: "Academic profiles",
+      researchInterests: "Research Interests",
+      selectedPublications: "Selected Publications",
+      fullList: "Full list",
+      outreach: "Outreach and Notes",
+      more: "More",
+    },
+    researchAreas: [
+      {
+        number: "01",
+        title: "Deep-potential molecular dynamics and enhanced sampling",
+        description:
+          "Method development and integrated workflows that combine machine-learned potential-energy surfaces with free-energy and rare-event sampling.",
+      },
+      {
+        number: "02",
+        title: "Ion distributions and reactions at gas–liquid–solid interfaces",
+        description:
+          "Molecular mechanisms governing water self-ions, charge organization, solvation, and reactivity across heterogeneous aqueous interfaces.",
+      },
+      {
+        number: "03",
+        title: "Micro- and nanobubble dynamics",
+        description:
+          "Nucleation, dissolution, interfacial charge, and stability control of nanobubbles under changing chemical and thermal environments.",
+      },
+      {
+        number: "04",
+        title: "Competing reactions under coupled electric-field and interface effects",
+        description:
+          "How external fields, partial solvation, and ion-pair separation reshape reaction thermodynamics, kinetics, and preferred pathways.",
+      },
+    ],
+    research: {
+      title: "Research",
+      repositories: "Research Repositories",
+      completeArchive: "Complete archive",
+      outreach: "Outreach and Notes",
+    },
+    publications: {
+      title: "Publications",
+      papers: "Papers",
+      patents: "Patents",
+      paperPages: "Paper pages",
+      granted: "granted",
+    },
+    cv: {
+      title: "Curriculum Vitae",
+      appointments: "Appointments",
+      education: "Education",
+      visiting: "Visiting Research",
+      exchange: "Academic Exchange",
+      honors: "Honors and Awards",
+      postdocTitle: "Postdoctoral Fellow",
+      postdocAdvisor: "Postdoctoral advisor",
+      postdocFocus:
+        "Focus: molecular-level understanding of micro- and nanobubbles in aqueous environments.",
+      phdTitle: "Ph.D. in Power Engineering and Engineering Thermophysics",
+      advisor: "Advisor",
+      phdFocus:
+        "Focus: water self-ion distributions at aqueous interfaces and their effects on physicochemical processes.",
+      bachelorTitle: "B.Eng. in New Energy Science and Engineering",
+      mentor: "Research mentor",
+      bachelorFocus:
+        "Focus: high-value utilization of solid waste and biomass energy conversion.",
+      visitingTitle: "Visiting Ph.D. Researcher",
+      host: "Host",
+      visitingFocus:
+        "Focus: enhanced sampling and deep-potential molecular simulation of water-self-ion-mediated glycine tautomerism.",
+      talk1Title: "Oral presentation, 5th ABACUS Developer Conference",
+      talk1Place: "Jul 2025, Beijing, China",
+      talk1Text:
+        "Electric Field and Interface Modulation of Glycine Tautomerism in Solution: A Study Using ABACUS, DeePKS, DeePMD, and OPES with Voronoi CVs.",
+      talk2Title: "Oral presentation, 14th National Conference on Fluid Mechanics",
+      talk2Place: "Aug 2026, Qingdao, China",
+      talk2Text:
+        "Molecular Mechanisms of Ion-Microenvironment-Regulated Micro/Nanobubble Evolution.",
+    },
+    resources: {
+      title: "Resources",
+      codes: "Codes",
+      tutorials: "Tutorials",
+      recommended: "Recommended Learning Resources",
+      notes: "Notes",
+      notesText:
+        "Technical notes and longer-form tutorials will be published here as the collection develops.",
+    },
+    contact: {
+      title: "Contact",
+      email: "Email",
+      affiliation: "Affiliation",
+      profiles: "Academic Profiles",
+      social: "Social",
+    },
+    notFound: {
+      title: "Page Not Found",
+      returnHome: "Return to the home page.",
+    },
+  },
+  zh: {
+    htmlLang: "zh-CN",
+    pageTitles: {
+      "/": "张鹏超",
+      "/research": "研究 | 张鹏超",
+      "/publications": "论文 | 张鹏超",
+      "/cv": "简历 | 张鹏超",
+      "/resources": "资源 | 张鹏超",
+      "/contact": "联系 | 张鹏超",
+    },
+    nav: [
+      ["/", "首页"],
+      ["/research", "研究"],
+      ["/publications", "论文"],
+      ["/cv", "简历"],
+      ["/resources", "资源"],
+      ["/contact", "联系"],
+    ],
+    header: {
+      menuOpen: "关闭",
+      menuClosed: "菜单",
+      navLabel: "主导航",
+      switchLabel: "Switch language to English",
+      switchText: "English",
+    },
+    publicationLinks: {
+      sharedCopy: "共享全文",
+      codeData: "代码与数据",
+      graphicalAbstract: "图文摘要：",
+    },
+    home: {
+      name: "张鹏超",
+      position: ["博士后", "清华大学燃烧能源中心"],
+      bio: "我从事计算化学与分子模拟研究，关注水相界面、水自解离离子、纳米气泡动力学以及反应机理，主要使用机器学习势能面与增强采样方法。我在清华大学获得博士学位，在华中科技大学获得能源与动力工程学士学位，并曾在意大利理工学院进行博士访问研究。",
+      academicProfiles: "学术主页",
+      researchInterests: "研究方向",
+      selectedPublications: "代表论文",
+      fullList: "完整列表",
+      outreach: "科普与笔记",
+      more: "更多",
+    },
+    researchAreas: [
+      {
+        number: "01",
+        title: "深度势分子动力学与增强采样",
+        description:
+          "发展并整合机器学习势能面、自由能计算与稀有事件采样方法，构建面向复杂反应体系的模拟工作流。",
+      },
+      {
+        number: "02",
+        title: "气-液-固界面的离子分布与反应",
+        description:
+          "研究水自解离离子、电荷组织、溶剂化结构与界面反应性在非均相水环境中的分子机制。",
+      },
+      {
+        number: "03",
+        title: "微纳米气泡动力学",
+        description:
+          "研究纳米气泡的成核、溶解、界面电荷与稳定性调控，关注化学与热环境变化下的演化机制。",
+      },
+      {
+        number: "04",
+        title: "电场与界面耦合效应下的竞争反应",
+        description:
+          "研究外加电场、局域溶剂化与离子对分离如何改变反应热力学、动力学与优势路径。",
+      },
+    ],
+    research: {
+      title: "研究",
+      repositories: "研究仓库",
+      completeArchive: "完整归档",
+      outreach: "科普与笔记",
+    },
+    publications: {
+      title: "论文",
+      papers: "论文",
+      patents: "专利",
+      paperPages: "论文分页",
+      granted: "授权",
+    },
+    cv: {
+      title: "简历",
+      appointments: "工作经历",
+      education: "教育背景",
+      visiting: "访问研究",
+      exchange: "学术交流",
+      honors: "荣誉奖励",
+      postdocTitle: "博士后",
+      postdocAdvisor: "博士后合作导师",
+      postdocFocus: "研究方向：水环境中微纳米气泡的分子层次机制。",
+      phdTitle: "动力工程及工程热物理博士",
+      advisor: "导师",
+      phdFocus: "研究方向：水相界面水自解离离子分布及其对物理化学过程的影响。",
+      bachelorTitle: "新能源科学与工程学士",
+      mentor: "科研导师",
+      bachelorFocus: "研究方向：固体废弃物高值化利用与生物质能转化。",
+      visitingTitle: "博士访问研究生",
+      host: "访问导师",
+      visitingFocus:
+        "研究方向：水自解离离子介导的甘氨酸互变异构反应的增强采样与深度势分子模拟。",
+      talk1Title: "口头报告，第五届 ABACUS 开发者大会",
+      talk1Place: "2025年7月，北京",
+      talk1Text:
+        "溶液中甘氨酸互变异构的电场与界面调控：基于 ABACUS、DeePKS、DeePMD、OPES 与 Voronoi CV 的研究。",
+      talk2Title: "口头报告，第十四届全国流体力学学术会议",
+      talk2Place: "2026年8月，青岛",
+      talk2Text: "离子微环境调控微纳米气泡演化的分子机制。",
+    },
+    resources: {
+      title: "资源",
+      codes: "代码",
+      tutorials: "教程",
+      recommended: "推荐学习资源",
+      notes: "笔记",
+      notesText: "技术笔记和更系统的教程会随内容积累逐步整理到这里。",
+    },
+    contact: {
+      title: "联系",
+      email: "邮箱",
+      affiliation: "单位",
+      profiles: "学术主页",
+      social: "社交账号",
+    },
+    notFound: {
+      title: "页面不存在",
+      returnHome: "返回首页。",
+    },
+  },
+};
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -31,20 +297,12 @@ function ScrollToTop() {
   return null;
 }
 
-function DocumentTitle() {
+function DocumentTitle({ copy }) {
   const { pathname } = useLocation();
-  const pageTitles = {
-    "/": "Pengchao Zhang",
-    "/research": "Research | Pengchao Zhang",
-    "/publications": "Publications | Pengchao Zhang",
-    "/cv": "CV | Pengchao Zhang",
-    "/resources": "Resources | Pengchao Zhang",
-    "/contact": "Contact | Pengchao Zhang",
-  };
 
   useEffect(() => {
-    document.title = pageTitles[pathname] || "Pengchao Zhang";
-  }, [pathname]);
+    document.title = copy.pageTitles[pathname] || copy.pageTitles["/"];
+  }, [copy, pathname]);
 
   return null;
 }
@@ -57,7 +315,7 @@ function ExternalLink({ href, children, className = "" }) {
   );
 }
 
-function Header() {
+function Header({ copy, language, onLanguageChange }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
 
@@ -65,46 +323,47 @@ function Header() {
     setMenuOpen(false);
   }, [location.pathname]);
 
-  const navItems = [
-    ["/", "Home"],
-    ["/research", "Research"],
-    ["/publications", "Publications"],
-    ["/cv", "CV"],
-    ["/resources", "Resources"],
-    ["/contact", "Contact"],
-  ];
-
   return (
     <header className="site-header">
       <div className="header-inner">
         <Link className="site-identity" to="/">
           Pengchao Zhang
         </Link>
-        <button
-          className="menu-button"
-          type="button"
-          aria-expanded={menuOpen}
-          aria-controls="primary-navigation"
-          onClick={() => setMenuOpen((current) => !current)}
-        >
-          {menuOpen ? "Close" : "Menu"}
-        </button>
-        <nav
-          id="primary-navigation"
-          className={`primary-navigation ${menuOpen ? "is-open" : ""}`}
-          aria-label="Primary navigation"
-        >
-          {navItems.map(([path, label]) => (
-            <NavLink
-              key={path}
-              to={path}
-              end={path === "/"}
-              className={({ isActive }) => (isActive ? "active" : undefined)}
-            >
-              {label}
-            </NavLink>
-          ))}
-        </nav>
+        <div className="header-actions">
+          <nav
+            id="primary-navigation"
+            className={`primary-navigation ${menuOpen ? "is-open" : ""}`}
+            aria-label={copy.header.navLabel}
+          >
+            {copy.nav.map(([path, label]) => (
+              <NavLink
+                key={path}
+                to={path}
+                end={path === "/"}
+                className={({ isActive }) => (isActive ? "active" : undefined)}
+              >
+                {label}
+              </NavLink>
+            ))}
+          </nav>
+          <button
+            className="language-toggle"
+            type="button"
+            aria-label={copy.header.switchLabel}
+            onClick={() => onLanguageChange(language === "en" ? "zh" : "en")}
+          >
+            {copy.header.switchText}
+          </button>
+          <button
+            className="menu-button"
+            type="button"
+            aria-expanded={menuOpen}
+            aria-controls="primary-navigation"
+            onClick={() => setMenuOpen((current) => !current)}
+          >
+            {menuOpen ? copy.header.menuOpen : copy.header.menuClosed}
+          </button>
+        </div>
       </div>
     </header>
   );
@@ -128,7 +387,7 @@ function PageTitle({ children }) {
   );
 }
 
-function LinkGroup({ publication }) {
+function LinkGroup({ publication, copy }) {
   return (
     <div className="publication-links">
       <ExternalLink href={publication.doi}>DOI</ExternalLink>
@@ -143,16 +402,20 @@ function LinkGroup({ publication }) {
         </ExternalLink>
       )}
       {publication.freeAccess && (
-        <ExternalLink href={publication.freeAccess}>Shared copy</ExternalLink>
+        <ExternalLink href={publication.freeAccess}>
+          {copy.publicationLinks.sharedCopy}
+        </ExternalLink>
       )}
       {publication.code && (
-        <ExternalLink href={publication.code}>Code &amp; data</ExternalLink>
+        <ExternalLink href={publication.code}>
+          {copy.publicationLinks.codeData}
+        </ExternalLink>
       )}
     </div>
   );
 }
 
-function PublicationEntry({ publication, compact = false }) {
+function PublicationEntry({ publication, copy, compact = false }) {
   return (
     <article
       className={[
@@ -168,13 +431,13 @@ function PublicationEntry({ publication, compact = false }) {
         <p className="publication-details">
           {compact ? publication.journal : publication.details}
         </p>
-        <LinkGroup publication={publication} />
+        <LinkGroup publication={publication} copy={copy} />
       </div>
       {!compact && publication.toc && (
         <img
           className="publication-toc"
           src={publication.toc}
-          alt={`Graphical abstract for ${publication.title}`}
+          alt={`${copy.publicationLinks.graphicalAbstract} ${publication.title}`}
           loading="lazy"
         />
       )}
@@ -182,7 +445,7 @@ function PublicationEntry({ publication, compact = false }) {
   );
 }
 
-function HomePage() {
+function HomePage({ copy }) {
   const featured = publications.filter((publication) => publication.featured);
   const featuredOutreach = outreachLinks.slice(0, 4);
 
@@ -190,21 +453,13 @@ function HomePage() {
     <main className="section-shell">
       <section className="home-intro">
         <div className="home-text">
-          <h1>Pengchao Zhang</h1>
+          <h1>{copy.home.name}</h1>
           <p className="position">
-            Postdoctoral Fellow<br />
-            Center for Combustion Energy, Tsinghua University
+            {copy.home.position[0]}<br />
+            {copy.home.position[1]}
           </p>
-          <p>
-            I am working on computational chemistry and molecular simulation. My
-            research focuses on aqueous interfaces, water self-ions, nanobubble
-            dynamics, and reaction mechanisms using machine-learned potentials
-            and enhanced sampling. I received my Ph.D. from Tsinghua University
-            and my Bachelor of Engineering from Huazhong University of Science
-            and Technology. I was also a visiting Ph.D. researcher at the
-            Italian Institute of Technology.
-          </p>
-          <div className="inline-links" aria-label="Academic profiles">
+          <p>{copy.home.bio}</p>
+          <div className="inline-links" aria-label={copy.home.academicProfiles}>
             {profileLinks.map((link) => (
               <ExternalLink key={link.label} href={link.href}>
                 {link.label}
@@ -222,9 +477,9 @@ function HomePage() {
       </section>
 
       <section className="content-section">
-        <h2>Research Interests</h2>
+        <h2>{copy.home.researchInterests}</h2>
         <ul className="plain-list">
-          {researchAreas.map((area) => (
+          {copy.researchAreas.map((area) => (
             <li key={area.number}>{area.title}</li>
           ))}
         </ul>
@@ -232,14 +487,15 @@ function HomePage() {
 
       <section className="content-section">
         <div className="section-heading">
-          <h2>Selected Publications</h2>
-          <Link to="/publications">Full list</Link>
+          <h2>{copy.home.selectedPublications}</h2>
+          <Link to="/publications">{copy.home.fullList}</Link>
         </div>
         <div className="publication-stack">
           {featured.map((publication) => (
             <PublicationEntry
               key={publication.doi}
               publication={publication}
+              copy={copy}
               compact
             />
           ))}
@@ -248,8 +504,8 @@ function HomePage() {
 
       <section className="content-section">
         <div className="section-heading">
-          <h2>Outreach and Notes</h2>
-          <Link to="/research">More</Link>
+          <h2>{copy.home.outreach}</h2>
+          <Link to="/research">{copy.home.more}</Link>
         </div>
         <div className="resource-list">
           {featuredOutreach.map((item) => (
@@ -266,13 +522,13 @@ function HomePage() {
   );
 }
 
-function ResearchPage() {
+function ResearchPage({ copy }) {
   return (
     <main>
-      <PageTitle>Research</PageTitle>
+      <PageTitle>{copy.research.title}</PageTitle>
       <div className="section-shell page-content">
         <section className="research-list">
-          {researchAreas.map((area) => (
+          {copy.researchAreas.map((area) => (
             <article key={area.number}>
               <h2>{area.title}</h2>
               <p>{area.description}</p>
@@ -282,9 +538,9 @@ function ResearchPage() {
 
         <section className="content-section">
           <div className="section-heading">
-            <h2>Research Repositories</h2>
+            <h2>{copy.research.repositories}</h2>
             <ExternalLink href="https://github.com/Zhang-pchao/research">
-              Complete archive
+              {copy.research.completeArchive}
             </ExternalLink>
           </div>
           <div className="resource-list">
@@ -300,7 +556,7 @@ function ResearchPage() {
         </section>
 
         <section className="content-section">
-          <h2>Outreach and Notes</h2>
+          <h2>{copy.research.outreach}</h2>
           <div className="resource-list">
             {outreachLinks.map((item) => (
               <article key={item.href}>
@@ -317,7 +573,7 @@ function ResearchPage() {
   );
 }
 
-function PublicationsPage() {
+function PublicationsPage({ copy }) {
   const papersPerPage = 10;
   const [paperPage, setPaperPage] = useState(1);
   const pageCount = Math.ceil(publications.length / papersPerPage);
@@ -328,17 +584,21 @@ function PublicationsPage() {
 
   return (
     <main>
-      <PageTitle>Publications</PageTitle>
+      <PageTitle>{copy.publications.title}</PageTitle>
       <div className="section-shell page-content">
         <section className="publication-section" id="papers">
-          <h2>Papers</h2>
+          <h2>{copy.publications.papers}</h2>
           <div className="publication-stack full">
             {visiblePapers.map((publication) => (
-              <PublicationEntry key={publication.doi} publication={publication} />
+              <PublicationEntry
+                key={publication.doi}
+                publication={publication}
+                copy={copy}
+              />
             ))}
           </div>
           {pageCount > 1 && (
-            <nav className="pagination" aria-label="Paper pages">
+            <nav className="pagination" aria-label={copy.publications.paperPages}>
               {Array.from({ length: pageCount }, (_, index) => index + 1).map(
                 (page) => (
                   <button
@@ -360,7 +620,7 @@ function PublicationsPage() {
         </section>
 
         <section className="publication-section" id="patents">
-          <h2>Patents</h2>
+          <h2>{copy.publications.patents}</h2>
           <div className="patent-list">
             {patents.map((patent) => (
               <article key={patent.number}>
@@ -368,7 +628,9 @@ function PublicationsPage() {
                 <div>
                   <h3>{patent.title}</h3>
                   <p>{patent.authors}</p>
-                  <p>{patent.number}; granted {patent.date}.</p>
+                  <p>
+                    {patent.number}; {copy.publications.granted} {patent.date}.
+                  </p>
                 </div>
               </article>
             ))}
@@ -401,113 +663,92 @@ function CvSection({ id, title, children }) {
   );
 }
 
-function CvPage() {
+function CvPage({ copy }) {
   return (
     <main>
-      <PageTitle>Curriculum Vitae</PageTitle>
+      <PageTitle>{copy.cv.title}</PageTitle>
       <div className="section-shell page-content cv-content">
-        <CvSection id="appointments" title="Appointments">
+        <CvSection id="appointments" title={copy.cv.appointments}>
           <TimelineEntry
             period="Jul 2025–present"
-            title="Postdoctoral Fellow"
+            title={copy.cv.postdocTitle}
             institution="Center for Combustion Energy, Department of Energy and Power Engineering, Tsinghua University"
           >
             <p>
-              Postdoctoral advisor:{" "}
+              {copy.cv.postdocAdvisor}:{" "}
               <ExternalLink href="https://sungroup-thu.com/">
                 Prof. Chao Sun
               </ExternalLink>
               .
             </p>
-            <p>
-              Focus: molecular-level understanding of micro- and nanobubbles in
-              aqueous environments.
-            </p>
+            <p>{copy.cv.postdocFocus}</p>
           </TimelineEntry>
         </CvSection>
 
-        <CvSection id="education" title="Education">
+        <CvSection id="education" title={copy.cv.education}>
           <TimelineEntry
             period="Sep 2020–Jun 2025"
-            title="Ph.D. in Power Engineering and Engineering Thermophysics"
+            title={copy.cv.phdTitle}
             institution="Center for Combustion Energy, Department of Energy and Power Engineering, Tsinghua University"
           >
             <p>
-              Advisor:{" "}
+              {copy.cv.advisor}:{" "}
               <ExternalLink href="https://xux-group.github.io/">
                 Prof. Xuefei Xu
               </ExternalLink>
               .
             </p>
-            <p>
-              Focus: water self-ion distributions at aqueous interfaces and
-              their effects on physicochemical processes.
-            </p>
+            <p>{copy.cv.phdFocus}</p>
           </TimelineEntry>
           <TimelineEntry
             period="Sep 2016–Jun 2020"
-            title="B.Eng. in New Energy Science and Engineering"
+            title={copy.cv.bachelorTitle}
             institution="School of Energy and Power Engineering, Huazhong University of Science and Technology"
           >
             <p>
-              Research mentor:{" "}
+              {copy.cv.mentor}:{" "}
               <ExternalLink href="http://sklccyao.energy.hust.edu.cn/info/1079/1297.htm">
                 Prof. Hongyun Hu
               </ExternalLink>
               .
             </p>
-            <p>
-              Focus: high-value utilization of solid waste and biomass energy
-              conversion.
-            </p>
+            <p>{copy.cv.bachelorFocus}</p>
           </TimelineEntry>
         </CvSection>
 
-        <CvSection id="visiting" title="Visiting Research">
+        <CvSection id="visiting" title={copy.cv.visiting}>
           <TimelineEntry
             period="Nov 2022–Nov 2023"
-            title="Visiting Ph.D. Researcher"
+            title={copy.cv.visitingTitle}
             institution="Atomistic Simulations, Italian Institute of Technology"
           >
             <p>
-              Host:{" "}
+              {copy.cv.host}:{" "}
               <ExternalLink href="https://www.iit.it/people-details/-/people/michele-parrinello">
                 Prof. Michele Parrinello
               </ExternalLink>
               .
             </p>
-            <p>
-              Focus: enhanced sampling and deep-potential molecular simulation
-              of water-self-ion-mediated glycine tautomerism.
-            </p>
+            <p>{copy.cv.visitingFocus}</p>
           </TimelineEntry>
         </CvSection>
 
-        <CvSection id="talks" title="Academic Exchange">
+        <CvSection id="talks" title={copy.cv.exchange}>
           <div className="record-list">
             <article>
-              <h3>Oral presentation, 5th ABACUS Developer Conference</h3>
-              <p>Jul 2025, Beijing, China</p>
-              <p>
-                Electric Field and Interface Modulation of Glycine Tautomerism in
-                Solution: A Study Using ABACUS, DeePKS, DeePMD, and OPES with
-                Voronoi CVs.
-              </p>
+              <h3>{copy.cv.talk1Title}</h3>
+              <p>{copy.cv.talk1Place}</p>
+              <p>{copy.cv.talk1Text}</p>
             </article>
             <article>
-              <h3>
-                Oral presentation, 14th National Conference on Fluid Mechanics
-              </h3>
-              <p>Aug 2026, Qingdao, China</p>
-              <p>
-                Molecular Mechanisms of Ion-Microenvironment-Regulated
-                Micro/Nanobubble Evolution.
-              </p>
+              <h3>{copy.cv.talk2Title}</h3>
+              <p>{copy.cv.talk2Place}</p>
+              <p>{copy.cv.talk2Text}</p>
             </article>
           </div>
         </CvSection>
 
-        <CvSection id="honors" title="Honors and Awards">
+        <CvSection id="honors" title={copy.cv.honors}>
           <div className="honor-list">
             {honors.map((honor) => (
               <div key={`${honor.year}-${honor.title}`}>
@@ -522,13 +763,13 @@ function CvPage() {
   );
 }
 
-function ResourcesPage() {
+function ResourcesPage({ copy }) {
   return (
     <main>
-      <PageTitle>Resources</PageTitle>
+      <PageTitle>{copy.resources.title}</PageTitle>
       <div className="section-shell page-content">
         <section className="content-section first">
-          <h2>Codes</h2>
+          <h2>{copy.resources.codes}</h2>
           <div className="resource-list">
             {codeResources.map((resource) => (
               <article key={resource.href}>
@@ -542,7 +783,7 @@ function ResourcesPage() {
         </section>
 
         <section className="content-section">
-          <h2>Tutorials</h2>
+          <h2>{copy.resources.tutorials}</h2>
           <div className="resource-list">
             {tutorials.map((tutorial) => (
               <article key={tutorial.href}>
@@ -556,7 +797,7 @@ function ResourcesPage() {
         </section>
 
         <section className="content-section">
-          <h2>Recommended Learning Resources</h2>
+          <h2>{copy.resources.recommended}</h2>
           <div className="resource-groups">
             {recommendedResourceGroups.map((group) => (
               <section key={group.title} className="resource-group">
@@ -579,24 +820,21 @@ function ResourcesPage() {
         </section>
 
         <section className="content-section notes-section">
-          <h2>Notes</h2>
-          <p>
-            Technical notes and longer-form tutorials will be published here as
-            the collection develops.
-          </p>
+          <h2>{copy.resources.notes}</h2>
+          <p>{copy.resources.notesText}</p>
         </section>
       </div>
     </main>
   );
 }
 
-function ContactPage() {
+function ContactPage({ copy }) {
   return (
     <main>
-      <PageTitle>Contact</PageTitle>
+      <PageTitle>{copy.contact.title}</PageTitle>
       <div className="section-shell page-content contact-content">
         <section>
-          <h2>Email</h2>
+          <h2>{copy.contact.email}</h2>
           <p>
             <a href="mailto:zhangpengchao@mail.tsinghua.edu.cn">
               zhangpengchao@mail.tsinghua.edu.cn
@@ -608,14 +846,14 @@ function ContactPage() {
         </section>
 
         <section>
-          <h2>Affiliation</h2>
+          <h2>{copy.contact.affiliation}</h2>
           <p>Center for Combustion Energy</p>
           <p>Department of Energy and Power Engineering</p>
           <p>Tsinghua University, Beijing 100084, China</p>
         </section>
 
         <section>
-          <h2>Academic Profiles</h2>
+          <h2>{copy.contact.profiles}</h2>
           <div className="link-list">
             {profileLinks.map((link) => (
               <ExternalLink key={link.label} href={link.href}>
@@ -626,7 +864,7 @@ function ContactPage() {
         </section>
 
         <section>
-          <h2>Social</h2>
+          <h2>{copy.contact.social}</h2>
           <div className="link-list">
             {socialLinks.map((link) => (
               <ExternalLink key={link.label} href={link.href}>
@@ -640,13 +878,13 @@ function ContactPage() {
   );
 }
 
-function NotFoundPage() {
+function NotFoundPage({ copy }) {
   return (
     <main>
-      <PageTitle>Page Not Found</PageTitle>
+      <PageTitle>{copy.notFound.title}</PageTitle>
       <div className="section-shell page-content">
         <p>
-          <Link to="/">Return to the home page.</Link>
+          <Link to="/">{copy.notFound.returnHome}</Link>
         </p>
       </div>
     </main>
@@ -654,19 +892,34 @@ function NotFoundPage() {
 }
 
 function AppLayout() {
+  const [language, setLanguage] = useState(() => {
+    if (typeof window === "undefined") return "en";
+    return window.localStorage.getItem("site-language") === "zh" ? "zh" : "en";
+  });
+  const copy = COPY[language];
+
+  useEffect(() => {
+    window.localStorage.setItem("site-language", language);
+    document.documentElement.lang = copy.htmlLang;
+  }, [copy.htmlLang, language]);
+
   return (
     <>
       <ScrollToTop />
-      <DocumentTitle />
-      <Header />
+      <DocumentTitle copy={copy} />
+      <Header
+        copy={copy}
+        language={language}
+        onLanguageChange={setLanguage}
+      />
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/research" element={<ResearchPage />} />
-        <Route path="/publications" element={<PublicationsPage />} />
-        <Route path="/cv" element={<CvPage />} />
-        <Route path="/resources" element={<ResourcesPage />} />
-        <Route path="/contact" element={<ContactPage />} />
-        <Route path="*" element={<NotFoundPage />} />
+        <Route path="/" element={<HomePage copy={copy} />} />
+        <Route path="/research" element={<ResearchPage copy={copy} />} />
+        <Route path="/publications" element={<PublicationsPage copy={copy} />} />
+        <Route path="/cv" element={<CvPage copy={copy} />} />
+        <Route path="/resources" element={<ResourcesPage copy={copy} />} />
+        <Route path="/contact" element={<ContactPage copy={copy} />} />
+        <Route path="*" element={<NotFoundPage copy={copy} />} />
       </Routes>
       <Footer />
     </>
