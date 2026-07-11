@@ -113,6 +113,7 @@ const COPY = {
       ["/contact", "Contact"],
     ],
     header: {
+      identity: "Pengchao's Homepage",
       menuOpen: "Close",
       menuClosed: "Menu",
       navLabel: "Primary navigation",
@@ -257,6 +258,7 @@ const COPY = {
       ["/contact", "联系"],
     ],
     header: {
+      identity: "章鹏超 · 个人主页",
       menuOpen: "关闭",
       menuClosed: "菜单",
       navLabel: "主导航",
@@ -420,7 +422,7 @@ function Header({ copy, language, onLanguageChange }) {
     <header className="site-header">
       <div className="header-inner">
         <Link className="site-identity" to="/">
-          Pengchao Zhang
+          {copy.header.identity}
         </Link>
         <div className="header-actions">
           <nav

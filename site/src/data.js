@@ -67,9 +67,9 @@ export const codeResources = [
     zhTitle: "界面水自解离离子的 Voronoi CVs",
     href: "https://github.com/Zhang-pchao/OilWaterInterface/tree/main/Voronoi_CVs",
     description:
-      "PLUMED CVs for ion charge, OH-/H3O+ distance, ion identity, and ion location in slab systems.",
+      "PLUMED CVs for ion charge, OH⁻/H₃O⁺ distance, ion identity, and ion location in slab systems.",
     zhDescription:
-      "用于 slab 体系中离子电荷、OH-/H3O+ 距离、离子身份和位置判别的 PLUMED CV。",
+      "用于 slab 体系中离子电荷、OH⁻/H₃O⁺ 距离、离子身份和位置判别的 PLUMED CV。",
   },
   {
     title: "Voronoi CVs for OPES-DPMD nitrogen reduction",
@@ -411,11 +411,11 @@ export const outreachLinks = [
     zhDescription: "Bilibili 报告视频：电场与界面调控溶液中甘氨酸互变异构反应。",
   },
   {
-    title: "Deep-potential and enhanced-sampling workflows",
-    zhTitle: "深度势能与增强采样工作流",
+    title: "Interface and ion environments control TiO₂-water nanobubbles",
+    zhTitle: "界面与离子环境共同控制 TiO₂–水体系中的纳米气泡",
     href: "https://zhuanlan.zhihu.com/p/2032423240954541351",
-    description: "Technical notes on molecular simulation workflows that combine deep potentials with enhanced sampling.",
-    zhDescription: "知乎笔记：整理深度势能模型与增强采样结合的分子模拟工作流。",
+    description: "Zhihu note on how surface chemistry, ion distributions, and interfacial charge jointly control nanobubble stability in TiO₂-water systems.",
+    zhDescription: "知乎笔记：说明 TiO₂–水体系中表面化学改变离子环境，离子分布决定界面电荷，界面电荷进一步控制纳米气泡稳定性。",
   },
   {
     title: "Acidity and basicity of the air-water interface",
@@ -432,7 +432,7 @@ export const outreachLinks = [
     zhDescription: "知乎笔记：比较空气-水和油-水界面的水自离子分布，说明油-水界面电荷分布与 OH⁻ 富集、H₃O⁺ 排斥之间的联系。",
   },
   {
-    title: "H+ and OH- regulate nitrogen nanobubble dynamics",
+    title: "H⁺ and OH⁻ regulate nitrogen nanobubble dynamics",
     zhTitle: "H⁺ 和 OH⁻ 调控体相纳米气泡的动态演化",
     href: "https://zhuanlan.zhihu.com/p/705998273",
     description: "Zhihu note on DPMD simulations and theoretical analysis of nitrogen nanobubbles under acidic and alkaline conditions.",
