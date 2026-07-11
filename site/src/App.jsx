@@ -17,6 +17,7 @@ import {
   recommendedResourceGroups,
   researchProjects,
   socialLinks,
+  technicalNotes,
   tutorials,
 } from "./data.js";
 
@@ -101,6 +102,7 @@ const COPY = {
       "/research": "Research | Pengchao Zhang",
       "/publications": "Publications | Pengchao Zhang",
       "/cv": "CV | Pengchao Zhang",
+      "/notes": "Technical Notes / Blog | Pengchao Zhang",
       "/resources": "Resources | Pengchao Zhang",
       "/contact": "Contact | Pengchao Zhang",
     },
@@ -109,6 +111,7 @@ const COPY = {
       ["/research", "Research"],
       ["/publications", "Publications"],
       ["/cv", "CV"],
+      ["/notes", "Notes"],
       ["/resources", "Resources"],
       ["/contact", "Contact"],
     ],
@@ -218,9 +221,19 @@ const COPY = {
       codes: "Codes",
       tutorials: "Tutorials",
       recommended: "Recommended Learning Resources",
-      notes: "Notes",
+      notes: "Technical Notes / Blog",
       notesText:
-        "Technical notes and longer-form tutorials will be published here as the collection develops.",
+        "A searchable index is available for PLUMED, DeePMD, OPES, ASE, server environments, and post-processing notes.",
+      notesLink: "Open Technical Notes / Blog",
+    },
+    notes: {
+      title: "Technical Notes / Blog",
+      intro:
+        "Searchable working notes on PLUMED, DeePMD, OPES, ASE, server environments, and post-processing workflows.",
+      searchLabel: "Search notes",
+      searchPlaceholder: "Search PLUMED, DeePMD, OPES, ASE...",
+      allCategories: "All",
+      empty: "No notes match this search.",
     },
     contact: {
       title: "Contact",
@@ -246,6 +259,7 @@ const COPY = {
       "/research": "研究 | 章鹏超",
       "/publications": "论文 | 章鹏超",
       "/cv": "简历 | 章鹏超",
+      "/notes": "技术笔记 / Blog | 章鹏超",
       "/resources": "资源 | 章鹏超",
       "/contact": "联系 | 章鹏超",
     },
@@ -254,6 +268,7 @@ const COPY = {
       ["/research", "研究"],
       ["/publications", "论文"],
       ["/cv", "简历"],
+      ["/notes", "技术笔记"],
       ["/resources", "资源"],
       ["/contact", "联系"],
     ],
@@ -356,8 +371,19 @@ const COPY = {
       codes: "代码",
       tutorials: "教程",
       recommended: "推荐学习资源",
-      notes: "笔记",
-      notesText: "技术笔记和更系统的教程会随内容积累逐步整理到这里。",
+      notes: "技术笔记 / Blog",
+      notesText:
+        "已整理为可检索入口，覆盖 PLUMED、DeePMD、OPES、ASE、服务器环境和后处理经验。",
+      notesLink: "打开技术笔记 / Blog",
+    },
+    notes: {
+      title: "技术笔记 / Blog",
+      intro:
+        "整理 PLUMED、DeePMD、OPES、ASE、服务器环境和后处理经验，方便按主题检索。",
+      searchLabel: "检索笔记",
+      searchPlaceholder: "搜索 PLUMED、DeePMD、OPES、ASE...",
+      allCategories: "全部",
+      empty: "没有匹配的笔记。",
     },
     contact: {
       title: "联系",
@@ -903,6 +929,103 @@ function CvPage({ copy }) {
   );
 }
 
+function NotesPage({ copy, language }) {
+  const [query, setQuery] = useState("");
+  const [category, setCategory] = useState("all");
+  const normalizedQuery = query.trim().toLowerCase();
+  const categories = Array.from(
+    new Map(
+      technicalNotes.map((note) => [
+        note.category,
+        localized(note, "Category", language),
+      ]),
+    ),
+  );
+  const visibleNotes = technicalNotes.filter((note) => {
+    const matchesCategory = category === "all" || note.category === category;
+    const searchableText = [
+      localized(note, "Title", language),
+      localized(note, "Description", language),
+      localized(note, "Category", language),
+      note.tags.join(" "),
+    ]
+      .join(" ")
+      .toLowerCase();
+
+    return matchesCategory && (!normalizedQuery || searchableText.includes(normalizedQuery));
+  });
+
+  return (
+    <main>
+      <PageTitle>{copy.notes.title}</PageTitle>
+      <div className="section-shell page-content">
+        <p className="notes-intro">{copy.notes.intro}</p>
+
+        <div className="notes-toolbar">
+          <label className="notes-search">
+            <span>{copy.notes.searchLabel}</span>
+            <input
+              type="search"
+              value={query}
+              placeholder={copy.notes.searchPlaceholder}
+              onChange={(event) => setQuery(event.target.value)}
+            />
+          </label>
+          <div className="note-filters" aria-label={copy.notes.searchLabel}>
+            <button
+              className={category === "all" ? "active" : undefined}
+              type="button"
+              aria-pressed={category === "all"}
+              onClick={() => setCategory("all")}
+            >
+              {copy.notes.allCategories}
+            </button>
+            {categories.map(([key, label]) => (
+              <button
+                key={key}
+                className={category === key ? "active" : undefined}
+                type="button"
+                aria-pressed={category === key}
+                onClick={() => setCategory(key)}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {visibleNotes.length > 0 ? (
+          <div className="notes-grid">
+            {visibleNotes.map((note) => (
+              <article className="note-card" key={note.title}>
+                <div className="note-meta">
+                  <span className="note-category">
+                    {localized(note, "Category", language)}
+                  </span>
+                  <span className="status-pill">
+                    {localized(note, "Status", language)}
+                  </span>
+                </div>
+                <h2>{localized(note, "Title", language)}</h2>
+                <p>{localized(note, "Description", language)}</p>
+                <div className="tag-list">
+                  {note.tags.map((tag) => (
+                    <span className="tag-pill" key={tag}>
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <p className="notes-empty">{copy.notes.empty}</p>
+        )}
+      </div>
+    </main>
+  );
+}
+
 function ResourcesPage({ copy, language }) {
   return (
     <main>
@@ -966,6 +1089,7 @@ function ResourcesPage({ copy, language }) {
         <section className="content-section notes-section">
           <h2>{copy.resources.notes}</h2>
           <p>{copy.resources.notesText}</p>
+          <Link to="/notes">{copy.resources.notesLink}</Link>
         </section>
       </div>
     </main>
@@ -1064,6 +1188,10 @@ function AppLayout() {
         />
         <Route path="/publications" element={<PublicationsPage copy={copy} />} />
         <Route path="/cv" element={<CvPage copy={copy} />} />
+        <Route
+          path="/notes"
+          element={<NotesPage copy={copy} language={language} />}
+        />
         <Route
           path="/resources"
           element={<ResourcesPage copy={copy} language={language} />}

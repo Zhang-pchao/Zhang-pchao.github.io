@@ -82,6 +82,87 @@ export const codeResources = [
   },
 ];
 
+export const technicalNotes = [
+  {
+    title: "PLUMED collective variables and input patterns",
+    zhTitle: "PLUMED 集体变量与输入文件模板",
+    category: "PLUMED",
+    zhCategory: "PLUMED",
+    tags: ["PLUMED", "CV", "Voronoi", "metadynamics"],
+    description:
+      "Practical notes for writing, checking, and reusing CV definitions in reactive aqueous and interfacial simulations.",
+    zhDescription:
+      "整理反应水相与界面模拟中 CV 定义的编写、检查和复用经验。",
+    status: "Living notes",
+    zhStatus: "持续整理",
+  },
+  {
+    title: "DeePMD and Deep Potential workflow checks",
+    zhTitle: "DeePMD 与深度势能工作流检查",
+    category: "DeePMD",
+    zhCategory: "DeePMD",
+    tags: ["DeePMD", "Deep Potential", "training", "validation"],
+    description:
+      "Training setup, model-deviation checks, trajectory sanity checks, and common failure modes for machine-learned potentials.",
+    zhDescription:
+      "记录深度势能模型训练、模型偏差、轨迹检查和常见失效模式的排查方法。",
+    status: "Living notes",
+    zhStatus: "持续整理",
+  },
+  {
+    title: "OPES enhanced-sampling workflows",
+    zhTitle: "OPES 增强采样工作流",
+    category: "OPES",
+    zhCategory: "OPES",
+    tags: ["OPES", "free energy", "reweighting", "PLUMED"],
+    description:
+      "Reusable patterns for OPES setup, convergence inspection, free-energy reconstruction, and reporting.",
+    zhDescription:
+      "整理 OPES 设置、收敛判断、自由能重构和结果汇报中的可复用流程。",
+    status: "Living notes",
+    zhStatus: "持续整理",
+  },
+  {
+    title: "ASE scripting for atomistic systems",
+    zhTitle: "ASE 原子体系脚本经验",
+    category: "ASE",
+    zhCategory: "ASE",
+    tags: ["ASE", "Python", "structures", "automation"],
+    description:
+      "Small Python recipes for structure editing, trajectory conversion, batch preparation, and simulation automation.",
+    zhDescription:
+      "汇总结构编辑、轨迹格式转换、批量建模和模拟自动化中的 ASE 脚本片段。",
+    status: "Living notes",
+    zhStatus: "持续整理",
+  },
+  {
+    title: "Server environments and job templates",
+    zhTitle: "服务器环境与作业模板",
+    category: "Server",
+    zhCategory: "服务器环境",
+    tags: ["HPC", "SLURM", "conda", "modules"],
+    description:
+      "Environment setup, module and conda notes, scheduler templates, and reproducible command records for remote servers.",
+    zhDescription:
+      "记录远程服务器上的环境配置、module/conda 用法、调度脚本模板和可复现命令。",
+    status: "Living notes",
+    zhStatus: "持续整理",
+  },
+  {
+    title: "Post-processing and trajectory analysis",
+    zhTitle: "后处理与轨迹分析",
+    category: "Post-processing",
+    zhCategory: "后处理",
+    tags: ["analysis", "Python", "trajectory", "visualization"],
+    description:
+      "Analysis scripts and checks for trajectories, collective variables, free-energy surfaces, figures, and movies.",
+    zhDescription:
+      "整理轨迹、集体变量、自由能面、图像和视频后处理中的脚本与检查方法。",
+    status: "Living notes",
+    zhStatus: "持续整理",
+  },
+];
+
 export const recommendedResourceGroups = [
   {
     title: "Foundations, Computing, and Academic Workflow",
