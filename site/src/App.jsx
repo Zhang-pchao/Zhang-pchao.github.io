@@ -26,11 +26,11 @@ const movieGroups = [
     sourceHref: "https://pubs.acs.org/doi/10.1021/acs.jcim.4c00273",
     title: {
       en: "Glycine proton-transfer movies",
-      zh: "甘氨酸质子转移视频",
+      zh: "甘氨酸质子转移过程",
     },
     source: {
       en: "From Supporting Information videos for Intramolecular and Water Mediated Tautomerism of Solvated Glycine.",
-      zh: "来自论文 Intramolecular and Water Mediated Tautomerism of Solvated Glycine 的 Supporting Information 视频。",
+      zh: "来自甘氨酸互变异构论文的支持信息视频。",
     },
     videos: [
       {
@@ -61,32 +61,32 @@ const movieGroups = [
     sourceHref: "https://pubs.acs.org/doi/10.1021/jacs.4c06641",
     title: {
       en: "Nitrogen nanobubble movies",
-      zh: "氮气纳米气泡视频",
+      zh: "氮气纳米气泡演化过程",
     },
     source: {
       en: "From Supporting Information videos for Hydroxide and Hydronium Ions Modulate the Dynamic Evolution of Nitrogen Nanobubbles in Water.",
-      zh: "来自论文 Hydroxide and Hydronium Ions Modulate the Dynamic Evolution of Nitrogen Nanobubbles in Water 的 Supporting Information 视频。",
+      zh: "来自氢氧根和水合氢离子调控氮气纳米气泡演化论文的支持信息视频。",
     },
     videos: [
       {
         src: "/assets/videos/bubble-pure-water-a.mp4",
         title: {
           en: "Pure water system A",
-          zh: "纯水体系 A",
+          zh: "纯水体系中的气泡演化过程",
         },
       },
       {
         src: "/assets/videos/bubble-acidic-b.mp4",
         title: {
           en: "Acidic system B",
-          zh: "酸性体系 B",
+          zh: "酸性体系中的气泡演化过程",
         },
       },
       {
         src: "/assets/videos/bubble-more-alkaline-d.mp4",
         title: {
           en: "More alkaline system D",
-          zh: "强碱性体系 D",
+          zh: "碱性体系中的气泡演化过程",
         },
       },
     ],
@@ -266,23 +266,23 @@ const COPY = {
     home: {
       name: "章鹏超",
       position: ["博士后", "清华大学燃烧能源中心"],
-      bio: "我从事计算化学与分子模拟研究，关注水相界面、水自解离离子、纳米气泡动力学以及反应机理，主要使用机器学习势能面与增强采样方法。我在清华大学获得博士学位，在华中科技大学获得能源与动力工程学士学位，并曾在意大利理工学院进行博士访问研究。",
+      bio: "我从事计算化学与分子模拟研究，关注水相界面、水自解离离子、纳米气泡动力学以及反应机理，主要使用深度势能模型与增强采样方法。我在清华大学获得博士学位，在华中科技大学获得能源与动力工程学士学位，并曾在意大利理工学院进行博士访问研究。",
       academicProfiles: "学术主页",
       researchInterests: "研究方向",
       selectedPublications: "代表论文",
       fullList: "完整列表",
       movies: "研究视频",
       movieIntro:
-        "来自已发表论文 Supporting Information 的质子转移和纳米气泡动力学循环静音预览视频。",
-      outreach: "科普与笔记",
+        "这里展示两项已发表工作的支持信息视频，循环静音播放，便于快速了解质子转移和纳米气泡演化过程。",
+      outreach: "推送与宣传",
       more: "更多",
     },
     researchAreas: [
       {
         number: "01",
-        title: "深度势分子动力学与增强采样",
+        title: "深度势能分子动力学与增强采样",
         description:
-          "发展并整合机器学习势能面、自由能计算与稀有事件采样方法，构建面向复杂反应体系的模拟工作流。",
+          "发展并整合深度势能模型、自由能计算与稀有事件采样方法，构建面向复杂反应体系的模拟工作流。",
       },
       {
         number: "02",
@@ -307,7 +307,7 @@ const COPY = {
       title: "研究",
       repositories: "研究仓库",
       completeArchive: "完整归档",
-      outreach: "科普与笔记",
+      outreach: "推送与宣传",
     },
     publications: {
       title: "论文",
@@ -335,7 +335,7 @@ const COPY = {
       visitingTitle: "博士访问研究生",
       host: "访问导师",
       visitingFocus:
-        "研究方向：水自解离离子介导的甘氨酸互变异构反应的增强采样与深度势分子模拟。",
+        "研究方向：水自解离离子介导的甘氨酸互变异构反应的增强采样与深度势能分子模拟。",
       talk1Title: "口头报告，第五届 ABACUS 开发者大会",
       talk1Place: "2025年7月，北京",
       talk1Text:
@@ -392,6 +392,10 @@ function ExternalLink({ href, children, className = "" }) {
       {children}
     </a>
   );
+}
+
+function localized(item, field, language) {
+  return language === "zh" ? item[`zh${field}`] || item[field.toLowerCase()] : item[field.toLowerCase()];
 }
 
 function Header({ copy, language, onLanguageChange }) {
@@ -561,7 +565,7 @@ function MovieShowcase({ copy, language }) {
   );
 }
 
-function HomePage({ copy }) {
+function HomePage({ copy, language }) {
   const featured = publications.filter((publication) => publication.featured);
   const featuredOutreach = outreachLinks.slice(0, 4);
 
@@ -592,7 +596,7 @@ function HomePage({ copy }) {
         />
       </section>
 
-      <MovieShowcase copy={copy} language={copy.htmlLang === "zh-CN" ? "zh" : "en"} />
+      <MovieShowcase copy={copy} language={language} />
 
       <section className="content-section">
         <h2>{copy.home.researchInterests}</h2>
@@ -629,9 +633,11 @@ function HomePage({ copy }) {
           {featuredOutreach.map((item) => (
             <article key={item.href}>
               <h3>
-                <ExternalLink href={item.href}>{item.title}</ExternalLink>
+                <ExternalLink href={item.href}>
+                  {localized(item, "Title", language)}
+                </ExternalLink>
               </h3>
-              <p>{item.description}</p>
+              <p>{localized(item, "Description", language)}</p>
             </article>
           ))}
         </div>
@@ -640,7 +646,7 @@ function HomePage({ copy }) {
   );
 }
 
-function ResearchPage({ copy }) {
+function ResearchPage({ copy, language }) {
   return (
     <main>
       <PageTitle>{copy.research.title}</PageTitle>
@@ -679,9 +685,11 @@ function ResearchPage({ copy }) {
             {outreachLinks.map((item) => (
               <article key={item.href}>
                 <h3>
-                  <ExternalLink href={item.href}>{item.title}</ExternalLink>
+                  <ExternalLink href={item.href}>
+                    {localized(item, "Title", language)}
+                  </ExternalLink>
                 </h3>
-                <p>{item.description}</p>
+                <p>{localized(item, "Description", language)}</p>
               </article>
             ))}
           </div>
@@ -1031,8 +1039,11 @@ function AppLayout() {
         onLanguageChange={setLanguage}
       />
       <Routes>
-        <Route path="/" element={<HomePage copy={copy} />} />
-        <Route path="/research" element={<ResearchPage copy={copy} />} />
+        <Route path="/" element={<HomePage copy={copy} language={language} />} />
+        <Route
+          path="/research"
+          element={<ResearchPage copy={copy} language={language} />}
+        />
         <Route path="/publications" element={<PublicationsPage copy={copy} />} />
         <Route path="/cv" element={<CvPage copy={copy} />} />
         <Route path="/resources" element={<ResourcesPage copy={copy} />} />

@@ -321,48 +321,66 @@ export const researchProjects = [
 export const outreachLinks = [
   {
     title: "Ion-regulated nitrogen nanobubble evolution",
+    zhTitle: "离子调控氮气纳米气泡演化",
     href: "https://mp.weixin.qq.com/s/ZiB_C1laE76r4SwGh6_hHQ",
     description: "Chinese-language article on how hydronium and hydroxide ions modulate nitrogen nanobubble dynamics in water.",
+    zhDescription: "介绍水合氢离子和氢氧根离子如何调控水中氮气纳米气泡的动态演化。",
   },
   {
     title: "Nanobubble nucleation and dissolution near anatase-water interfaces",
+    zhTitle: "锐钛矿-水界面附近的纳米气泡成核与溶解",
     href: "https://mp.weixin.qq.com/s/qIgB2yBWz_ABVNwwTsz4SQ",
     description: "Chinese-language article on molecular simulations of nanobubble evolution near anatase-water interfaces.",
+    zhDescription: "介绍锐钛矿-水界面附近纳米气泡演化过程的分子模拟研究。",
   },
   {
     title: "Electric-field and interface effects on glycine tautomerism",
+    zhTitle: "电场与界面对甘氨酸互变异构反应的调控",
     href: "https://www.cce.tsinghua.edu.cn/info/1012/4070.htm",
     description: "Tsinghua CCE research news on deep-potential simulations of solvated glycine under electric-field and interface effects.",
+    zhDescription: "清华大学燃烧能源中心关于电场与界面效应调控溶液中甘氨酸反应机制的研究报道。",
   },
   {
     title: "Video report: glycine tautomerism in solution",
+    zhTitle: "视频报告：溶液中甘氨酸互变异构",
     href: "https://www.bilibili.com/video/BV1D2b5zEEYx/",
     description: "Bilibili video report on electric-field and interface modulation of glycine tautomerism in solution.",
+    zhDescription: "关于电场与界面调控溶液中甘氨酸互变异构反应的视频报告。",
   },
   {
     title: "Deep-potential and enhanced-sampling workflows",
+    zhTitle: "深度势能与增强采样工作流",
     href: "https://zhuanlan.zhihu.com/p/2032423240954541351",
     description: "Technical notes on molecular simulation workflows that combine deep potentials with enhanced sampling.",
+    zhDescription: "整理深度势能模型与增强采样结合的分子模拟工作流。",
   },
   {
     title: "Aqueous-interface self-ion simulations",
+    zhTitle: "水相界面自解离离子模拟",
     href: "https://zhuanlan.zhihu.com/p/695737327",
     description: "Notes on simulating interfacial water, hydronium, and hydroxide ion distributions.",
+    zhDescription: "关于界面水、水合氢离子和氢氧根离子分布模拟的技术笔记。",
   },
   {
     title: "Computational chemistry workflow notes",
+    zhTitle: "计算化学工作流笔记",
     href: "https://zhuanlan.zhihu.com/p/20844844357",
     description: "Long-form notes on computational chemistry practice.",
+    zhDescription: "计算化学实践中的工具、流程与经验整理。",
   },
   {
     title: "Enhanced sampling and free-energy notes",
+    zhTitle: "增强采样与自由能计算笔记",
     href: "https://zhuanlan.zhihu.com/p/705998273",
     description: "Notes on rare-event and free-energy simulation methods.",
+    zhDescription: "关于稀有事件采样与自由能模拟方法的笔记。",
   },
   {
     title: "Atomistic simulation tutorial notes",
+    zhTitle: "原子尺度模拟教程笔记",
     href: "https://zhuanlan.zhihu.com/p/695839138",
     description: "Tutorial-style notes for atomistic modeling.",
+    zhDescription: "面向原子尺度建模与模拟的教程式笔记。",
   },
 ];
 

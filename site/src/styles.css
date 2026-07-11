@@ -171,9 +171,9 @@ h3 {
 
 .home-intro {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 205px;
+  grid-template-columns: minmax(0, 1fr) 190px;
   gap: 46px;
-  align-items: start;
+  align-items: center;
   padding: 48px 0 38px;
   border-bottom: 1px solid var(--line);
 }
@@ -194,9 +194,11 @@ h3 {
 }
 
 .profile-photo {
-  width: 205px;
-  height: auto;
+  width: 190px;
+  height: 238px;
   border: 1px solid #ccc;
+  object-fit: cover;
+  object-position: center top;
 }
 
 .inline-links,
@@ -658,6 +660,7 @@ h3 {
 
   .profile-photo {
     width: 145px;
+    height: 182px;
   }
 
   .contact-content {
@@ -681,6 +684,7 @@ h3 {
 
   .profile-photo {
     width: 155px;
+    height: 194px;
     margin: 22px 0 0;
   }
 
