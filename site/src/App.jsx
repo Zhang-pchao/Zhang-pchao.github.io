@@ -102,7 +102,7 @@ const COPY = {
       "/research": "Research | Pengchao Zhang",
       "/publications": "Publications | Pengchao Zhang",
       "/cv": "CV | Pengchao Zhang",
-      "/notes": "Technical Notes / Blog | Pengchao Zhang",
+      "/notes": "Research Field Notes | Pengchao Zhang",
       "/resources": "Resources | Pengchao Zhang",
       "/contact": "Contact | Pengchao Zhang",
     },
@@ -111,7 +111,7 @@ const COPY = {
       ["/research", "Research"],
       ["/publications", "Publications"],
       ["/cv", "CV"],
-      ["/notes", "Notes"],
+      ["/notes", "Field Notes"],
       ["/resources", "Resources"],
       ["/contact", "Contact"],
     ],
@@ -221,18 +221,21 @@ const COPY = {
       codes: "Codes",
       tutorials: "Tutorials",
       recommended: "Recommended Learning Resources",
-      notes: "Technical Notes / Blog",
+      notes: "Research Field Notes",
       notesText:
-        "A searchable index is available for PLUMED, DeePMD, OPES, ASE, server environments, and post-processing notes.",
-      notesLink: "Open Technical Notes / Blog",
+        "Case-based notes connect papers, code, simulation systems, and method decisions from real research projects.",
+      notesLink: "Open Research Field Notes",
     },
     notes: {
-      title: "Technical Notes / Blog",
+      title: "Research Field Notes",
       intro:
-        "Searchable working notes on PLUMED, DeePMD, OPES, ASE, server environments, and post-processing workflows.",
+        "Notes from real simulation projects: CV design, model validation, enhanced sampling choices, interfacial analysis, failed attempts, and reproducible research capsules.",
       searchLabel: "Search notes",
-      searchPlaceholder: "Search PLUMED, DeePMD, OPES, ASE...",
+      searchPlaceholder: "Search Voronoi, glycine, nanobubble...",
       allCategories: "All",
+      system: "System",
+      methodValue: "Method value",
+      links: "Paper and code",
       empty: "No notes match this search.",
     },
     contact: {
@@ -259,7 +262,7 @@ const COPY = {
       "/research": "研究 | 章鹏超",
       "/publications": "论文 | 章鹏超",
       "/cv": "简历 | 章鹏超",
-      "/notes": "技术笔记 / Blog | 章鹏超",
+      "/notes": "研究札记 | 章鹏超",
       "/resources": "资源 | 章鹏超",
       "/contact": "联系 | 章鹏超",
     },
@@ -268,7 +271,7 @@ const COPY = {
       ["/research", "研究"],
       ["/publications", "论文"],
       ["/cv", "简历"],
-      ["/notes", "技术笔记"],
+      ["/notes", "研究札记"],
       ["/resources", "资源"],
       ["/contact", "联系"],
     ],
@@ -371,19 +374,22 @@ const COPY = {
       codes: "代码",
       tutorials: "教程",
       recommended: "推荐学习资源",
-      notes: "技术笔记 / Blog",
+      notes: "研究札记",
       notesText:
-        "已整理为可检索入口，覆盖 PLUMED、DeePMD、OPES、ASE、服务器环境和后处理经验。",
-      notesLink: "打开技术笔记 / Blog",
+        "以真实研究案例为核心，连接论文、代码、模拟体系和方法判断。",
+      notesLink: "打开研究札记",
     },
     notes: {
-      title: "技术笔记 / Blog",
+      title: "研究札记",
       intro:
-        "整理 PLUMED、DeePMD、OPES、ASE、服务器环境和后处理经验，方便按主题检索。",
-      searchLabel: "检索笔记",
-      searchPlaceholder: "搜索 PLUMED、DeePMD、OPES、ASE...",
+        "记录真实模拟研究中的 CV 设计、模型验证、增强采样取舍、界面分析、失败经验和可复现实验片段。",
+      searchLabel: "检索札记",
+      searchPlaceholder: "搜索 Voronoi、甘氨酸、纳米气泡...",
       allCategories: "全部",
-      empty: "没有匹配的笔记。",
+      system: "模拟体系",
+      methodValue: "方法价值",
+      links: "论文与代码",
+      empty: "没有匹配的札记。",
     },
     contact: {
       title: "联系",
@@ -947,7 +953,10 @@ function NotesPage({ copy, language }) {
       localized(note, "Title", language),
       localized(note, "Description", language),
       localized(note, "Category", language),
+      localized(note, "System", language),
+      localized(note, "Value", language),
       note.tags.join(" "),
+      note.links?.map((link) => localized(link, "Label", language)).join(" "),
     ]
       .join(" ")
       .toLowerCase();
@@ -1008,11 +1017,26 @@ function NotesPage({ copy, language }) {
                 </div>
                 <h2>{localized(note, "Title", language)}</h2>
                 <p>{localized(note, "Description", language)}</p>
+                <p className="note-system">
+                  <span>{copy.notes.system}</span>
+                  {localized(note, "System", language)}
+                </p>
+                <p className="note-value">
+                  <span>{copy.notes.methodValue}</span>
+                  {localized(note, "Value", language)}
+                </p>
                 <div className="tag-list">
                   {note.tags.map((tag) => (
                     <span className="tag-pill" key={tag}>
                       {tag}
                     </span>
+                  ))}
+                </div>
+                <div className="note-links" aria-label={copy.notes.links}>
+                  {note.links.map((link) => (
+                    <ExternalLink key={link.href} href={link.href}>
+                      {localized(link, "Label", language)}
+                    </ExternalLink>
                   ))}
                 </div>
               </article>

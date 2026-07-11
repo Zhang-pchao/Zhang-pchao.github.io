@@ -84,82 +84,133 @@ export const codeResources = [
 
 export const technicalNotes = [
   {
-    title: "PLUMED collective variables and input patterns",
-    zhTitle: "PLUMED 集体变量与输入文件模板",
-    category: "PLUMED",
-    zhCategory: "PLUMED",
-    tags: ["PLUMED", "CV", "Voronoi", "metadynamics"],
+    title: "Water self-ions at interfaces: from double layers to Voronoi CVs",
+    zhTitle: "界面水自解离离子：从双分子层分布到 Voronoi CV",
+    category: "Interfacial ions",
+    zhCategory: "界面离子",
+    system:
+      "Air-water and air(oil)-water slab systems; H₃O⁺/OH⁻ identity, charge, distance, diffusion, and interfacial location.",
+    zhSystem:
+      "空气-水与空气（油）-水 slab 体系；H₃O⁺/OH⁻ 的身份、电荷、距离、扩散和界面位置。",
+    tags: ["H₃O⁺", "OH⁻", "Voronoi CV", "OPES-DPMD", "slab"],
     description:
-      "Practical notes for writing, checking, and reusing CV definitions in reactive aqueous and interfacial simulations.",
+      "A case note on turning an interfacial acidity question into reusable CVs, analysis scripts, diffusion checks, and figure workflows.",
     zhDescription:
-      "整理反应水相与界面模拟中 CV 定义的编写、检查和复用经验。",
-    status: "Living notes",
-    zhStatus: "持续整理",
+      "记录如何把界面酸碱性问题转化为可复用的 CV、分析脚本、扩散检查和作图流程。",
+    value:
+      "The reusable part is the decision record: how to define where an ion is, which ion it is, and whether an apparent interfacial preference is robust to the coordinate choice.",
+    zhValue:
+      "真正值得备份的是方法判断：怎样定义离子在哪里、它是哪一种离子，以及表观界面偏好是否依赖坐标选择。",
+    status: "Field note",
+    zhStatus: "研究札记",
+    links: [
+      {
+        label: "Paper: air-water double layer",
+        zhLabel: "论文：空气-水界面双分子层分布",
+        href: "https://doi.org/10.1021/acsphyschemau.3c00076",
+      },
+      {
+        label: "Paper: air(oil)-water interfaces",
+        zhLabel: "论文：空气（油）-水界面",
+        href: "https://doi.org/10.1021/acs.langmuir.4c05004",
+      },
+      {
+        label: "Code: DoubleLayerAirWater",
+        zhLabel: "代码：DoubleLayerAirWater",
+        href: "https://github.com/Zhang-pchao/DoubleLayerAirWater",
+      },
+      {
+        label: "Code: OilWaterInterface Voronoi CVs",
+        zhLabel: "代码：OilWaterInterface Voronoi CVs",
+        href: "https://github.com/Zhang-pchao/OilWaterInterface/tree/main/Voronoi_CVs",
+      },
+    ],
   },
   {
-    title: "DeePMD and Deep Potential workflow checks",
-    zhTitle: "DeePMD 与深度势能工作流检查",
-    category: "DeePMD",
-    zhCategory: "DeePMD",
-    tags: ["DeePMD", "Deep Potential", "training", "validation"],
+    title: "Glycine tautomerism: proton transfer as a model-CV-sampling problem",
+    zhTitle: "甘氨酸互变异构：把质子转移作为模型-CV-采样耦合问题",
+    category: "Reactive sampling",
+    zhCategory: "反应采样",
+    system:
+      "Solvated glycine; intramolecular, H₃O⁺-mediated, and OH⁻-mediated proton-transfer pathways.",
+    zhSystem:
+      "水溶液中的甘氨酸；分子内、H₃O⁺ 介导和 OH⁻ 介导的质子转移路径。",
+    tags: ["glycine", "DeePKS", "DeePMD", "OPES", "proton transfer"],
     description:
-      "Training setup, model-deviation checks, trajectory sanity checks, and common failure modes for machine-learned potentials.",
+      "Connects ab initio and DeePKS/DeePMD model building, OPES enhanced sampling, Voronoi CVs, kinetics, and movie post-processing.",
     zhDescription:
-      "记录深度势能模型训练、模型偏差、轨迹检查和常见失效模式的排查方法。",
-    status: "Living notes",
-    zhStatus: "持续整理",
+      "串联从 ab initio 与 DeePKS/DeePMD 建模，到 OPES 增强采样、Voronoi CV、动力学分析和视频后处理的流程。",
+    value:
+      "Use this as a casebook for why low training loss is not enough: the reaction coordinate, water-ion identity, model coverage, and trajectory evidence have to agree.",
+    zhValue:
+      "这类笔记的价值在于说明为什么训练 loss 低还不够：反应坐标、水自离子身份、模型覆盖范围和轨迹证据必须相互一致。",
+    status: "Field note",
+    zhStatus: "研究札记",
+    links: [
+      {
+        label: "Paper: solvated glycine tautomerism",
+        zhLabel: "论文：溶液中甘氨酸互变异构",
+        href: "https://doi.org/10.1021/acs.jcim.4c00273",
+      },
+      {
+        label: "Code: GlycineTautomerism",
+        zhLabel: "代码：GlycineTautomerism",
+        href: "https://github.com/Zhang-pchao/GlycineTautomerism",
+      },
+      {
+        label: "Code: Voronoi collective variables",
+        zhLabel: "代码：Voronoi 集体变量",
+        href: "https://github.com/Zhang-pchao/GlycineTautomerism/tree/main/Voronoi_collective_variables",
+      },
+      {
+        label: "Workflow: enhanced sampling inputs",
+        zhLabel: "工作流：增强采样输入",
+        href: "https://github.com/Zhang-pchao/GlycineTautomerism/tree/main/Enhanced_Sampling",
+      },
+    ],
   },
   {
-    title: "OPES enhanced-sampling workflows",
-    zhTitle: "OPES 增强采样工作流",
-    category: "OPES",
-    zhCategory: "OPES",
-    tags: ["OPES", "free energy", "reweighting", "PLUMED"],
+    title: "Ion-regulated nanobubbles: from bulk N₂ bubbles to TiO₂-water interfaces",
+    zhTitle: "离子调控纳米气泡：从体相 N₂ 气泡到 TiO₂-水界面",
+    category: "Nanobubbles",
+    zhCategory: "纳米气泡",
+    system:
+      "Nitrogen nanobubbles in water and near TiO₂-water interfaces; H₃O⁺/OH⁻ environments, N₂ clusters, surface species, and bubble stability.",
+    zhSystem:
+      "水中及 TiO₂-水界面附近的氮气纳米气泡；H₃O⁺/OH⁻ 环境、N₂ 团簇、表面物种和气泡稳定性。",
+    tags: ["nanobubble", "N₂", "TiO₂-water", "Deep Potential", "cluster analysis"],
     description:
-      "Reusable patterns for OPES setup, convergence inspection, free-energy reconstruction, and reporting.",
+      "Bridges ion-modulated bubble dissolution and stability with surface-assisted bubble nucleation, using DP training, OPES-DPMD, cluster tracking, and movie/figure workflows.",
     zhDescription:
-      "整理 OPES 设置、收敛判断、自由能重构和结果汇报中的可复用流程。",
-    status: "Living notes",
-    zhStatus: "持续整理",
-  },
-  {
-    title: "ASE scripting for atomistic systems",
-    zhTitle: "ASE 原子体系脚本经验",
-    category: "ASE",
-    zhCategory: "ASE",
-    tags: ["ASE", "Python", "structures", "automation"],
-    description:
-      "Small Python recipes for structure editing, trajectory conversion, batch preparation, and simulation automation.",
-    zhDescription:
-      "汇总结构编辑、轨迹格式转换、批量建模和模拟自动化中的 ASE 脚本片段。",
-    status: "Living notes",
-    zhStatus: "持续整理",
-  },
-  {
-    title: "Server environments and job templates",
-    zhTitle: "服务器环境与作业模板",
-    category: "Server",
-    zhCategory: "服务器环境",
-    tags: ["HPC", "SLURM", "conda", "modules"],
-    description:
-      "Environment setup, module and conda notes, scheduler templates, and reproducible command records for remote servers.",
-    zhDescription:
-      "记录远程服务器上的环境配置、module/conda 用法、调度脚本模板和可复现命令。",
-    status: "Living notes",
-    zhStatus: "持续整理",
-  },
-  {
-    title: "Post-processing and trajectory analysis",
-    zhTitle: "后处理与轨迹分析",
-    category: "Post-processing",
-    zhCategory: "后处理",
-    tags: ["analysis", "Python", "trajectory", "visualization"],
-    description:
-      "Analysis scripts and checks for trajectories, collective variables, free-energy surfaces, figures, and movies.",
-    zhDescription:
-      "整理轨迹、集体变量、自由能面、图像和视频后处理中的脚本与检查方法。",
-    status: "Living notes",
-    zhStatus: "持续整理",
+      "把离子调控气泡溶解/稳定性与表面辅助气泡成核联系起来，覆盖 DP 训练、OPES-DPMD、团簇追踪和图/视频后处理。",
+    value:
+      "This backs up choices that generic AI cannot infer from package docs: what counts as the bubble, how to track it through PBC, and how ions, N₂, and surface species are separated in analysis.",
+    zhValue:
+      "这类备份记录的是通用 AI 难以从软件文档中推断的选择：怎样定义气泡、如何跨 PBC 追踪，以及分析中如何区分离子、N₂ 和表面物种。",
+    status: "Field note",
+    zhStatus: "研究札记",
+    links: [
+      {
+        label: "Paper: ion-regulated N₂ nanobubbles",
+        zhLabel: "论文：离子调控 N₂ 纳米气泡",
+        href: "https://doi.org/10.1021/jacs.4c06641",
+      },
+      {
+        label: "Code: N2BubbleIon",
+        zhLabel: "代码：N2BubbleIon",
+        href: "https://github.com/Zhang-pchao/N2BubbleIon",
+      },
+      {
+        label: "Paper: TiO₂-water nanobubble nucleation",
+        zhLabel: "论文：TiO₂-水界面纳米气泡成核",
+        href: "https://doi.org/10.1021/jacs.6c05480",
+      },
+      {
+        label: "Code: OPES-DPMD-Bubble-TiO2",
+        zhLabel: "代码：OPES-DPMD-Bubble-TiO2",
+        href: "https://github.com/Zhang-pchao/research/tree/main/OPES-DPMD-Bubble-TiO2",
+      },
+    ],
   },
 ];
 
