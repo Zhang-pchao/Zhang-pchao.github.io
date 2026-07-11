@@ -24,241 +24,296 @@ export const socialLinks = [
 export const tutorials = [
   {
     title: "From DFT to DeePKS to DeePMD | DeePKS Basics",
+    zhTitle: "DFT → DeePKS → DeePMD：DeePKS 基础",
     href: "https://nb.bohrium.dp.tech/detail/8742877753",
     description: "An introductory notebook on the DeePKS workflow.",
+    zhDescription: "介绍 DeePKS 工作流基础概念的入门 notebook。",
   },
   {
     title: "From DFT to DeePKS to DeePMD | DeePKS Tutorials",
+    zhTitle: "DFT → DeePKS → DeePMD：DeePKS 实践教程",
     href: "https://nb.bohrium.dp.tech/detail/7144731675",
     description: "Practical notebooks connecting DFT, DeePKS, and DeePMD.",
+    zhDescription: "串联 DFT、DeePKS 与 DeePMD 的实践 notebook。",
   },
   {
     title: "OPES (On-the-Fly Probability Enhanced Sampling)",
+    zhTitle: "OPES 增强采样",
     href: "https://bohrium.dp.tech/notebooks/9874998164",
     description: "A notebook introduction to OPES enhanced sampling.",
+    zhDescription: "介绍 OPES 增强采样方法的 notebook。",
   },
   {
     title: "Voronoi CVs for Enhanced Sampling Autoionization and Tautomerism",
+    zhTitle: "用于自解离与互变异构增强采样的 Voronoi CVs",
     href: "https://bohrium.dp.tech/notebooks/83327491785",
     description: "Collective-variable construction for reactive aqueous systems.",
+    zhDescription: "面向水相反应体系的集体变量构建示例。",
   },
 ];
 
 export const codeResources = [
   {
     title: "Voronoi CVs for glycine tautomerism",
+    zhTitle: "甘氨酸互变异构的 Voronoi CVs",
     href: "https://github.com/Zhang-pchao/GlycineTautomerism/tree/main/Voronoi_collective_variables",
     description:
       "PLUMED source files for Voronoi-based solvation, proton-transfer, and autoionization CVs used in solvated glycine tautomerism.",
+    zhDescription:
+      "用于溶液中甘氨酸互变异构研究的 PLUMED 源文件，包含基于 Voronoi 的溶剂化、质子转移和自解离 CV。",
   },
   {
     title: "Voronoi CVs for water self-ions at interfaces",
+    zhTitle: "界面水自解离离子的 Voronoi CVs",
     href: "https://github.com/Zhang-pchao/OilWaterInterface/tree/main/Voronoi_CVs",
     description:
       "PLUMED CVs for ion charge, OH-/H3O+ distance, ion identity, and ion location in slab systems.",
+    zhDescription:
+      "用于 slab 体系中离子电荷、OH-/H3O+ 距离、离子身份和位置判别的 PLUMED CV。",
   },
   {
     title: "Voronoi CVs for OPES-DPMD nitrogen reduction",
+    zhTitle: "OPES-DPMD 氮还原反应的 Voronoi CVs",
     href: "https://github.com/Zhang-pchao/research/tree/main/OPES-DPMD-NRR/Voronoi_collective_variables",
     description:
       "Custom PLUMED VoronoiD3 code for reactive Voronoi environments in OPES-DPMD simulations of nitrogen reduction.",
+    zhDescription:
+      "用于氮还原 OPES-DPMD 模拟的自定义 PLUMED VoronoiD3 代码，描述反应过程中的 Voronoi 局域环境。",
   },
 ];
 
 export const recommendedResourceGroups = [
   {
     title: "Foundations, Computing, and Academic Workflow",
+    zhTitle: "基础、计算与学术工作流",
     resources: [
       {
         title: "Theory and Computing Physics Guide",
         href: "https://chriswenchen.github.io/theory-computing-physics-guide/",
         description:
           "Computing environments and software for theoretical and computational physics.",
+        zhDescription: "理论与计算物理中的计算环境和常用软件整理。",
       },
       {
         title: "CS Self-Learning Guide",
         href: "https://csdiy.wiki/",
         description: "Computer-science courses and structured self-study pathways.",
+        zhDescription: "计算机科学课程和系统自学路线整理。",
       },
       {
         title: "Liu Group Tutorials",
         href: "http://jianliugroup.pku.edu.cn/tutorials.html",
         description: "Tutorials on computational chemistry and molecular simulation.",
+        zhDescription: "计算化学与分子模拟相关教程。",
       },
       {
         title: "Cheng Group Wiki",
         href: "https://wiki.cheng-group.net/",
         description: "Group notes on computational chemistry and atomistic simulation.",
+        zhDescription: "计算化学和原子尺度模拟相关组内笔记。",
       },
       {
         title: "Overleaf",
         href: "https://www.overleaf.com/",
         description: "Online LaTeX writing and collaboration.",
+        zhDescription: "在线 LaTeX 写作与协作平台。",
       },
       {
         title: "GitHub",
         href: "https://github.com/",
         description: "Code hosting, version control, and collaboration.",
+        zhDescription: "代码托管、版本控制与协作平台。",
       },
       {
         title: "Google Scholar",
         href: "https://scholar.google.com/",
         description: "Academic literature search and citation tracking.",
+        zhDescription: "学术文献检索和引用追踪工具。",
       },
       {
         title: "Academic Tree",
         href: "https://academictree.org/chemistry/index.php",
         description: "Academic genealogy for chemistry researchers.",
+        zhDescription: "化学研究者学术谱系查询。",
       },
     ],
   },
   {
     title: "Molecular Simulation Engines and Atomistic Workflows",
+    zhTitle: "分子模拟引擎与原子尺度工作流",
     resources: [
       {
         title: "LAMMPS",
         href: "https://www.lammps.org/",
         description: "A general-purpose molecular dynamics simulation package.",
+        zhDescription: "通用分子动力学模拟软件。",
       },
       {
         title: "GROMACS",
         href: "https://manual.gromacs.org/documentation/current/index.html",
         description:
           "Current documentation for molecular dynamics simulations with GROMACS.",
+        zhDescription: "GROMACS 分子动力学模拟的官方文档。",
       },
       {
         title: "i-PI",
         href: "https://docs.ipi-code.org/",
         description: "A Python interface for path-integral and atomistic simulations.",
+        zhDescription: "用于路径积分和原子尺度模拟的 Python 接口。",
       },
       {
         title: "ASE",
         href: "https://docs.ase-lib.org/",
         description: "Python tools for setting up, running, and analyzing atomistic simulations.",
+        zhDescription: "用于构建、运行和分析原子尺度模拟的 Python 工具。",
       },
       {
         title: "Atomistic Cookbook",
         href: "https://atomistic-cookbook.org/index.html",
         description: "Worked examples for atomistic simulation workflows.",
+        zhDescription: "原子尺度模拟工作流的案例教程。",
       },
     ],
   },
   {
     title: "Enhanced Sampling and Free-Energy Methods",
+    zhTitle: "增强采样与自由能方法",
     resources: [
       {
         title: "PLUMED",
         href: "https://www.plumed.org/download",
         description:
           "Software and documentation for free-energy calculations and enhanced sampling.",
+        zhDescription: "自由能计算与增强采样软件及文档。",
       },
       {
         title: "MLcolvar",
         href: "https://mlcolvar.readthedocs.io/en/latest/index.html",
         description: "Machine-learning collective variables for enhanced sampling.",
+        zhDescription: "用于增强采样的机器学习集体变量工具。",
       },
     ],
   },
   {
     title: "Electronic Structure and Quantum Chemistry",
+    zhTitle: "电子结构与量子化学",
     resources: [
       {
         title: "CP2K",
         href: "https://www.cp2k.org/about",
         description:
           "An electronic-structure and atomistic simulation software package.",
+        zhDescription: "电子结构和原子尺度模拟软件。",
       },
       {
         title: "ABACUS",
         href: "https://abacus.deepmodeling.com/en/latest/",
         description: "Open-source electronic-structure package for first-principles calculations.",
+        zhDescription: "用于第一性原理计算的开源电子结构软件。",
       },
       {
         title: "ORCA",
         href: "https://www.faccts.de/docs#orca",
         description: "Quantum chemistry software and documentation.",
+        zhDescription: "量子化学软件及文档。",
       },
       {
         title: "Truhlar Software",
         href: "https://truhlar.chem.umn.edu/computational-tools/software",
         description: "Computational chemistry software from the Truhlar group.",
+        zhDescription: "Truhlar 课题组整理的计算化学软件。",
       },
       {
         title: "Atomistic Software",
         href: "https://atomistic.software/#/table",
         description: "Searchable table of atomistic modeling software.",
+        zhDescription: "可检索的原子尺度建模软件列表。",
       },
     ],
   },
   {
     title: "Materials Databases and Benchmarking",
+    zhTitle: "材料数据库与基准测试",
     resources: [
       {
         title: "Materials Project",
         href: "https://next-gen.materialsproject.org/",
         description: "Materials data, structures, and computational property records.",
+        zhDescription: "材料数据、结构和计算性质数据库。",
       },
       {
         title: "Matbench Discovery",
         href: "https://matbench-discovery.materialsproject.org/",
         description:
           "A benchmark for machine-learning models in materials discovery.",
+        zhDescription: "面向材料发现机器学习模型的基准测试。",
       },
     ],
   },
   {
     title: "Machine-Learned Atomistic Modeling and AI for Science",
+    zhTitle: "机器学习原子尺度建模与 AI for Science",
     resources: [
       {
         title: "DeepModeling",
         href: "https://deepmodeling.com/",
         description:
           "Open-source tools for machine-learning-assisted molecular modeling.",
+        zhDescription: "面向机器学习分子建模的开源工具生态。",
       },
       {
         title: "DeePMD-kit",
         href: "https://docs.deepmodeling.com/projects/deepmd/en/master/index.html",
         description: "Deep-potential model training and molecular dynamics.",
+        zhDescription: "深度势能模型训练和分子动力学模拟工具。",
       },
       {
         title: "AI for Science Square",
         href: "https://www.aissquare.com/",
         description: "AI-for-science platform and workflow resources.",
+        zhDescription: "AI for Science 平台与工作流资源。",
       },
     ],
   },
   {
     title: "Visualization and Trajectory Analysis",
+    zhTitle: "可视化与轨迹分析",
     resources: [
       {
         title: "OVITO",
         href: "https://docs.ovito.org/python/index.html",
         description: "Python interface for atomistic visualization and analysis.",
+        zhDescription: "原子尺度结构可视化与分析的 Python 接口。",
       },
       {
         title: "VMD",
         href: "https://www.ks.uiuc.edu/Research/vmd/",
         description: "Molecular visualization and trajectory analysis.",
+        zhDescription: "分子可视化与轨迹分析软件。",
       },
     ],
   },
   {
     title: "Continuum and Multiscale Simulation",
+    zhTitle: "连续介质与多尺度模拟",
     resources: [
       {
         title: "Basilisk",
         href: "https://basilisk.fr/",
         description: "Tools for computational fluid dynamics and interfacial flows.",
+        zhDescription: "用于计算流体力学和界面流动的工具。",
       },
     ],
   },
   {
     title: "Coding and Local Development Assistance",
+    zhTitle: "代码与本地开发辅助",
     resources: [
       {
         title: "OpenAI Codex",
         href: "https://openai.com/codex/",
         description: "Coding assistant for local development workflows.",
+        zhDescription: "面向本地开发工作流的代码辅助工具。",
       },
     ],
   },
@@ -295,92 +350,100 @@ export const researchProjects = [
   {
     topic: "Aqueous interfaces",
     title: "Water self-ions at air–water and oil–water interfaces",
+    zhTitle: "空气-水与油-水界面的水自解离离子",
     description: "Deep-potential models, enhanced sampling, trajectories, and analysis tools.",
+    zhDescription: "深度势能模型、增强采样、轨迹数据和分析工具。",
     href: "https://github.com/Zhang-pchao/OilWaterInterface",
   },
   {
     topic: "Nanobubbles",
     title: "Ion-regulated nitrogen nanobubble dynamics",
+    zhTitle: "离子调控氮气纳米气泡动力学",
     description: "Simulation inputs and analysis for acidic, neutral, and alkaline environments.",
+    zhDescription: "酸性、中性和碱性环境下的模拟输入与分析。",
     href: "https://github.com/Zhang-pchao/N2BubbleIon",
   },
   {
     topic: "Reactive chemistry",
     title: "Glycine tautomerism in water and electric fields",
+    zhTitle: "水和电场中的甘氨酸互变异构",
     description: "Voronoi collective variables, trained models, and free-energy workflows.",
+    zhDescription: "Voronoi 集体变量、训练模型和自由能计算工作流。",
     href: "https://github.com/Zhang-pchao/research/tree/main/GlycineEfield",
   },
   {
     topic: "Solid–water interfaces",
     title: "Nanobubble evolution near anatase (101)",
+    zhTitle: "锐钛矿 (101)-水界面附近的纳米气泡演化",
     description: "OPES-DPMD inputs and analysis across interfacial ionic microenvironments.",
+    zhDescription: "不同界面离子微环境下的 OPES-DPMD 输入与分析。",
     href: "https://github.com/Zhang-pchao/research/tree/main/OPES-DPMD-Bubble-TiO2",
   },
 ];
 
 export const outreachLinks = [
   {
-    title: "Ion-regulated nitrogen nanobubble evolution",
-    zhTitle: "离子调控氮气纳米气泡演化",
+    title: "DeePMD study of nitrogen nanobubble dynamics",
+    zhTitle: "DeePMD 探究体相氮气纳米气泡演化",
     href: "https://mp.weixin.qq.com/s/ZiB_C1laE76r4SwGh6_hHQ",
-    description: "Chinese-language article on how hydronium and hydroxide ions modulate nitrogen nanobubble dynamics in water.",
-    zhDescription: "介绍水合氢离子和氢氧根离子如何调控水中氮气纳米气泡的动态演化。",
+    description: "WeChat feature on the JACS work using DeePMD to study ion-regulated nitrogen nanobubble dynamics.",
+    zhDescription: "微信推送：介绍 JACS 工作中如何用 DeePMD 研究离子调控的体相氮气纳米气泡动态演化。",
   },
   {
-    title: "Nanobubble nucleation and dissolution near anatase-water interfaces",
-    zhTitle: "锐钛矿-水界面附近的纳米气泡成核与溶解",
+    title: "DeePKS and ABACUS study of proton transfer in solution",
+    zhTitle: "DeePKS+ABACUS 研究溶液中的质子转移",
     href: "https://mp.weixin.qq.com/s/qIgB2yBWz_ABVNwwTsz4SQ",
-    description: "Chinese-language article on molecular simulations of nanobubble evolution near anatase-water interfaces.",
-    zhDescription: "介绍锐钛矿-水界面附近纳米气泡演化过程的分子模拟研究。",
+    description: "WeChat feature on combining deep-potential models, DeePKS, and ABACUS for proton-transfer simulations in solution.",
+    zhDescription: "微信推送：介绍深度势能模型、DeePKS 和 ABACUS 结合研究溶液中质子转移过程。",
   },
   {
-    title: "Electric-field and interface effects on glycine tautomerism",
-    zhTitle: "电场与界面对甘氨酸互变异构反应的调控",
+    title: "Electric-field and interface effects on competitive reactions",
+    zhTitle: "电场与界面对竞争反应机制的调控",
     href: "https://www.cce.tsinghua.edu.cn/info/1012/4070.htm",
     description: "Tsinghua CCE research news on deep-potential simulations of solvated glycine under electric-field and interface effects.",
-    zhDescription: "清华大学燃烧能源中心关于电场与界面效应调控溶液中甘氨酸反应机制的研究报道。",
+    zhDescription: "清华大学燃烧能源中心报道：通过深度势能分子动力学研究电场和界面对溶液中甘氨酸竞争反应机制的影响。",
   },
   {
     title: "Video report: glycine tautomerism in solution",
-    zhTitle: "视频报告：溶液中甘氨酸互变异构",
+    zhTitle: "报告视频：溶液中甘氨酸互变异构",
     href: "https://www.bilibili.com/video/BV1D2b5zEEYx/",
     description: "Bilibili video report on electric-field and interface modulation of glycine tautomerism in solution.",
-    zhDescription: "关于电场与界面调控溶液中甘氨酸互变异构反应的视频报告。",
+    zhDescription: "Bilibili 报告视频：电场与界面调控溶液中甘氨酸互变异构反应。",
   },
   {
     title: "Deep-potential and enhanced-sampling workflows",
     zhTitle: "深度势能与增强采样工作流",
     href: "https://zhuanlan.zhihu.com/p/2032423240954541351",
     description: "Technical notes on molecular simulation workflows that combine deep potentials with enhanced sampling.",
-    zhDescription: "整理深度势能模型与增强采样结合的分子模拟工作流。",
+    zhDescription: "知乎笔记：整理深度势能模型与增强采样结合的分子模拟工作流。",
   },
   {
-    title: "Aqueous-interface self-ion simulations",
-    zhTitle: "水相界面自解离离子模拟",
+    title: "Acidity and basicity of the air-water interface",
+    zhTitle: "空气-水界面是中性、酸性，还是碱性？",
     href: "https://zhuanlan.zhihu.com/p/695737327",
-    description: "Notes on simulating interfacial water, hydronium, and hydroxide ion distributions.",
-    zhDescription: "关于界面水、水合氢离子和氢氧根离子分布模拟的技术笔记。",
+    description: "Zhihu note explaining the long-standing debate on water self-ion preferences at the air-water interface.",
+    zhDescription: "知乎笔记：解释水自离子界面偏好的长期争议，提出 H₃O⁺ 与 OH⁻ 在不同深度和浓度形成双分子层分布。",
   },
   {
-    title: "Computational chemistry workflow notes",
-    zhTitle: "计算化学工作流笔记",
+    title: "Water self-ion preferences at air-water and oil-water interfaces",
+    zhTitle: "增强采样 DPMD 揭示空气（油）-水界面水自离子的倾向",
     href: "https://zhuanlan.zhihu.com/p/20844844357",
-    description: "Long-form notes on computational chemistry practice.",
-    zhDescription: "计算化学实践中的工具、流程与经验整理。",
+    description: "Zhihu note comparing self-ion distributions at air-water and oil-water interfaces from enhanced-sampling DPMD.",
+    zhDescription: "知乎笔记：比较空气-水和油-水界面的水自离子分布，说明油-水界面电荷分布与 OH⁻ 富集、H₃O⁺ 排斥之间的联系。",
   },
   {
-    title: "Enhanced sampling and free-energy notes",
-    zhTitle: "增强采样与自由能计算笔记",
+    title: "H+ and OH- regulate nitrogen nanobubble dynamics",
+    zhTitle: "H⁺ 和 OH⁻ 调控体相纳米气泡的动态演化",
     href: "https://zhuanlan.zhihu.com/p/705998273",
-    description: "Notes on rare-event and free-energy simulation methods.",
-    zhDescription: "关于稀有事件采样与自由能模拟方法的笔记。",
+    description: "Zhihu note on DPMD simulations and theoretical analysis of nitrogen nanobubbles under acidic and alkaline conditions.",
+    zhDescription: "知乎笔记：用 DPMD 模拟和理论分析说明酸性条件促进 N₂ 纳米气泡溶解，而碱性条件下 OH⁻ 富集可能减缓气泡溶解。",
   },
   {
-    title: "Atomistic simulation tutorial notes",
-    zhTitle: "原子尺度模拟教程笔记",
+    title: "DPMD and enhanced sampling for glycine proton transfer",
+    zhTitle: "DPMD+增强采样：溶液中甘氨酸异构化与质子转移",
     href: "https://zhuanlan.zhihu.com/p/695839138",
-    description: "Tutorial-style notes for atomistic modeling.",
-    zhDescription: "面向原子尺度建模与模拟的教程式笔记。",
+    description: "Zhihu note on glycine isomerization and proton-transfer simulations with DPMD and enhanced sampling.",
+    zhDescription: "知乎笔记：介绍甘氨酸从中性形式转变为两性离子形式的三条路径，包括分子内质子转移以及 H₃O⁺/OH⁻ 参与的分子间质子转移。",
   },
 ];
 

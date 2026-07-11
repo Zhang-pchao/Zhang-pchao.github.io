@@ -130,7 +130,7 @@ const COPY = {
         "Postdoctoral Fellow",
         "Center for Combustion Energy, Tsinghua University",
       ],
-      bio: "I am working on computational chemistry and molecular simulation. My research focuses on aqueous interfaces, water self-ions, nanobubble dynamics, and reaction mechanisms using machine-learned potentials and enhanced sampling. I received my Ph.D. from Tsinghua University and my Bachelor of Engineering from Huazhong University of Science and Technology. I was also a visiting Ph.D. researcher at the Italian Institute of Technology.",
+      bio: "I am working on computational chemistry and molecular simulation. My research focuses on aqueous interfaces, water self-ions, nanobubble dynamics, and reaction mechanisms using machine-learned potentials and enhanced sampling. I received my Ph.D. from Tsinghua University and my bachelor's degree from Huazhong University of Science and Technology. I was also a visiting Ph.D. researcher at the Italian Institute of Technology.",
       academicProfiles: "Academic profiles",
       researchInterests: "Research Interests",
       selectedPublications: "Selected Publications",
@@ -225,6 +225,11 @@ const COPY = {
       title: "Contact",
       email: "Email",
       affiliation: "Affiliation",
+      affiliationLines: [
+        "Center for Combustion Energy",
+        "Department of Energy and Power Engineering",
+        "Tsinghua University, Beijing 100084, China",
+      ],
       profiles: "Academic Profiles",
       social: "Social",
     },
@@ -266,7 +271,7 @@ const COPY = {
     home: {
       name: "章鹏超",
       position: ["博士后", "清华大学燃烧能源中心"],
-      bio: "我从事计算化学与分子模拟研究，关注水相界面、水自解离离子、纳米气泡动力学以及反应机理，主要使用深度势能模型与增强采样方法。我在清华大学获得博士学位，在华中科技大学获得能源与动力工程学士学位，并曾在意大利理工学院进行博士访问研究。",
+      bio: "我从事计算化学与分子模拟研究，关注水相界面、水自解离离子、纳米气泡动力学以及反应机理，主要使用深度势能模型与增强采样方法。我在清华大学获得博士学位，在华中科技大学获得学士学位，并曾在意大利理工学院进行博士访问研究。",
       academicProfiles: "学术主页",
       researchInterests: "研究方向",
       selectedPublications: "代表论文",
@@ -356,6 +361,11 @@ const COPY = {
       title: "联系",
       email: "邮箱",
       affiliation: "单位",
+      affiliationLines: [
+        "清华大学燃烧能源中心",
+        "能源与动力工程系",
+        "中国北京 100084",
+      ],
       profiles: "学术主页",
       social: "社交账号",
     },
@@ -671,9 +681,11 @@ function ResearchPage({ copy, language }) {
             {researchProjects.map((project) => (
               <article key={project.title}>
                 <h3>
-                  <ExternalLink href={project.href}>{project.title}</ExternalLink>
+                  <ExternalLink href={project.href}>
+                    {localized(project, "Title", language)}
+                  </ExternalLink>
                 </h3>
-                <p>{project.description}</p>
+                <p>{localized(project, "Description", language)}</p>
               </article>
             ))}
           </div>
@@ -889,7 +901,7 @@ function CvPage({ copy }) {
   );
 }
 
-function ResourcesPage({ copy }) {
+function ResourcesPage({ copy, language }) {
   return (
     <main>
       <PageTitle>{copy.resources.title}</PageTitle>
@@ -900,9 +912,11 @@ function ResourcesPage({ copy }) {
             {codeResources.map((resource) => (
               <article key={resource.href}>
                 <h3>
-                  <ExternalLink href={resource.href}>{resource.title}</ExternalLink>
+                  <ExternalLink href={resource.href}>
+                    {localized(resource, "Title", language)}
+                  </ExternalLink>
                 </h3>
-                <p>{resource.description}</p>
+                <p>{localized(resource, "Description", language)}</p>
               </article>
             ))}
           </div>
@@ -914,9 +928,11 @@ function ResourcesPage({ copy }) {
             {tutorials.map((tutorial) => (
               <article key={tutorial.href}>
                 <h3>
-                  <ExternalLink href={tutorial.href}>{tutorial.title}</ExternalLink>
+                  <ExternalLink href={tutorial.href}>
+                    {localized(tutorial, "Title", language)}
+                  </ExternalLink>
                 </h3>
-                <p>{tutorial.description}</p>
+                <p>{localized(tutorial, "Description", language)}</p>
               </article>
             ))}
           </div>
@@ -927,16 +943,16 @@ function ResourcesPage({ copy }) {
           <div className="resource-groups">
             {recommendedResourceGroups.map((group) => (
               <section key={group.title} className="resource-group">
-                <h3>{group.title}</h3>
+                <h3>{localized(group, "Title", language)}</h3>
                 <div className="resource-list">
                   {group.resources.map((resource) => (
                     <article key={resource.href}>
                       <h4>
                         <ExternalLink href={resource.href}>
-                          {resource.title}
+                          {localized(resource, "Title", language)}
                         </ExternalLink>
                       </h4>
-                      <p>{resource.description}</p>
+                      <p>{localized(resource, "Description", language)}</p>
                     </article>
                   ))}
                 </div>
@@ -973,9 +989,9 @@ function ContactPage({ copy }) {
 
         <section>
           <h2>{copy.contact.affiliation}</h2>
-          <p>Center for Combustion Energy</p>
-          <p>Department of Energy and Power Engineering</p>
-          <p>Tsinghua University, Beijing 100084, China</p>
+          {copy.contact.affiliationLines.map((line) => (
+            <p key={line}>{line}</p>
+          ))}
         </section>
 
         <section>
@@ -1046,7 +1062,10 @@ function AppLayout() {
         />
         <Route path="/publications" element={<PublicationsPage copy={copy} />} />
         <Route path="/cv" element={<CvPage copy={copy} />} />
-        <Route path="/resources" element={<ResourcesPage copy={copy} />} />
+        <Route
+          path="/resources"
+          element={<ResourcesPage copy={copy} language={language} />}
+        />
         <Route path="/contact" element={<ContactPage copy={copy} />} />
         <Route path="*" element={<NotFoundPage copy={copy} />} />
       </Routes>
