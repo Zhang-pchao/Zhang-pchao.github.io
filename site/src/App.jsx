@@ -542,7 +542,10 @@ function LinkGroup({ publication, copy }) {
   );
 }
 
-function PublicationEntry({ publication, copy, compact = false }) {
+function PublicationEntry({ publication, copy, language = "en", compact = false }) {
+  const title = localized(publication, "Title", language);
+  const details = localized(publication, "Details", language);
+
   return (
     <article
       className={[
@@ -553,10 +556,10 @@ function PublicationEntry({ publication, copy, compact = false }) {
     >
       <div className="publication-year">{publication.year}</div>
       <div className="publication-copy">
-        <h2>{publication.title}</h2>
+        <h2>{title}</h2>
         {!compact && <p>{publication.authors}</p>}
         <p className="publication-details">
-          {compact ? publication.journal : publication.details}
+          {compact ? publication.journal : details}
         </p>
         <LinkGroup publication={publication} copy={copy} />
       </div>
@@ -564,7 +567,7 @@ function PublicationEntry({ publication, copy, compact = false }) {
         <img
           className="publication-toc"
           src={publication.toc}
-          alt={`${copy.publicationLinks.graphicalAbstract} ${publication.title}`}
+          alt={`${copy.publicationLinks.graphicalAbstract} ${title}`}
           loading="lazy"
         />
       )}
@@ -662,6 +665,7 @@ function HomePage({ copy, language }) {
               key={publication.doi}
               publication={publication}
               copy={copy}
+              language={language}
               compact
             />
           ))}
@@ -745,7 +749,7 @@ function ResearchPage({ copy, language }) {
   );
 }
 
-function PublicationsPage({ copy }) {
+function PublicationsPage({ copy, language }) {
   const papersPerPage = 10;
   const [paperPage, setPaperPage] = useState(1);
   const pageCount = Math.ceil(publications.length / papersPerPage);
@@ -766,6 +770,7 @@ function PublicationsPage({ copy }) {
                 key={publication.doi}
                 publication={publication}
                 copy={copy}
+                language={language}
               />
             ))}
           </div>
@@ -1210,7 +1215,10 @@ function AppLayout() {
           path="/research"
           element={<ResearchPage copy={copy} language={language} />}
         />
-        <Route path="/publications" element={<PublicationsPage copy={copy} />} />
+        <Route
+          path="/publications"
+          element={<PublicationsPage copy={copy} language={language} />}
+        />
         <Route path="/cv" element={<CvPage copy={copy} />} />
         <Route
           path="/notes"

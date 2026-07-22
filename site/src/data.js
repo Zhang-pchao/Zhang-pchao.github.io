@@ -196,6 +196,11 @@ export const technicalNotes = [
         href: "https://doi.org/10.1021/jacs.4c06641",
       },
       {
+        label: "Paper: ion-modulated Ostwald ripening",
+        zhLabel: "论文：离子调控 Ostwald 熟化动力学",
+        href: "https://doi.org/10.1021/jacs.6c08865",
+      },
+      {
         label: "Code: N2BubbleIon",
         zhLabel: "代码：N2BubbleIon",
         href: "https://github.com/Zhang-pchao/N2BubbleIon",
@@ -491,8 +496,10 @@ export const researchProjects = [
     topic: "Nanobubbles",
     title: "Ion-regulated nitrogen nanobubble dynamics",
     zhTitle: "离子调控氮气纳米气泡动力学",
-    description: "Simulation inputs and analysis for acidic, neutral, and alkaline environments.",
-    zhDescription: "酸性、中性和碱性环境下的模拟输入与分析。",
+    description:
+      "Simulation inputs and analysis for acidic, neutral, alkaline, and saline environments, including bulk nanobubble coarsening and Ostwald ripening.",
+    zhDescription:
+      "覆盖酸性、中性、碱性和盐溶液环境，以及体相纳米气泡粗化与 Ostwald 熟化的模拟输入和分析。",
     href: "https://github.com/Zhang-pchao/N2BubbleIon",
   },
   {
@@ -580,6 +587,21 @@ export const outreachLinks = [
 ];
 
 export const publications = [
+  {
+    year: "2026",
+    journal: "J. Am. Chem. Soc.",
+    title: "Ion-Modulated Ostwald Ripening Dynamics of Nitrogen Nanobubble Pairs",
+    zhTitle: "离子调控的氮气纳米气泡对 Ostwald 熟化动力学",
+    authors: "Xiangdang Guo, Pengchao Zhang*, Chao Sun*, and Xuefei Xu*",
+    details:
+      "Journal of the American Chemical Society, ASAP article (2026); volume and page numbers forthcoming.",
+    zhDetails: "Journal of the American Chemical Society，2026 年在线发表；卷号和页码待定。",
+    doi: "https://doi.org/10.1021/jacs.6c08865",
+    pdf: "/papers/jacs-2026-ion-modulated-ostwald-ripening.pdf",
+    freeAccess: "https://pubs.acs.org/articlesonrequest/AOR-UGINE9JW5B5CQ4Z9HAXS",
+    toc: "/assets/toc/jacs-2026-ion-modulated-ostwald-ripening.webp",
+    featured: true,
+  },
   {
     year: "2026",
     journal: "J. Am. Chem. Soc.",
