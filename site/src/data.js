@@ -522,6 +522,15 @@ export const researchProjects = [
 
 export const outreachLinks = [
   {
+    title: "Ion-modulated Ostwald ripening of nitrogen nanobubble pairs",
+    zhTitle: "离子调控氮气纳米气泡对的 Ostwald 熟化",
+    href: "https://zhuanlan.zhihu.com/p/2063315948661108791",
+    description:
+      "Zhihu note introducing the JACS study of ion-modulated Ostwald ripening in nitrogen nanobubble pairs, including the rate order acidic > alkaline ≈ pure water > saline and the interfacial role of ion hydration and hydrogen-bond restructuring.",
+    zhDescription:
+      "知乎文章：介绍离子如何通过重排界面水、改变氢键网络和形成特定离子水合结构，调控氮气纳米气泡对的 Ostwald 熟化；熟化速率为酸性溶液 > 碱性溶液 ≈ 纯水 > 盐溶液，并指出 NaCl 界面离子水合结构形成阻碍气体迁移的微观屏障。",
+  },
+  {
     title: "DeePMD study of nitrogen nanobubble dynamics",
     zhTitle: "DeePMD 探究体相氮气纳米气泡演化",
     href: "https://mp.weixin.qq.com/s/ZiB_C1laE76r4SwGh6_hHQ",
