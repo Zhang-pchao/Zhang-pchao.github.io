@@ -543,7 +543,7 @@ function LinkGroup({ publication, copy }) {
 }
 
 function PublicationEntry({ publication, copy, language = "en", compact = false }) {
-  const title = localized(publication, "Title", language);
+  const title = publication.title;
   const details = localized(publication, "Details", language);
 
   return (

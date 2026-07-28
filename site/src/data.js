@@ -600,7 +600,6 @@ export const publications = [
     year: "2026",
     journal: "J. Am. Chem. Soc.",
     title: "Ion-Modulated Ostwald Ripening Dynamics of Nitrogen Nanobubble Pairs",
-    zhTitle: "离子调控的氮气纳米气泡对 Ostwald 熟化动力学",
     authors: "Xiangdang Guo, Pengchao Zhang*, Chao Sun*, and Xuefei Xu*",
     details:
       "Journal of the American Chemical Society, ASAP article (2026); volume and page numbers forthcoming.",
