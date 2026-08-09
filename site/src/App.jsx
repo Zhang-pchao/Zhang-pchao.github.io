@@ -545,6 +545,7 @@ function LinkGroup({ publication, copy }) {
 function PublicationEntry({ publication, copy, language = "en", compact = false }) {
   const title = publication.title;
   const details = localized(publication, "Details", language);
+  const [authorsBefore, authorsAfter] = publication.authors.split("Pengchao Zhang");
 
   return (
     <article
@@ -557,7 +558,11 @@ function PublicationEntry({ publication, copy, language = "en", compact = false 
       <div className="publication-year">{publication.year}</div>
       <div className="publication-copy">
         <h2>{title}</h2>
-        {!compact && <p>{publication.authors}</p>}
+        {!compact && (
+          <p>
+            {authorsBefore}<strong>Pengchao Zhang</strong>{authorsAfter}
+          </p>
+        )}
         <p className="publication-details">
           {compact ? publication.journal : details}
         </p>
