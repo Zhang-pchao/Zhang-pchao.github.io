@@ -602,8 +602,9 @@ export const publications = [
     title: "Ion-Modulated Ostwald Ripening Dynamics of Nitrogen Nanobubble Pairs",
     authors: "Xiangdang Guo, Pengchao Zhang*, Chao Sun*, and Xuefei Xu*",
     details:
-      "Journal of the American Chemical Society, ASAP article (2026); volume and page numbers forthcoming.",
-    zhDetails: "Journal of the American Chemical Society，2026 年在线发表；卷号和页码待定。",
+      "Journal of the American Chemical Society 148(30), 32412–32425 (2026).",
+    zhDetails:
+      "Journal of the American Chemical Society 148(30), 32412–32425（2026）。",
     doi: "https://doi.org/10.1021/jacs.6c08865",
     pdf: "/papers/jacs-2026-ion-modulated-ostwald-ripening.pdf",
     freeAccess: "https://pubs.acs.org/articlesonrequest/AOR-UGINE9JW5B5CQ4Z9HAXS",
