@@ -1557,6 +1557,10 @@ function ReactiveVoronoiPage({ copy, language }) {
                   <li key={item.text}>{localized(item, "Text", language)}</li>
                 ))}
               </ol>
+              <p>{localized(guide, "NlistExampleText", language)}</p>
+              <pre className="large-code-block">
+                <code>{guide.nlistExample}</code>
+              </pre>
             </div>
           </section>
 
@@ -1706,6 +1710,38 @@ function ReactiveVoronoiPage({ copy, language }) {
                 <li key={item.text}>{localized(item, "Text", language)}</li>
               ))}
             </ul>
+            <h3 className="subsection-heading">
+              {localized(guide.performanceBenchmark, "Title", language)}
+            </h3>
+            <p>{localized(guide.performanceBenchmark, "Text", language)}</p>
+            <pre className="compact-code-block">
+              <code>{guide.performanceBenchmark.config}</code>
+            </pre>
+            <div className="table-scroll">
+              <table className="guide-table">
+                <thead>
+                  <tr>
+                    {guide.performanceBenchmark.columns.map((column) => (
+                      <th key={column.key}>
+                        {localized(column, "Label", language)}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {guide.performanceBenchmark.rows.map((row) => (
+                    <tr key={row.waters}>
+                      {guide.performanceBenchmark.columns.map((column) => (
+                        <td key={column.key}>{row[column.key]}</td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="callout">
+              {localized(guide.performanceBenchmark, "Note", language)}
+            </p>
             <h3 className="subsection-heading">{copy.code.limitations}</h3>
             <ul className="guide-list">
               {guide.limitations.map((item) => (

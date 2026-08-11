@@ -92,7 +92,7 @@ export const reactiveVoronoiGuide = {
     "A general PLUMED implementation for proton-transfer systems whose donor, acceptor, or ionic identity changes during a trajectory. This guide starts from the shared soft assignment, then shows how to construct and interpret glycine tautomerism, bulk-water autoionization, and interfacial ion-location coordinates with the current API.",
   zhSummary:
     "面向质子供体、受体或离子身份随轨迹改变的反应体系。本指南从共用的平滑归属出发，依次说明如何使用当前 API 构建并判读甘氨酸互变异构、体相水自解离和界面离子位置集体变量。",
-  reviewedCommit: "f13bead9f6df0d152906f66102139fabe7edafd1",
+  reviewedCommit: "2ddc114d62fd704681ed2e840c7edfa379248ae1",
   links: [
     {
       label: "Source",
@@ -134,7 +134,7 @@ export const reactiveVoronoiGuide = {
   zhInstallText:
     "三个 Action 属于 PLUMED 默认的 colvar 模块，不依赖外部程序库。在正式 PLUMED 版本提供这些 Action 之前，建议先把已审阅源码编译为运行时插件，这是最短的安装与测试路径。",
   runtimeInstall: `curl -L -o ReactiveVoronoi.cpp \\
-  https://raw.githubusercontent.com/Zhang-pchao/plumed2/f13bead9f6df0d152906f66102139fabe7edafd1/src/colvar/ReactiveVoronoi.cpp
+  https://raw.githubusercontent.com/Zhang-pchao/plumed2/2ddc114d62fd704681ed2e840c7edfa379248ae1/src/colvar/ReactiveVoronoi.cpp
 plumed mklib ReactiveVoronoi.cpp`,
   driverTest: `plumed driver \\
   --plumed plumed.dat \\
@@ -210,13 +210,13 @@ plumed mklib ReactiveVoronoi.cpp`,
         "人为定义的基准占据数 νᵢ：一个数会广播到全部 CENTER；向量则必须与 CENTERS 保持完全相同的顺序。",
     },
     {
-      keyword: "NLIST · NL_CUTOFF · NL_STRIDE",
+      keyword: "NLIST · NL_CUTOFF · NL_SKIN · NL_STRIDE",
       actions: "All",
       zhActions: "全部",
       description:
-        "NLIST is off by default. When enabled, the positive cutoff and update stride are both required; converge the truncated, renormalized assignment against exact values and forces.",
+        "NLIST is off by default. NL_CUTOFF and NL_STRIDE are required when it is enabled. Optional NL_SKIN buffers the candidate list when NL_STRIDE>1; converge values and forces against exact mode before using any accelerated setting.",
       zhDescription:
-        "NLIST 默认关闭；启用后必须同时给出正的截断距离与更新步长，并以精确模式为基准收敛截断后重新归一化的 CV 数值和力。",
+        "NLIST 默认关闭；启用后必须给出 NL_CUTOFF 与 NL_STRIDE。NL_STRIDE>1 时可用可选的 NL_SKIN 为候选列表增加缓冲；任何加速配置都必须先以精确模式为基准收敛 CV 数值和力。",
     },
     {
       keyword: "SELECT · COEFFICIENTS · POWER · SIGN",
@@ -305,12 +305,12 @@ plumed mklib ReactiveVoronoi.cpp`,
         "实际选择：在中性态、过渡态、产物态和载体切换构型上扫描多个数值；施加偏置前检查状态区分、连续性与解析导数。论文示例使用 KAPPA=5 进行较平滑采样、使用 KAPPA=100 做较尖锐的结构诊断，但这些数值只适用于对应体系。",
     },
   ],
-  nlistTitle: "Choosing NL_CUTOFF and NL_STRIDE beyond water",
-  zhNlistTitle: "非水体系如何选择 NL_CUTOFF 与 NL_STRIDE",
+  nlistTitle: "Choosing NL_CUTOFF, NL_SKIN, and NL_STRIDE",
+  zhNlistTitle: "如何选择 NL_CUTOFF、NL_SKIN 与 NL_STRIDE",
   nlistText:
-    "Omitting NLIST uses the exact full-pair definition; there is no hidden default cutoff. If NLIST is enabled, NL_CUTOFF is an absolute CENTER–ASSIGNED distance in the active PLUMED length units, not a bond cutoff or a water-specific constant. NL_CUTOFF and NL_STRIDE must both be supplied, and this implementation has no user-facing NL_SKIN keyword.",
+    "Omitting NLIST uses the exact full-pair definition; there is no hidden default cutoff. With NLIST, NL_CUTOFF is the true CENTER–ASSIGNED evaluation cutoff in the active PLUMED length units, NL_STRIDE controls scheduled list rebuilds, and optional NL_SKIN adds a Verlet buffer to the candidate list when NL_STRIDE is greater than one. None of these distances is a bond cutoff or a transferable water constant.",
   zhNlistText:
-    "不写 NLIST 时使用精确的全配对定义，并不存在隐藏的默认截断距离。启用 NLIST 后，NL_CUTOFF 表示当前 PLUMED 长度单位下 CENTER–ASSIGNED 的绝对距离，不是成键截断，也不是水体系专用常数；NL_CUTOFF 与 NL_STRIDE 必须同时给出，当前实现没有供用户设置的 NL_SKIN 关键词。",
+    "不写 NLIST 时使用精确的全配对定义，并不存在隐藏的默认截断距离。启用 NLIST 后，NL_CUTOFF 是当前 PLUMED 长度单位下真正参与求值的 CENTER–ASSIGNED 截断距离，NL_STRIDE 控制计划重建列表的步长；当 NL_STRIDE 大于 1 时，可选的 NL_SKIN 为候选列表增加 Verlet 缓冲。这些距离都不是成键截断，也不是可直接迁移的水体系常数。",
   nlistEstimateText:
     "For an initial screening estimate, let d_min be the nearest-center distance and R=NL_CUTOFF. Requiring the relative score at the cutoff to fall below a chosen tolerance ε gives the relation below. Smaller KAPPA spreads assignment weight farther and therefore usually requires a larger R. This estimate does not replace a convergence test because several omitted centers and force derivatives can accumulate error.",
   zhNlistEstimateText:
@@ -327,16 +327,35 @@ plumed mklib ReactiveVoronoi.cpp`,
         "先设 NL_STRIDE=1，在已标注构型上逐步增大 NL_CUTOFF，直到 CV 数值以及坐标/盒子导数都在目标分析或偏置所需精度内与精确模式一致。每个 ASSIGNED 原子必须至少保留一个 CENTER，否则 Action 会停止。",
     },
     {
-      text: "Choose the smallest converged cutoff with a safety margin, then test larger NL_STRIDE values against the maximum atomic displacement between list updates. A relevant pair must not cross the cutoff unnoticed; replica-exchange runs also require NL_STRIDE to divide the exchange stride.",
+      text: "After converging NL_CUTOFF with NL_STRIDE=1, test NL_STRIDE>1 together with an explicit NL_SKIN. Candidates are retained out to NL_CUTOFF+NL_SKIN but evaluated at the true NL_CUTOFF; the list rebuilds early if an included atom moves by more than half the skin or if the periodic box changes.",
       zhText:
-        "选择达到收敛的最小截断距离并留出安全余量，然后依据两次列表更新间的最大原子位移测试更大的 NL_STRIDE。不能让重要配对在两次更新之间无记录地跨过截断边界；副本交换计算还要求 NL_STRIDE 能整除交换步长。",
+        "用 NL_STRIDE=1 收敛 NL_CUTOFF 后，再把 NL_STRIDE>1 与显式 NL_SKIN 配合测试。候选配对保留到 NL_CUTOFF+NL_SKIN，但仍在真实 NL_CUTOFF 内求值；若参与原子移动超过半个 skin，或周期盒发生变化，列表会提前重建。",
     },
     {
-      text: "Prefer exact mode for small or moderate systems and for derivative validation. NLIST changes the normalization set, so membership changes can add small discontinuities even when no missing-center error is triggered; report the final cutoff, stride, tolerances, and exact-mode comparison.",
+      text: "Benchmark skin and stride together: a larger skin reduces rebuilds but retains more candidates. Replica-exchange runs require NL_STRIDE to divide the exchange stride. Report NL_CUTOFF, NL_SKIN, NL_STRIDE, convergence tolerances, and the exact-mode comparison.",
       zhText:
-        "小型或中等体系以及导数验证应优先使用精确模式。NLIST 会改变归一化候选集合，因此即使没有触发 CENTER 缺失错误，成员变化仍可能引入小的不连续；最终应报告截断距离、更新步长、收敛容差及与精确模式的比较。",
+        "NL_SKIN 与 NL_STRIDE 应联合测试：更大的 skin 可减少重建次数，但会保留更多候选配对。副本交换计算要求 NL_STRIDE 能整除交换步长。最终应报告 NL_CUTOFF、NL_SKIN、NL_STRIDE、收敛容差及与精确模式的比较。",
+    },
+    {
+      text: "Prefer exact mode for small or moderate systems and for derivative validation. NLIST truncates and renormalizes the candidate set, so it remains an approximation even when the buffered membership update is displacement-safe.",
+      zhText:
+        "小型或中等体系以及导数验证应优先使用精确模式。NLIST 会截断并重新归一化候选集合，因此即使缓冲后的成员更新满足位移安全条件，它仍然属于近似算法。",
     },
   ],
+  nlistExampleText:
+    "This input shows the validation sequence. The 2.4 Å cutoff and 0.6 Å skin were converged only for the tested water setup and are not defaults. Compare exact and trial values and derivatives first; retain only the accelerated Action in production after cutoff, skin, and stride have all passed validation.",
+  zhNlistExampleText:
+    "下面的输入展示验证顺序。2.4 Å 截断与 0.6 Å skin 只在本次水体系中完成了收敛验证，并不是默认参数。应先比较 exact 与 trial 的数值和导数；只有截断、skin 与步长全部通过验证后，生产计算才只保留加速 Action。",
+  nlistExample: `UNITS LENGTH=A
+
+# 1. Exact reference
+sa_exact: VORONOI_COORDINATION CENTERS=WaterO ASSIGNED=WaterH KAPPA=50 REFERENCE=2 POWER=2
+
+# 2. Converge NL_CUTOFF with a rebuild every step
+sa_trial: VORONOI_COORDINATION CENTERS=WaterO ASSIGNED=WaterH KAPPA=50 REFERENCE=2 POWER=2 NLIST NL_CUTOFF=2.4 NL_STRIDE=1
+
+# 3. After validation, amortize rebuilds with a displacement-safe skin
+sa_fast: VORONOI_COORDINATION CENTERS=WaterO ASSIGNED=WaterH KAPPA=50 REFERENCE=2 POWER=2 NLIST NL_CUTOFF=2.4 NL_SKIN=0.6 NL_STRIDE=10`,
   minimalStructure: {
     filename: "two-water.xyz",
     href: "/assets/reactive-voronoi/examples/two-water.xyz",
@@ -817,14 +836,57 @@ opes: OPES_METAD ARG=oh_z,h3o_z TEMP=300 PACE=500 BARRIER=75`,
       zhText: "检查晶格平移不变性，以及原子列表与配套向量同步重排后的不变性。",
     },
     {
-      text: "If NLIST is used, converge values and forces against exact mode before increasing NL_STRIDE.",
-      zhText: "若使用 NLIST，先以精确模式收敛数值和力，再增大 NL_STRIDE。",
+      text: "If NLIST is used, converge values and forces against exact mode with NL_STRIDE=1 before testing NL_SKIN and a larger NL_STRIDE.",
+      zhText: "若使用 NLIST，先以 NL_STRIDE=1 对照精确模式收敛数值和力，再测试 NL_SKIN 与更大的 NL_STRIDE。",
     },
     {
       text: "Compare serial and intended MPI/OpenMP execution, then run a short fixed-seed MD smoke test before biasing.",
       zhText: "对比串行与预期 MPI/OpenMP 结果；施加偏置前进行短程固定随机种子 MD 冒烟测试。",
     },
   ],
+  performanceBenchmark: {
+    title: "Measured DPMD + LAMMPS + PLUMED speedup",
+    zhTitle: "DPMD + LAMMPS + PLUMED 实测加速",
+    text:
+      "Median timings from two reverse-order 1000-step runs using one RTX 3090 and eight CPU/PLUMED threads. The accelerated runs used the water-specific configuration shown below.",
+    zhText:
+      "以下为两次反序 1000 步计算的中位耗时，使用一张 RTX 3090 和 8 个 CPU/PLUMED 线程；加速组采用下面这套仅针对该水体系验证的配置。",
+    config: "NLIST NL_CUTOFF=2.4 NL_SKIN=0.6 NL_STRIDE=10",
+    columns: [
+      { key: "waters", label: "Waters", zhLabel: "水分子数" },
+      { key: "exact", label: "Exact MD loop (s)", zhLabel: "精确模式 MD (s)" },
+      { key: "accelerated", label: "Accelerated MD loop (s)", zhLabel: "加速模式 MD (s)" },
+      { key: "endToEnd", label: "End-to-end", zhLabel: "端到端加速" },
+      { key: "cvOnly", label: "CV forward only", zhLabel: "仅 CV forward" },
+    ],
+    rows: [
+      {
+        waters: "256",
+        exact: "13.241",
+        accelerated: "9.230",
+        endToEnd: "1.435×",
+        cvOnly: "17.281×",
+      },
+      {
+        waters: "512",
+        exact: "32.836",
+        accelerated: "16.567",
+        endToEnd: "1.982×",
+        cvOnly: "22.271×",
+      },
+      {
+        waters: "1024",
+        exact: "101.571",
+        accelerated: "31.620",
+        endToEnd: "3.212×",
+        cvOnly: "37.448×",
+      },
+    ],
+    note:
+      "The highest user-facing result is 3.212× for the complete 1024-water MD loop; 37.448× measures only PLUMED CV forward. Rebuilding the 1024-water list every step gave 2.862× end-to-end, while the earlier 2.589× result describes 1-to-8-thread scaling of exact mode rather than the neighbor-list speedup.",
+    zhNote:
+      "面向用户应报告的最高结果是 1024 水完整 MD 循环的 3.212×；37.448× 只对应 PLUMED CV forward。1024 水每步重建列表时端到端加速为 2.862×；较早的 2.589× 表示精确模式从 1 到 8 线程的伸缩，并不是邻居表带来的总加速。",
+  },
   performance: [
     {
       text: "Exact mode evaluates Ncenters × Nassigned pairs per step; for water this is 2Nwater².",
@@ -839,8 +901,12 @@ opes: OPES_METAD ARG=oh_z,h3o_z TEMP=300 PACE=500 BARRIER=75`,
       zhText: "即使分子动力学力模型运行在 GPU 上，这些 Action 仍由 CPU 执行；应合理分配并实测主机 CPU 核数，避免过度订阅。",
     },
     {
-      text: "A converged NLIST reduces retained pairs for large systems, but it is an approximation and can introduce membership discontinuities.",
-      zhText: "对大体系，经过收敛验证的 NLIST 可减少保留配对，但它属于近似，并可能引入成员变化不连续。",
+      text: "A converged NLIST reduces retained pairs for large systems, but it accelerates only the CV. DeePMD inference, LAMMPS integration, CPU/GPU communication, and output remain in the end-to-end critical path.",
+      zhText: "对大体系，经过收敛验证的 NLIST 可减少保留配对，但它只加速 CV；DeePMD 推理、LAMMPS 积分、CPU/GPU 通信和输出仍处于端到端关键路径中。",
+    },
+    {
+      text: "The measured gains and NLIST parameters above apply only to the validated water benchmark. New systems must keep exact mode as the reference and repeat value, force, and performance convergence before enabling NLIST in production.",
+      zhText: "上述加速比与 NLIST 参数只适用于已验证的水体系。新体系必须以精确模式为基准，重新完成数值、力与性能收敛后，才能在生产计算中启用 NLIST。",
     },
   ],
   limitations: [
