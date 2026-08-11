@@ -662,6 +662,12 @@ opes: OPES_METAD ARG=oh_z,h3o_z TEMP=300 PACE=500 BARRIER=75`,
     },
     {
       authors: "Pengchao Zhang and Xuefei Xu",
+      title: "Modulation of Electric Field and Interface on Competitive Reaction Mechanisms",
+      details: "J. Chem. Theory Comput. 2025, 21, 6584–6593",
+      doi: "https://doi.org/10.1021/acs.jctc.5c00705",
+    },
+    {
+      authors: "Pengchao Zhang and Xuefei Xu",
       title: "Propensity of Water Self-Ions at Air(Oil)–Water Interfaces Revealed by Deep Potential Molecular Dynamics with Enhanced Sampling",
       details: "Langmuir 2025, 41, 3675–3683",
       doi: "https://doi.org/10.1021/acs.langmuir.4c05004",
