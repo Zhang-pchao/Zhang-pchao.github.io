@@ -1254,6 +1254,7 @@ function MathDisplay({ kind }) {
     coordination: "Coordination-defect reduction",
     distance: "Distance-weighted coordination-defect product",
     position: "Defect-weighted Cartesian position",
+    cutoff: "Relative soft-assignment score at the neighbor-list cutoff",
   };
 
   let equation;
@@ -1304,7 +1305,7 @@ function MathDisplay({ kind }) {
         <msub><mi>q</mi><mi>k</mi></msub>
       </mrow>
     );
-  } else {
+  } else if (kind === "position") {
     equation = (
       <mrow>
         <mi>P</mi><mo>=</mo>
@@ -1319,6 +1320,20 @@ function MathDisplay({ kind }) {
         <msub><mi>x</mi><mrow><mi>i</mi><mi>α</mi></mrow></msub>
         <mo>−</mo><msub><mi>x</mi><mn>0</mn></msub>
         <mo>)</mo>
+      </mrow>
+    );
+  } else {
+    equation = (
+      <mrow>
+        <msup>
+          <mi>e</mi>
+          <mrow>
+            <mo>−</mo><mi>κ</mi><mo>(</mo><mi>R</mi><mo>−</mo>
+            <msub><mi>d</mi><mtext>min</mtext></msub><mo>)</mo>
+          </mrow>
+        </msup>
+        <mo>≤</mo>
+        <mi>ε</mi>
       </mrow>
     );
   }
@@ -1436,6 +1451,17 @@ function ReactiveVoronoiPage({ copy, language }) {
                   <li key={item.text}>{localized(item, "Text", language)}</li>
                 ))}
               </ul>
+            </div>
+            <div className="nlist-guidance">
+              <h3>{localized(guide, "NlistTitle", language)}</h3>
+              <p>{localized(guide, "NlistText", language)}</p>
+              <MathDisplay kind="cutoff" />
+              <p>{localized(guide, "NlistEstimateText", language)}</p>
+              <ol className="guide-list">
+                {guide.nlistGuidance.map((item) => (
+                  <li key={item.text}>{localized(item, "Text", language)}</li>
+                ))}
+              </ol>
             </div>
           </section>
 

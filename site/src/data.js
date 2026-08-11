@@ -211,8 +211,10 @@ plumed mklib ReactiveVoronoi.cpp`,
       keyword: "NLIST · NL_CUTOFF · NL_STRIDE",
       actions: "All",
       zhActions: "全部",
-      description: "Optional approximate truncation; converge values and forces against exact mode.",
-      zhDescription: "可选的近似截断；必须以精确模式为基准收敛 CV 数值和力。",
+      description:
+        "NLIST is off by default. When enabled, the positive cutoff and update stride are both required; converge the truncated, renormalized assignment against exact values and forces.",
+      zhDescription:
+        "NLIST 默认关闭；启用后必须同时给出正的截断距离与更新步长，并以精确模式为基准收敛截断后重新归一化的 CV 数值和力。",
     },
     {
       keyword: "SELECT · COEFFICIENTS · POWER · SIGN",
@@ -271,6 +273,38 @@ plumed mklib ReactiveVoronoi.cpp`,
       text: "Practical choice: scan several values on neutral, transition, product, and host-switching frames. Confirm state separation, continuity, and analytical derivatives before biasing. The paper examples use KAPPA=5 for smoother sampling and KAPPA=100 for sharper structural diagnosis, but these values are system-specific.",
       zhText:
         "实际选择：在中性态、过渡态、产物态和载体切换构型上扫描多个数值；施加偏置前检查状态区分、连续性与解析导数。论文示例使用 KAPPA=5 进行较平滑采样、使用 KAPPA=100 做较尖锐的结构诊断，但这些数值只适用于对应体系。",
+    },
+  ],
+  nlistTitle: "Choosing NL_CUTOFF and NL_STRIDE beyond water",
+  zhNlistTitle: "非水体系如何选择 NL_CUTOFF 与 NL_STRIDE",
+  nlistText:
+    "Omitting NLIST uses the exact full-pair definition; there is no hidden default cutoff. If NLIST is enabled, NL_CUTOFF is an absolute CENTER–ASSIGNED distance in the active PLUMED length units, not a bond cutoff or a water-specific constant. NL_CUTOFF and NL_STRIDE must both be supplied, and this implementation has no user-facing NL_SKIN keyword.",
+  zhNlistText:
+    "不写 NLIST 时使用精确的全配对定义，并不存在隐藏的默认截断距离。启用 NLIST 后，NL_CUTOFF 表示当前 PLUMED 长度单位下 CENTER–ASSIGNED 的绝对距离，不是成键截断，也不是水体系专用常数；NL_CUTOFF 与 NL_STRIDE 必须同时给出，当前实现没有供用户设置的 NL_SKIN 关键词。",
+  nlistEstimateText:
+    "For an initial screening estimate, let d_min be the nearest-center distance and R=NL_CUTOFF. Requiring the relative score at the cutoff to fall below a chosen tolerance ε gives the relation below. Smaller KAPPA spreads assignment weight farther and therefore usually requires a larger R. This estimate does not replace a convergence test because several omitted centers and force derivatives can accumulate error.",
+  zhNlistEstimateText:
+    "初步估算时，可令 d_min 为最近 CENTER 的距离、R=NL_CUTOFF，并要求截断边界处的相对权重低于选定容差 ε，得到下式。较小的 KAPPA 会把归属权重分布得更远，因此通常需要更大的 R。由于多个被截断 CENTER 及力导数的误差可能累积，这一估算不能代替收敛测试。",
+  nlistGuidance: [
+    {
+      text: "Build the reference with no NLIST and collect representative reactant, transition, product, host-switching, and distorted frames. For a non-water system, these frames—not chemical labels—define which CENTER–ASSIGNED distances can matter.",
+      zhText:
+        "先用不含 NLIST 的输入建立精确基准，并收集反应物、过渡态、产物、载体切换及畸变构型。对非水体系，真正决定截断范围的是这些构型中可能重要的 CENTER–ASSIGNED 距离，而不是体系的化学名称。",
+    },
+    {
+      text: "Set NL_STRIDE=1 and increase NL_CUTOFF over the labeled frames until both CV values and coordinate/box derivatives agree with exact mode within the accuracy required by the intended analysis or bias. Every ASSIGNED atom must retain at least one CENTER; otherwise the Action stops.",
+      zhText:
+        "先设 NL_STRIDE=1，在已标注构型上逐步增大 NL_CUTOFF，直到 CV 数值以及坐标/盒子导数都在目标分析或偏置所需精度内与精确模式一致。每个 ASSIGNED 原子必须至少保留一个 CENTER，否则 Action 会停止。",
+    },
+    {
+      text: "Choose the smallest converged cutoff with a safety margin, then test larger NL_STRIDE values against the maximum atomic displacement between list updates. A relevant pair must not cross the cutoff unnoticed; replica-exchange runs also require NL_STRIDE to divide the exchange stride.",
+      zhText:
+        "选择达到收敛的最小截断距离并留出安全余量，然后依据两次列表更新间的最大原子位移测试更大的 NL_STRIDE。不能让重要配对在两次更新之间无记录地跨过截断边界；副本交换计算还要求 NL_STRIDE 能整除交换步长。",
+    },
+    {
+      text: "Prefer exact mode for small or moderate systems and for derivative validation. NLIST changes the normalization set, so membership changes can add small discontinuities even when no missing-center error is triggered; report the final cutoff, stride, tolerances, and exact-mode comparison.",
+      zhText:
+        "小型或中等体系以及导数验证应优先使用精确模式。NLIST 会改变归一化候选集合，因此即使没有触发 CENTER 缺失错误，成员变化仍可能引入小的不连续；最终应报告截断距离、更新步长、收敛容差及与精确模式的比较。",
     },
   ],
   minimalExample: `LOAD FILE=./ReactiveVoronoi.so
