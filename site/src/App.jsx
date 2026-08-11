@@ -236,7 +236,6 @@ const COPY = {
         "Research software and reproducible source archives. The generic Reactive Soft-Voronoi implementation is the maintained entry point for new systems; paper-specific C++ files remain available for reproducing published workflows.",
       featured: "Primary Project",
       openGuide: "Open the complete guide",
-      reviewedSnapshot: "Reviewed snapshot",
       projectLinks: "Project links",
       archives: "Paper-specific Implementations and Application Examples",
       archivesIntro:
@@ -248,28 +247,38 @@ const COPY = {
       guideSections: [
         ["overview", "Project overview"],
         ["principle", "Scientific principle"],
-        ["installation", "Installation"],
+        ["installation", "Installation and first test"],
         ["actions", "Three CV Actions"],
-        ["keywords", "Keywords"],
-        ["example", "Minimal example"],
-        ["applications", "Published applications"],
+        ["keywords", "Keyword reference"],
+        ["quick-start", "Minimal example"],
+        ["case-studies", "Three worked cases"],
         ["validation", "Output and validation"],
         ["performance", "Performance and limitations"],
         ["references", "References and code"],
       ],
       overview: "Project overview",
       principle: "Scientific principle",
-      installation: "Installation",
-      runtimePlugin: "Runtime plugin",
-      inTreeBuild: "In-tree build",
+      installation: "Installation and first test",
+      runtimePlugin: "Build the runtime plugin",
+      driverTest: "Evaluate a trajectory with plumed driver",
+      regtest: "Open the regression-test input",
       actions: "Three CV Actions",
       keywords: "Keyword reference",
       keyword: "Keyword",
       appliesTo: "Action",
       meaning: "Meaning",
       minimalExample: "Minimal water example",
-      applications: "Published applications",
-      applicationCode: "Paper implementation",
+      caseStudies: "Three paper-based worked cases",
+      caseSetup: "Define the chemical mapping",
+      currentInput: "Current generic input",
+      paperBias: "Published biasing pattern",
+      readOutput: "How to read the output",
+      trajectory: "Representative trajectory",
+      provenance: "Data provenance",
+      legacyMapping: "Translate legacy paper Actions to the current API",
+      legacyAction: "Legacy paper Action",
+      currentAction: "Current generic Action",
+      translation: "Translation",
       outputValidation: "Output and validation",
       expectedOutput: "Expected interpretation",
       state: "Configuration",
@@ -280,7 +289,6 @@ const COPY = {
       limitations: "Scientific and numerical limits",
       references: "References and code links",
       doi: "DOI",
-      commit: "Commit",
     },
     notes: {
       title: "Research Field Notes",
@@ -443,7 +451,6 @@ const COPY = {
         "这里汇集科研软件与可复现源码归档。对新体系，通用 Reactive Soft-Voronoi 实现是持续维护的主要入口；论文专用 C++ 文件继续用于复现已发表工作。",
       featured: "主要项目",
       openGuide: "打开完整指南",
-      reviewedSnapshot: "已审阅快照",
       projectLinks: "项目链接",
       archives: "论文专用实现与应用示例",
       archivesIntro:
@@ -455,28 +462,38 @@ const COPY = {
       guideSections: [
         ["overview", "项目概览"],
         ["principle", "科学原理"],
-        ["installation", "安装"],
+        ["installation", "安装与首次测试"],
         ["actions", "三个 CV Action"],
-        ["keywords", "关键词"],
-        ["example", "最小示例"],
-        ["applications", "论文实战"],
+        ["keywords", "关键词速查"],
+        ["quick-start", "最小示例"],
+        ["case-studies", "三个论文案例"],
         ["validation", "输出与验证"],
         ["performance", "性能与限制"],
         ["references", "参考文献与代码"],
       ],
       overview: "项目概览",
       principle: "科学原理",
-      installation: "安装",
-      runtimePlugin: "运行时插件",
-      inTreeBuild: "源码内构建",
+      installation: "安装与首次测试",
+      runtimePlugin: "编译运行时插件",
+      driverTest: "使用 plumed driver 读取轨迹",
+      regtest: "打开回归测试输入",
       actions: "三个 CV Action",
-      keywords: "关键词说明",
+      keywords: "关键词速查",
       keyword: "关键词",
       appliesTo: "适用 Action",
       meaning: "含义",
       minimalExample: "水体系最小示例",
-      applications: "论文实战",
-      applicationCode: "论文实现",
+      caseStudies: "三个基于论文的完整案例",
+      caseSetup: "定义化学映射",
+      currentInput: "当前通用输入",
+      paperBias: "论文中的偏置方式",
+      readOutput: "如何判读输出",
+      trajectory: "代表性轨迹",
+      provenance: "数据来源",
+      legacyMapping: "将论文旧 Action 适配到当前 API",
+      legacyAction: "论文旧 Action",
+      currentAction: "当前通用 Action",
+      translation: "适配方式",
       outputValidation: "输出与验证",
       expectedOutput: "输出判读",
       state: "构型",
@@ -487,7 +504,6 @@ const COPY = {
       limitations: "科学与数值边界",
       references: "参考文献与代码链接",
       doi: "DOI",
-      commit: "提交",
     },
     notes: {
       title: "研究札记",
@@ -549,7 +565,8 @@ function ExternalLink({ href, children, className = "" }) {
 }
 
 function localized(item, field, language) {
-  return language === "zh" ? item[`zh${field}`] || item[field.toLowerCase()] : item[field.toLowerCase()];
+  const sourceField = `${field.charAt(0).toLowerCase()}${field.slice(1)}`;
+  return language === "zh" ? item[`zh${field}`] || item[sourceField] : item[sourceField];
 }
 
 function HighlightedAuthors({ authors }) {
@@ -1192,25 +1209,15 @@ function CodePage({ copy, language }) {
         <section className="content-section first">
           <h2>{copy.code.featured}</h2>
           <article className="featured-code-card">
-            <div className="featured-code-meta">
-              <span className="status-pill">
-                {localized(guide, "Status", language)}
-              </span>
-              <span>
-                {copy.code.reviewedSnapshot}: {guide.reviewedCommit.slice(0, 9)}
-              </span>
-            </div>
             <h2>{localized(guide, "Title", language)}</h2>
             <p>{localized(guide, "Summary", language)}</p>
             <div className="code-card-links">
               <Link className="primary-link" to="/code/reactive-voronoi">
                 {copy.code.openGuide}
               </Link>
-              {guide.links.slice(0, 3).map((link) => (
-                <ExternalLink key={link.href} href={link.href}>
-                  {localized(link, "Label", language)}
-                </ExternalLink>
-              ))}
+              <ExternalLink href={guide.links[0].href}>
+                {localized(guide.links[0], "Label", language)}
+              </ExternalLink>
             </div>
           </article>
         </section>
@@ -1218,7 +1225,7 @@ function CodePage({ copy, language }) {
         <section className="content-section">
           <h2>{copy.code.archives}</h2>
           <p className="section-note">{copy.code.archivesIntro}</p>
-          <div className="archive-grid">
+          <div className="archive-list">
             {codeResources.map((resource) => (
               <article className="archive-card" key={resource.href}>
                 <h3>{localized(resource, "Title", language)}</h3>
@@ -1237,6 +1244,91 @@ function CodePage({ copy, language }) {
         </section>
       </div>
     </main>
+  );
+}
+
+function MathDisplay({ kind }) {
+  const labels = {
+    assignment:
+      "Soft assignment weight, smooth occupancy, and coordination defect",
+    coordination: "Coordination-defect reduction",
+    distance: "Distance-weighted coordination-defect product",
+    position: "Defect-weighted Cartesian position",
+  };
+
+  let equation;
+  if (kind === "assignment") {
+    equation = (
+      <mrow>
+        <msub><mi>w</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub>
+        <mo>=</mo>
+        <mfrac>
+          <msup><mi>e</mi><mrow><mo>−</mo><mi>κ</mi><msub><mi>d</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow></msup>
+          <mrow>
+            <munder><mo>∑</mo><mi>m</mi></munder>
+            <msup><mi>e</mi><mrow><mo>−</mo><mi>κ</mi><msub><mi>d</mi><mrow><mi>m</mi><mi>j</mi></mrow></msub></mrow></msup>
+          </mrow>
+        </mfrac>
+        <mspace width="2em" />
+        <msub><mi>n</mi><mi>i</mi></msub>
+        <mo>=</mo>
+        <munder><mo>∑</mo><mi>j</mi></munder>
+        <msub><mi>w</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub>
+        <mspace width="2em" />
+        <msub><mi>q</mi><mi>i</mi></msub>
+        <mo>=</mo>
+        <msub><mi>n</mi><mi>i</mi></msub>
+        <mo>−</mo>
+        <msub><mi>ν</mi><mi>i</mi></msub>
+      </mrow>
+    );
+  } else if (kind === "coordination") {
+    equation = (
+      <mrow>
+        <msub><mi>Q</mi><mi>p</mi></msub>
+        <mo>=</mo>
+        <munder><mo>∑</mo><mrow><mi>i</mi><mo>∈</mo><mi>S</mi></mrow></munder>
+        <msub><mi>a</mi><mi>i</mi></msub>
+        <msubsup><mi>q</mi><mi>i</mi><mi>p</mi></msubsup>
+      </mrow>
+    );
+  } else if (kind === "distance") {
+    equation = (
+      <mrow>
+        <mi>D</mi><mo>(</mo><msub><mi>G</mi><mn>1</mn></msub><mo>,</mo><msub><mi>G</mi><mn>2</mn></msub><mo>)</mo>
+        <mo>=</mo><mo>−</mo>
+        <munder><mo>∑</mo><mrow><mi>i</mi><mo>∈</mo><msub><mi>G</mi><mn>1</mn></msub></mrow></munder>
+        <munder><mo>∑</mo><mrow><mi>k</mi><mo>∈</mo><msub><mi>G</mi><mn>2</mn></msub></mrow></munder>
+        <msub><mi>d</mi><mrow><mi>i</mi><mi>k</mi></mrow></msub>
+        <msub><mi>q</mi><mi>i</mi></msub>
+        <msub><mi>q</mi><mi>k</mi></msub>
+      </mrow>
+    );
+  } else {
+    equation = (
+      <mrow>
+        <mi>P</mi><mo>=</mo>
+        <munder><mo>∑</mo><mrow><mi>i</mi><mo>∈</mo><mi>S</mi></mrow></munder>
+        <mi>g</mi><mo>(</mo><msub><mi>q</mi><mi>i</mi></msub><mo>)</mo>
+        <mi>f</mi><mo>(</mo><msub><mi>u</mi><mi>i</mi></msub><mo>)</mo>
+        <mspace width="2em" />
+        <msub><mi>u</mi><mi>i</mi></msub>
+        <mo>=</mo>
+        <mi mathvariant="normal">minimage</mi>
+        <mo>(</mo>
+        <msub><mi>x</mi><mrow><mi>i</mi><mi>α</mi></mrow></msub>
+        <mo>−</mo><msub><mi>x</mi><mn>0</mn></msub>
+        <mo>)</mo>
+      </mrow>
+    );
+  }
+
+  return (
+    <div className="math-display" role="img" aria-label={labels[kind]}>
+      <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+        {equation}
+      </math>
+    </div>
   );
 }
 
@@ -1261,14 +1353,6 @@ function ReactiveVoronoiPage({ copy, language }) {
 
         <div className="guide-body">
           <section id="overview" className="guide-section first">
-            <div className="featured-code-meta">
-              <span className="status-pill">
-                {localized(guide, "Status", language)}
-              </span>
-              <span>
-                {copy.code.reviewedSnapshot}: {guide.reviewedCommit.slice(0, 9)}
-              </span>
-            </div>
             <h2>{copy.code.overview}</h2>
             <p className="guide-lead">{localized(guide, "Summary", language)}</p>
             <div className="guide-link-panel" aria-label={copy.code.projectLinks}>
@@ -1277,59 +1361,44 @@ function ReactiveVoronoiPage({ copy, language }) {
                   {localized(link, "Label", language)}
                 </ExternalLink>
               ))}
-              <ExternalLink
-                href={`https://github.com/Zhang-pchao/plumed2/commit/${guide.reviewedCommit}`}
-              >
-                {copy.code.commit} {guide.reviewedCommit.slice(0, 9)}
-              </ExternalLink>
             </div>
           </section>
 
           <section id="principle" className="guide-section">
             <h2>{copy.code.principle}</h2>
             <p>{localized(guide, "PrincipleText", language)}</p>
-            <div className="formula-panel">
-              <code>{guide.formula}</code>
-            </div>
-            <div className="principle-flow">
-              {guide.principleSteps.map((step, index) => (
-                <article key={step.label}>
-                  <span>{String(index + 1).padStart(2, "0")}</span>
-                  <h3>{localized(step, "Label", language)}</h3>
-                  <p>{localized(step, "Detail", language)}</p>
-                </article>
+            <MathDisplay kind="assignment" />
+            <ol className="method-sequence">
+              {guide.principleSteps.map((step) => (
+                <li key={step.text}>{localized(step, "Text", language)}</li>
               ))}
-            </div>
+            </ol>
           </section>
 
           <section id="installation" className="guide-section">
             <h2>{copy.code.installation}</h2>
             <p>{localized(guide, "InstallText", language)}</p>
-            <div className="install-grid">
-              <div>
-                <h3>{copy.code.runtimePlugin}</h3>
-                <pre>
-                  <code>{guide.runtimeInstall}</code>
-                </pre>
-              </div>
-              <div>
-                <h3>{copy.code.inTreeBuild}</h3>
-                <pre>
-                  <code>{guide.inTreeInstall}</code>
-                </pre>
-              </div>
+            <div className="tutorial-step">
+              <h3>{copy.code.runtimePlugin}</h3>
+              <pre><code>{guide.runtimeInstall}</code></pre>
+            </div>
+            <div className="tutorial-step">
+              <h3>{copy.code.driverTest}</h3>
+              <pre><code>{guide.driverTest}</code></pre>
+              <ExternalLink href={guide.regtestHref}>{copy.code.regtest}</ExternalLink>
             </div>
             <p className="callout">{localized(guide, "InstallCaution", language)}</p>
           </section>
 
           <section id="actions" className="guide-section">
             <h2>{copy.code.actions}</h2>
-            <div className="action-grid">
+            <div className="action-list">
               {guide.actions.map((action) => (
-                <article key={action.name}>
+                <article className="action-row" key={action.name}>
                   <code>{action.name}</code>
                   <h3>{localized(action, "Purpose", language)}</h3>
                   <p>{localized(action, "Description", language)}</p>
+                  <MathDisplay kind={action.equation} />
                 </article>
               ))}
             </div>
@@ -1361,7 +1430,7 @@ function ReactiveVoronoiPage({ copy, language }) {
             </div>
           </section>
 
-          <section id="example" className="guide-section">
+          <section id="quick-start" className="guide-section">
             <h2>{copy.code.minimalExample}</h2>
             <p>{localized(guide, "ExampleText", language)}</p>
             <pre className="large-code-block">
@@ -1369,29 +1438,87 @@ function ReactiveVoronoiPage({ copy, language }) {
             </pre>
           </section>
 
-          <section id="applications" className="guide-section">
-            <h2>{copy.code.applications}</h2>
-            <div className="application-list">
-              {guide.applications.map((application) => (
-                <article key={application.doi}>
-                  <div className="application-year">{application.year}</div>
-                  <div>
-                    <h3>{localized(application, "Title", language)}</h3>
-                    <p>{localized(application, "Description", language)}</p>
-                    <div className="code-card-links">
-                      <ExternalLink href={application.doi}>DOI</ExternalLink>
-                      <ExternalLink href={application.code}>
-                        {copy.code.applicationCode}
-                      </ExternalLink>
-                    </div>
-                  </div>
-                </article>
+          <section id="case-studies" className="guide-section case-studies-section">
+            <h2>{copy.code.caseStudies}</h2>
+            <ol className="case-index">
+              {guide.cases.map((caseStudy) => (
+                <li key={caseStudy.id}>
+                  <a href={`#${caseStudy.id}`}>{localized(caseStudy, "Title", language)}</a>
+                </li>
               ))}
-            </div>
+            </ol>
+
+            {guide.cases.map((caseStudy) => (
+              <article id={caseStudy.id} className="case-study" key={caseStudy.id}>
+                <p className="case-number">{caseStudy.number}</p>
+                <h3>{localized(caseStudy, "Title", language)}</h3>
+                <p className="case-question">{localized(caseStudy, "Question", language)}</p>
+
+                <h4>{copy.code.caseSetup}</h4>
+                <p>{localized(caseStudy, "Setup", language)}</p>
+
+                <h4>{copy.code.currentInput}</h4>
+                <pre className="large-code-block"><code>{caseStudy.code}</code></pre>
+
+                <h4>{copy.code.paperBias}</h4>
+                <pre className="compact-code-block"><code>{caseStudy.biasCode}</code></pre>
+                <p className="case-note">{localized(caseStudy, "BiasText", language)}</p>
+
+                <h4>{copy.code.readOutput}</h4>
+                <ul className="guide-list">
+                  {caseStudy.interpretation.map((item) => (
+                    <li key={item.text}>{localized(item, "Text", language)}</li>
+                  ))}
+                </ul>
+
+                <h4>{copy.code.trajectory}</h4>
+                <figure className="cv-figure">
+                  <img
+                    src={caseStudy.figure}
+                    alt={localized(caseStudy, "FigureAlt", language)}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <figcaption>
+                    <strong>{copy.code.provenance}.</strong>{" "}
+                    {localized(caseStudy, "FigureCaption", language)}
+                  </figcaption>
+                </figure>
+
+                <div className="case-links">
+                  {caseStudy.links.map((link) => (
+                    <ExternalLink key={link.href} href={link.href}>
+                      {localized(link, "Label", language)}
+                    </ExternalLink>
+                  ))}
+                </div>
+              </article>
+            ))}
           </section>
 
           <section id="validation" className="guide-section">
             <h2>{copy.code.outputValidation}</h2>
+            <h3>{copy.code.legacyMapping}</h3>
+            <div className="table-scroll">
+              <table className="guide-table">
+                <thead>
+                  <tr>
+                    <th>{copy.code.legacyAction}</th>
+                    <th>{copy.code.currentAction}</th>
+                    <th>{copy.code.translation}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {guide.legacyMappings.map((mapping) => (
+                    <tr key={mapping.legacy}>
+                      <td><code>{mapping.legacy}</code></td>
+                      <td><code>{mapping.current}</code></td>
+                      <td>{localized(mapping, "Detail", language)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
             <h3>{copy.code.expectedOutput}</h3>
             <div className="table-scroll">
               <table className="guide-table">
@@ -1421,24 +1548,18 @@ function ReactiveVoronoiPage({ copy, language }) {
 
           <section id="performance" className="guide-section">
             <h2>{copy.code.performance}</h2>
-            <div className="constraint-grid">
-              <div>
-                <h3>{copy.code.scaling}</h3>
-                <ul className="guide-list">
-                  {guide.performance.map((item) => (
-                    <li key={item.text}>{localized(item, "Text", language)}</li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <h3>{copy.code.limitations}</h3>
-                <ul className="guide-list">
-                  {guide.limitations.map((item) => (
-                    <li key={item.text}>{localized(item, "Text", language)}</li>
-                  ))}
-                </ul>
-              </div>
-            </div>
+            <h3>{copy.code.scaling}</h3>
+            <ul className="guide-list">
+              {guide.performance.map((item) => (
+                <li key={item.text}>{localized(item, "Text", language)}</li>
+              ))}
+            </ul>
+            <h3 className="subsection-heading">{copy.code.limitations}</h3>
+            <ul className="guide-list">
+              {guide.limitations.map((item) => (
+                <li key={item.text}>{localized(item, "Text", language)}</li>
+              ))}
+            </ul>
           </section>
 
           <section id="references" className="guide-section">
@@ -1452,13 +1573,6 @@ function ReactiveVoronoiPage({ copy, language }) {
                   </p>
                   <ExternalLink href={reference.doi}>{copy.code.doi}</ExternalLink>
                 </article>
-              ))}
-            </div>
-            <div className="guide-link-panel final-links">
-              {guide.links.map((link) => (
-                <ExternalLink key={link.href} href={link.href}>
-                  {localized(link, "Label", language)}
-                </ExternalLink>
               ))}
             </div>
           </section>

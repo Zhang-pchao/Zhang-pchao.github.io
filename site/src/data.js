@@ -89,18 +89,11 @@ export const reactiveVoronoiGuide = {
   title: "Reactive Soft-Voronoi Collective Variables",
   zhTitle: "Reactive Soft-Voronoi 集体变量",
   summary:
-    "A general PLUMED implementation for reactive systems whose proton donor, acceptor, or ionic identity changes during a trajectory. One smooth assignment is reduced into coordination activity, defect separation, and physical position.",
+    "A general PLUMED implementation for proton-transfer systems whose donor, acceptor, or ionic identity changes during a trajectory. This guide starts from the shared soft assignment, then shows how to construct and interpret glycine tautomerism, bulk-water autoionization, and interfacial ion-location coordinates with the current API.",
   zhSummary:
-    "面向质子供体、受体或离子身份会随轨迹改变的反应体系。该通用 PLUMED 实现以同一套平滑归属为基础，分别描述配位缺陷活性、缺陷分离程度和物理空间位置。",
-  status: "Upstream proposal: PLUMED PR #1442",
-  zhStatus: "上游提案：PLUMED PR #1442",
+    "面向质子供体、受体或离子身份随轨迹改变的反应体系。本指南从共用的平滑归属出发，依次说明如何使用当前 API 构建并判读甘氨酸互变异构、体相水自解离和界面离子位置集体变量。",
   reviewedCommit: "f13bead9f6df0d152906f66102139fabe7edafd1",
   links: [
-    {
-      label: "Project branch",
-      zhLabel: "项目分支",
-      href: "https://github.com/Zhang-pchao/plumed2/tree/performance/reactive-voronoi-scaling",
-    },
     {
       label: "Source",
       zhLabel: "源码",
@@ -111,92 +104,76 @@ export const reactiveVoronoiGuide = {
       zhLabel: "手册概览",
       href: "https://github.com/Zhang-pchao/plumed2/blob/performance/reactive-voronoi-scaling/src/colvar/module.md#reactive-soft-voronoi-collective-variables",
     },
-    {
-      label: "Official regtest",
-      zhLabel: "官方回归测试",
-      href: "https://github.com/Zhang-pchao/plumed2/tree/performance/reactive-voronoi-scaling/regtest/basic/rt-reactive-voronoi",
-    },
-    {
-      label: "Upstream PR #1442",
-      zhLabel: "上游 PR #1442",
-      href: "https://github.com/plumed/plumed2/pull/1442",
-    },
   ],
+  regtestHref:
+    "https://github.com/Zhang-pchao/plumed2/tree/performance/reactive-voronoi-scaling/regtest/basic/rt-reactive-voronoi",
   principleSteps: [
     {
-      label: "Candidate centers",
-      zhLabel: "候选中心",
-      detail: "Atoms that can receive a transferable atom, commonly O or N.",
-      zhDetail: "可能接收可转移原子的中心，质子转移中通常为 O 或 N。",
+      text: "Choose CENTERS from atoms that can receive a transferable atom, commonly O or N in proton-transfer systems.",
+      zhText: "从可能接收可转移原子的原子中定义 CENTERS；在质子转移体系中通常是 O 或 N。",
     },
     {
-      label: "Soft assignment",
-      zhLabel: "平滑归属",
-      detail: "Each ASSIGNED atom is distributed continuously across all CENTERS.",
-      zhDetail: "每个 ASSIGNED 原子在全部 CENTERS 之间连续分配。",
+      text: "Put only transferable atoms in ASSIGNED. Each one is distributed continuously across every CENTER by a distance softmax.",
+      zhText: "ASSIGNED 只包含可转移原子；每个原子通过基于距离的 softmax 在全部 CENTER 之间连续分配。",
     },
     {
-      label: "Occupancy defect",
-      zhLabel: "占据数缺陷",
-      detail: "The smooth occupancy is compared with a declared reference value.",
-      zhDetail: "将平滑占据数与明确给定的参考占据数比较。",
+      text: "Declare the intended occupancy of every CENTER in REFERENCE, in exactly the same order as CENTERS.",
+      zhText: "在 REFERENCE 中按 CENTERS 的同一顺序，明确写出每个 CENTER 的目标占据数。",
     },
     {
-      label: "Physical reduction",
-      zhLabel: "物理约化",
-      detail: "Reduce the same defects into activity, separation, or position.",
-      zhDetail: "将同一组缺陷约化为活性、分离程度或空间位置。",
+      text: "Reduce the same occupancy defects into activity, separation, or position only after checking representative neutral, transition, product, and multi-defect frames.",
+      zhText: "先检查中性态、过渡态、产物态和多缺陷代表构型，再把同一组占据数缺陷约化为活性、分离程度或空间位置。",
     },
   ],
   principleText:
-    "For center i and assigned atom j, the normalized weight wᵢⱼ uses a distance-based softmax. The occupancy nᵢ = Σⱼwᵢⱼ and defect qᵢ = nᵢ − νᵢ are smooth functions of atomic coordinates. These geometric defects are useful reaction descriptors, but they are not formal electronic charges.",
+    "For center i and assigned atom j, a normalized distance softmax defines the assignment weight. Summing the weights gives the smooth occupancy, and subtracting the declared reference gives the coordination defect. The defects follow proton identity through Grotthuss transfer without tagging one permanent H₃O⁺ or OH⁻ molecule. They are geometric reaction descriptors, not formal electronic charges.",
   zhPrincipleText:
-    "对中心 i 和待归属原子 j，归一化权重 wᵢⱼ 由距离 softmax 给出；占据数 nᵢ = Σⱼwᵢⱼ，缺陷 qᵢ = nᵢ − νᵢ，均为原子坐标的平滑函数。这类几何缺陷适合作为反应描述符，但不等同于严格的电子电荷。",
-  formula: "wᵢⱼ = exp(−κdᵢⱼ) / Σₖ exp(−κdₖⱼ)    ·    nᵢ = Σⱼwᵢⱼ    ·    qᵢ = nᵢ − νᵢ",
+    "对中心 i 和待归属原子 j，归一化的距离 softmax 给出归属权重；权重求和得到平滑占据数，再减去指定参考值得到配位缺陷。该缺陷可在 Grotthuss 质子转移中追踪不断变化的离子身份，无需指定某个永久的 H₃O⁺ 或 OH⁻ 分子。它是几何反应描述符，不等同于严格的电子电荷。",
   installText:
-    "The Actions belong to PLUMED's default colvar module and have no external library dependency. Until the upstream proposal is merged and released, use the reviewed source snapshot either as a runtime plugin or in an isolated PLUMED source build.",
+    "The three Actions belong to PLUMED's default colvar module and need no external library. Before they are available in a released PLUMED version, compile the reviewed source as a runtime plugin for the shortest installation and testing path.",
   zhInstallText:
-    "三个 Action 属于 PLUMED 默认的 colvar 模块，不依赖外部程序库。在上游提案合并并随正式版本发布之前，可将已审阅源码编译为运行时插件，或放入独立的 PLUMED 源码构建中。",
+    "三个 Action 属于 PLUMED 默认的 colvar 模块，不依赖外部程序库。在正式 PLUMED 版本提供这些 Action 之前，建议先把已审阅源码编译为运行时插件，这是最短的安装与测试路径。",
   runtimeInstall: `curl -L -o ReactiveVoronoi.cpp \\
   https://raw.githubusercontent.com/Zhang-pchao/plumed2/f13bead9f6df0d152906f66102139fabe7edafd1/src/colvar/ReactiveVoronoi.cpp
 plumed mklib ReactiveVoronoi.cpp`,
-  inTreeInstall: `cp ReactiveVoronoi.cpp /path/to/plumed/src/colvar/
-cd /path/to/plumed
-./configure --prefix=/path/to/plumed-install
-make -j4
-make install
-source /path/to/plumed-install/lib/plumed/sourceme.sh`,
+  driverTest: `plumed driver \\
+  --plumed plumed.dat \\
+  --ixyz trajectory.xyz \\
+  --box 3.0,3.0,3.0`,
   installCaution:
-    "Compile the plugin with the same PLUMED executable, compiler, and ABI used by the target simulation. Rebuild after changing any of them. Test with plumed driver before a short molecular-dynamics smoke test.",
+    "Compile the plugin with the same PLUMED executable, compiler, and ABI used by the target simulation. Rebuild it after any of these change. The CVs do not require OPES, but the later bias examples need PLUMED's optional opes module. A successful driver run proves parsing and evaluation on the supplied frames; it does not yet validate forces, a bias, or a production setup.",
   zhInstallCaution:
-    "插件必须使用目标模拟所调用的同一 PLUMED 可执行文件、编译器和 ABI 编译；其中任一项变化后都应重新构建。先用 plumed driver 检查，再进行短程分子动力学冒烟测试。",
+    "插件必须使用目标模拟所调用的同一 PLUMED 可执行文件、编译器和 ABI 编译；其中任一项变化后都应重新构建。CV 本身不依赖 OPES，但后文偏置示例需要 PLUMED 的可选 opes 模块。driver 成功只说明输入能够解析并在给定构型上求值，尚不能证明力、偏置或生产参数正确。",
   actions: [
     {
       name: "VORONOI_COORDINATION",
+      equation: "coordination",
       purpose: "How much reactive coordination-defect activity is present?",
       zhPurpose: "体系中存在多少反应性配位缺陷？",
       description:
-        "Reduces selected defects with POWER=1 or 2, optional sign filtering, and optional coefficients. POWER=2 is often the smoother activity measure near qᵢ = 0.",
+        "Use POWER=1 when the sign of a protonation coordinate must be preserved, as in glycine sₚ. Use POWER=2 for nonnegative defect activity, as in the water self-ion number sₐ. SIGN and SELECT restrict which defects contribute; COEFFICIENTS distinguishes chemically different centers.",
       zhDescription:
-        "通过 POWER=1 或 2、可选的正负号筛选和权重系数约化指定缺陷。qᵢ = 0 附近，POWER=2 通常是更平滑的活性度量。",
+        "需要保留质子化坐标的正负号时使用 POWER=1，例如甘氨酸 sₚ；描述非负缺陷活性时使用 POWER=2，例如水自解离离子数 sₐ。SIGN 与 SELECT 限定参与计算的缺陷，COEFFICIENTS 用于区分不同化学中心。",
     },
     {
       name: "VORONOI_DISTANCE",
+      equation: "distance",
       purpose: "How far apart are correlated coordination defects?",
       zhPurpose: "相关配位缺陷彼此分离多远？",
       description:
-        "Combines defect products with explicit within-group or cross-group center distances. GROUP1 and GROUP2 are chemical selections, not positions in an atom list.",
+        "Use one GROUP for unique pairs within a pool, such as H₃O⁺–OH⁻ separation among water O atoms. Use GROUP1 and GROUP2 for cross terms, such as water–glycine distances. The result naturally goes to zero when the defects disappear and is therefore not a normalized geometric distance.",
       zhDescription:
-        "将缺陷乘积与组内或跨组中心距离结合。GROUP1 与 GROUP2 表示明确的化学选择，而不是原子列表中的位置。",
+        "使用一个 GROUP 计算同一候选池内的唯一配对，例如水 O 中 H₃O⁺–OH⁻ 的分离；使用 GROUP1 与 GROUP2 构建跨组项，例如水–甘氨酸距离。缺陷消失时输出自然趋近零，因此它不是归一化的几何距离。",
     },
     {
       name: "VORONOI_POSITION",
+      equation: "position",
       purpose: "Where is a selected defect in a declared Cartesian frame?",
       zhPurpose: "指定缺陷在明确的笛卡尔参考系中位于何处？",
       description:
-        "Reports a defect-weighted X, Y, or Z displacement from a fixed ORIGIN. SELECT limits possible hosts; NORMALIZE is valid only while a selected defect remains present.",
+        "Use a physical AXIS and fixed ORIGIN to replace legacy atom-index moments. SIGN separates H₃O⁺ and OH⁻, ABSOLUTE folds two equivalent slab sides, and NORMALIZE returns a conditional mean position only when the selected defect is guaranteed to remain present.",
       zhDescription:
-        "给出缺陷加权的 X、Y 或 Z 方向相对固定 ORIGIN 的位移。SELECT 限定可能载体；仅在指定缺陷始终存在时才可使用 NORMALIZE。",
+        "以真实 AXIS 和固定 ORIGIN 取代旧代码中的原子序号矩。SIGN 区分 H₃O⁺ 与 OH⁻，ABSOLUTE 可折叠 slab 两侧的等价界面；只有在指定缺陷始终存在时，才可用 NORMALIZE 得到条件平均位置。",
     },
   ],
   keywords: [
@@ -277,23 +254,286 @@ UNITS LENGTH=A
 WaterO: GROUP ATOMS=1-4
 WaterH: GROUP ATOMS=5-12
 
-ionization: VORONOI_COORDINATION ...
-  CENTERS=WaterO ASSIGNED=WaterH KAPPA=5 REFERENCE=2 POWER=2
-  ...
-ion_distance: VORONOI_DISTANCE ...
-  CENTERS=WaterO ASSIGNED=WaterH KAPPA=5 REFERENCE=2 GROUP1=WaterO
-  ...
+sa: VORONOI_COORDINATION CENTERS=WaterO ASSIGNED=WaterH KAPPA=5 REFERENCE=2 POWER=2
+st: VORONOI_DISTANCE CENTERS=WaterO ASSIGNED=WaterH KAPPA=5 REFERENCE=2 GROUP1=WaterO
+
+PRINT ARG=sa,st FILE=COLVAR STRIDE=1
+DUMPDERIVATIVES ARG=sa,st FILE=DERIVATIVES STRIDE=1`,
+  exampleText:
+    "Start with this exact full-pair monitor on a few labeled neutral, contact-pair, separated-pair, and proton-transfer frames. Replace the atom numbers with the topology actually read by PLUMED. Add a bias or NLIST only after values and analytical derivatives have been checked.",
+  zhExampleText:
+    "先在少量已标注的中性态、接触离子对、分离离子对和质子转移构型上，用这一精确全配对输入进行监测。原子编号必须替换为 PLUMED 实际读取拓扑中的编号；只有在数值与解析导数核验后，才能加入偏置或 NLIST。",
+  cases: [
+    {
+      id: "glycine",
+      number: "01",
+      title: "Solvated glycine: distinguish four protonation states and three pathways",
+      zhTitle: "溶剂化甘氨酸：区分四种质子化状态与三条路径",
+      question:
+        "The scientific task is not simply to count ions. The coordinate pair must distinguish neutral [N], zwitterionic [Z], anionic glycine–H₃O⁺, and cationic glycine–OH⁻, while allowing both intramolecular and water-mediated proton transfer.",
+      zhQuestion:
+        "这里的科学任务不只是计数离子，而是用一对坐标区分中性型 [N]、两性离子型 [Z]、阴离子甘氨酸–H₃O⁺ 和阳离子甘氨酸–OH⁻，同时容纳分子内与水介导的质子转移。",
+      setup:
+        "Use every water O together with glycine N and the two carboxyl O atoms as CENTERS; use all transferable water and glycine H atoms as ASSIGNED. The paper-consistent references are 2 for water O, 2 for glycine N, and 0.5 for each equivalent carboxyl O. The compact input below uses two water molecules only to keep the ordered REFERENCE vector readable.",
+      zhSetup:
+        "CENTERS 包含全部水 O、甘氨酸 N 和两个羧基 O，ASSIGNED 包含所有可参与转移的水 H 与甘氨酸 H。与论文定义一致的参考占据数分别为：水 O 取 2、甘氨酸 N 取 2、两个等价羧基 O 各取 0.5。为便于看清 REFERENCE 的顺序，下面的紧凑示例只写两个水分子。",
+      code: `LOAD FILE=./ReactiveVoronoi.so
+UNITS LENGTH=A
+
+# Compact topology: two H2O molecules plus glycine reactive sites
+WaterO: GROUP ATOMS=1,4
+WaterH: GROUP ATOMS=2,3,5,6
+GlyN: GROUP ATOMS=7
+GlyO1: GROUP ATOMS=8
+GlyO2: GROUP ATOMS=9
+GlyH: GROUP ATOMS=10-12
+AllH: GROUP ATOMS=WaterH,GlyH
+Centers: GROUP ATOMS=WaterO,GlyN,GlyO1,GlyO2
+
+sp: VORONOI_COORDINATION ...
+  CENTERS=Centers ASSIGNED=AllH KAPPA=5
+  REFERENCE=2,2,2,0.5,0.5 POWER=1
+  COEFFICIENTS=1,1,2,2,2
+...
+
+sd_water: VORONOI_DISTANCE ...
+  CENTERS=Centers ASSIGNED=AllH KAPPA=5
+  REFERENCE=2,2,2,0.5,0.5
+  GROUP1=WaterO GROUP2=GlyN,GlyO1,GlyO2
+...
+sd_internal: VORONOI_DISTANCE ...
+  CENTERS=Centers ASSIGNED=AllH KAPPA=5
+  REFERENCE=2,2,2,0.5,0.5
+  GROUP1=GlyN GROUP2=GlyO1,GlyO2
+...
+sd: COMBINE ARG=sd_water,sd_internal COEFFICIENTS=1,1 PERIODIC=NO
+
+PRINT ARG=sp,sd_water,sd_internal,sd FILE=COLVAR STRIDE=1`,
+      biasCode: `# Add only after unbiased and derivative checks
+opes: OPES_METAD ARG=sp,sd TEMP=300 PACE=500 BARRIER=35`,
+      biasText:
+        "The published production workflow biased sₚ and s_d together. TEMP, PACE, BARRIER, kernel settings, walls, and restart controls are paper-specific simulation choices rather than defaults of the CV.",
+      zhBiasText:
+        "论文生产模拟同时偏置 sₚ 与 s_d。TEMP、PACE、BARRIER、核宽度、限制势和重启设置属于该论文体系的模拟选择，并不是这些 CV 的默认参数。",
+      interpretation: [
+        {
+          text: "sₚ ≈ 0 contains [N] and [Z]; s_d separates them, with [N] near 0 Å and [Z] near 3 Å.",
+          zhText: "sₚ ≈ 0 同时包含 [N] 与 [Z]；s_d 将两者分开，[N] 接近 0 Å，[Z] 接近 3 Å。",
+        },
+        {
+          text: "sₚ ≈ −1 identifies anionic glycine with a compensating H₃O⁺; sₚ ≈ +1 identifies cationic glycine with a compensating OH⁻.",
+          zhText: "sₚ ≈ −1 对应阴离子甘氨酸与补偿 H₃O⁺；sₚ ≈ +1 对应阳离子甘氨酸与补偿 OH⁻。",
+        },
+        {
+          text: "An intramolecular [N]→[Z] path changes mainly along s_d near sₚ = 0. Water-mediated paths visit the negative or positive sₚ branches before returning to [Z].",
+          zhText: "分子内 [N]→[Z] 路径主要在 sₚ = 0 附近沿 s_d 变化；水介导路径则先进入 sₚ 的负支或正支，再回到 [Z]。",
+        },
+      ],
+      figure: "/assets/reactive-voronoi/glycine-cv-trajectory.png",
+      figureAlt: "Unsmoothed glycine protonation and defect-separation collective variables over an 80 ps trajectory window.",
+      zhFigureAlt: "甘氨酸质子化与缺陷分离集体变量在 80 ps 轨迹窗口内的未平滑演化。",
+      figureCaption:
+        "Representative 80 ps window from the paper-production enhanced-sampling trajectory, sampled every 0.1 ps without smoothing. The archived s05 and d05 columns evaluate the published sₚ and s_d definitions; the input above is their translation to the current generic Actions.",
+      zhFigureCaption:
+        "取自论文生产增强采样轨迹的代表性 80 ps 窗口，每 0.1 ps 抽样且不做平滑。归档输出列 s05 与 d05 计算论文中的 sₚ 和 s_d；上方输入是它们向当前通用 Action 的适配。",
+      links: [
+        {
+          label: "Paper",
+          zhLabel: "论文",
+          href: "https://doi.org/10.1021/acs.jcim.4c00273",
+        },
+        {
+          label: "Paper-specific reproduction archive",
+          zhLabel: "论文专用复现归档",
+          href: "https://github.com/Zhang-pchao/GlycineTautomerism/tree/main/Voronoi_collective_variables",
+        },
+      ],
+    },
+    {
+      id: "water-autoionization",
+      number: "02",
+      title: "Bulk water: form an H₃O⁺/OH⁻ pair and resolve its separation",
+      zhTitle: "体相水：形成 H₃O⁺/OH⁻ 离子对并解析其分离",
+      question:
+        "Water autoionization needs two complementary coordinates: defect activity detects whether self-ions exist, while defect-weighted separation distinguishes a contact pair from separated ions.",
+      zhQuestion:
+        "水自解离需要两个互补坐标：缺陷活性判断水自解离离子是否出现，缺陷加权距离再区分接触离子对与分离离子。",
+      setup:
+        "Use all water O atoms as CENTERS, all water H atoms as ASSIGNED, and REFERENCE=2. The 58-water atom ranges below match the published topology. KAPPA=5 gives the smoother activity used for sampling; KAPPA=8 was used for the separation coordinate in the paper.",
+      zhSetup:
+        "将全部水 O 设为 CENTERS、全部水 H 设为 ASSIGNED，并取 REFERENCE=2。下方 58 水分子的原子范围与论文拓扑一致。采样中的平滑活性使用 KAPPA=5，论文中的分离坐标使用 KAPPA=8。",
+      code: `LOAD FILE=./ReactiveVoronoi.so
+UNITS LENGTH=A
+
+WaterO: GROUP ATOMS=1-172:3
+WaterH: GROUP ATOMS=2-173:3,3-174:3
+
+sa: VORONOI_COORDINATION ...
+  CENTERS=WaterO ASSIGNED=WaterH
+  KAPPA=5 REFERENCE=2 POWER=2
+...
+st: VORONOI_DISTANCE ...
+  CENTERS=WaterO ASSIGNED=WaterH
+  KAPPA=8 REFERENCE=2 GROUP1=WaterO
+...
+
+# Resolve the narrow neutral basin while remaining continuous at st=1
+st_log: CUSTOM ARG=st ...
+  FUNC=log(x+0.03)*step(1-x)+(x-1+log(1.03))*step(x-1)
+  PERIODIC=NO
+...
+
+PRINT ARG=sa,st,st_log FILE=COLVAR STRIDE=1`,
+      biasCode: `# Add only after unbiased and derivative checks
+opes: OPES_METAD ARG=st_log,sa TEMP=300 PACE=500 BARRIER=75`,
+      biasText:
+        "The paper used the transformed separation and self-ion activity together because raw s_t is compressed near the first proton transfer. The logarithmic regularizer and OPES settings should be revalidated if the water model, temperature, size, or target event changes.",
+      zhBiasText:
+        "论文同时使用变换后的分离坐标与水自解离离子活性，因为原始 s_t 在首次质子转移附近分辨率较低。若水模型、温度、体系尺寸或目标事件改变，必须重新验证对数正则项与 OPES 参数。",
+      interpretation: [
+        {
+          text: "Neutral water gives sₐ ≈ 0 and s_t ≈ 0. One ideal, fully localized H₃O⁺/OH⁻ pair gives sₐ → 2; with the paper's smooth KAPPA=5 definition, the ionized basin is typically around sₐ ≈ 1.3.",
+          zhText: "中性水对应 sₐ ≈ 0、s_t ≈ 0。理想且充分局域的一对 H₃O⁺/OH⁻ 使 sₐ → 2；采用论文中较平滑的 KAPPA=5 定义时，离子态盆地通常位于 sₐ ≈ 1.3。",
+        },
+        {
+          text: "For a localized single pair, s_t approaches the H₃O⁺–OH⁻ separation. During defect formation it also contains the changing defect magnitude, so it is not a pure conditional distance.",
+          zhText: "对于充分局域的单离子对，s_t 接近 H₃O⁺–OH⁻ 间距；在缺陷形成过程中，它还包含不断变化的缺陷强度，因此不是纯粹的条件距离。",
+        },
+        {
+          text: "The transformed s′_t expands the narrow neutral basin: values near log(0.03) indicate neutral water, while positive values indicate established separation.",
+          zhText: "变换后的 s′_t 展开狭窄的中性盆地：接近 log(0.03) 表示中性水，正值表示已经建立明显分离。",
+        },
+      ],
+      figure: "/assets/reactive-voronoi/water-autoionization-cv-trajectory.png",
+      figureAlt: "Unsmoothed water self-ion activity and ion-pair separation over a 40 ps autoionization trajectory window.",
+      zhFigureAlt: "水自解离离子活性与离子对分离在 40 ps 自解离轨迹窗口内的未平滑演化。",
+      figureCaption:
+        "Representative 40 ps window from the published 58-water enhanced-sampling trajectory, sampled every 0.1 ps without smoothing. The coordinated rise of sₐ and s_t near 21 ps shows formation followed by separation of a self-ion pair. The archived cc and dd columns correspond to the current VORONOI_COORDINATION and VORONOI_DISTANCE definitions above.",
+      zhFigureCaption:
+        "取自论文 58 水分子增强采样轨迹的代表性 40 ps 窗口，每 0.1 ps 抽样且不做平滑。约 21 ps 处 sₐ 与 s_t 协同升高，显示水自解离离子对先形成、再分离。归档输出列 cc 与 dd 分别对应上方当前 VORONOI_COORDINATION 与 VORONOI_DISTANCE 定义。",
+      links: [
+        {
+          label: "Paper",
+          zhLabel: "论文",
+          href: "https://doi.org/10.1021/acs.langmuir.4c05004",
+        },
+        {
+          label: "Paper-specific reproduction input",
+          zhLabel: "论文专用复现输入",
+          href: "https://github.com/Zhang-pchao/OilWaterInterface/tree/main/Molecular_Dynamics/Enhanced_Sampling/DPMD/water_bulk_1",
+        },
+      ],
+    },
+    {
+      id: "interface-position",
+      number: "03",
+      title: "Interface normal: drive and monitor self-ion locations after autoionization",
+      zhTitle: "界面法向：自解离后驱动并监测离子位置",
+      question:
+        "After a self-ion pair forms, identity can continue hopping through the hydrogen-bond network. A useful location coordinate must therefore follow the positive or negative defect, not a permanently labeled oxygen atom.",
+      zhQuestion:
+        "水自解离离子对形成后，离子身份仍可沿氢键网络不断跳迁。因此，位置坐标必须跟随正、负配位缺陷，而不是永久标记某个氧原子。",
+      setup:
+        "For a slab normal to z, use the same water O/H assignment and define a fixed physical ORIGIN at the slab midplane. SIGN selects H₃O⁺ or OH⁻ and ABSOLUTE folds the two equivalent sides. The published air–water input used ORIGIN=53 Å for its own cell; users must determine the corresponding reference from their equilibrated geometry rather than copy this number.",
+      zhSetup:
+        "对于法向为 z 的 slab，沿用水 O/H 的归属定义，并在 slab 中面设置固定物理 ORIGIN。SIGN 区分 H₃O⁺ 与 OH⁻，ABSOLUTE 折叠两个等价界面。论文的气–水输入针对其特定晶胞使用 ORIGIN=53 Å；用户必须根据自己的平衡构型确定参考面，不能直接照搬该数值。",
+      code: `LOAD FILE=./ReactiveVoronoi.so
+UNITS LENGTH=A
+
+WaterO: GROUP ATOMS=1-766:3
+WaterH: GROUP ATOMS=2-767:3,3-768:3
+
+sa: VORONOI_COORDINATION ...
+  CENTERS=WaterO ASSIGNED=WaterH
+  KAPPA=5 REFERENCE=2 POWER=2
+...
+oh_z: VORONOI_POSITION ...
+  CENTERS=WaterO ASSIGNED=WaterH KAPPA=5 REFERENCE=2
+  AXIS=Z ORIGIN=53 SIGN=NEGATIVE ABSOLUTE
+...
 h3o_z: VORONOI_POSITION ...
   CENTERS=WaterO ASSIGNED=WaterH KAPPA=5 REFERENCE=2
-  AXIS=Z ORIGIN=5 SIGN=POSITIVE ABSOLUTE
-  ...
+  AXIS=Z ORIGIN=53 SIGN=POSITIVE ABSOLUTE
+...
 
-PRINT ARG=ionization,ion_distance,h3o_z FILE=COLVAR STRIDE=1
-DUMPDERIVATIVES ARG=ionization FILE=DERIVATIVES STRIDE=1`,
-  exampleText:
-    "This compact input monitors water autoionization, ion-pair separation, and positive-defect location. Atom numbers, KAPPA, ORIGIN, and every production setting are system-specific; begin from labeled structures and exact full-pair mode.",
-  zhExampleText:
-    "该最小输入同时监测水自解离活性、离子对分离和正缺陷位置。原子编号、KAPPA、ORIGIN 以及所有生产参数都依赖具体体系；应从带标注的结构和精确全配对模式开始。",
+# Sharper observables for structural diagnosis, not automatic bias replacements
+oh_z_sharp: VORONOI_POSITION ...
+  CENTERS=WaterO ASSIGNED=WaterH KAPPA=100 REFERENCE=2
+  AXIS=Z ORIGIN=53 SIGN=NEGATIVE ABSOLUTE
+...
+h3o_z_sharp: VORONOI_POSITION ...
+  CENTERS=WaterO ASSIGNED=WaterH KAPPA=100 REFERENCE=2
+  AXIS=Z ORIGIN=53 SIGN=POSITIVE ABSOLUTE
+...
+
+PRINT ARG=sa,oh_z,h3o_z,oh_z_sharp,h3o_z_sharp FILE=COLVAR STRIDE=1`,
+      biasCode: `# Add only after the ionized region and derivatives are validated
+opes: OPES_METAD ARG=oh_z,h3o_z TEMP=300 PACE=500 BARRIER=75`,
+      biasText:
+        "The paper used smoother KAPPA=5 position coordinates for sampling and sharper KAPPA=100 coordinates for structural analysis. If recombination is allowed, keep the unnormalized form shown here; NORMALIZE is fail-closed when the selected defect disappears.",
+      zhBiasText:
+        "论文使用较平滑的 KAPPA=5 位置坐标进行采样，并用 KAPPA=100 坐标做结构分析。若允许离子复合，应保留这里的未归一化形式；选定缺陷消失时，NORMALIZE 会按失效关闭原则停止计算。",
+      interpretation: [
+        {
+          text: "With one localized ion of the selected sign, each output approximates its absolute distance from the fixed midplane. In a neutral frame it goes to zero because the defect weight disappears.",
+          zhText: "当选定符号的离子充分局域时，输出近似为它到固定中面的绝对距离；中性态中缺陷权重消失，输出随之趋近零。",
+        },
+        {
+          text: "A drop toward zero can mean reduced defect localization rather than instantaneous motion to the midplane. Read the position together with sₐ or the sign-resolved coordination activity.",
+          zhText: "位置坐标降到零附近，可能表示缺陷局域性减弱，而不一定是离子瞬间移动到中面；必须结合 sₐ 或分正负号的配位缺陷活性判读。",
+        },
+        {
+          text: "ABSOLUTE combines the two slab sides. Omit it only when the signed side is physically meaningful and the image convention remains continuous; VORONOI_POSITION does not locate a drifting interface automatically.",
+          zhText: "ABSOLUTE 将 slab 两侧合并。只有当正负侧具有明确物理含义且周期成像连续时才应去掉它；VORONOI_POSITION 不会自动追踪漂移界面。",
+        },
+      ],
+      figure: "/assets/reactive-voronoi/interface-position-cv-trajectory.png",
+      figureAlt: "Unsmoothed negative- and positive-defect position coordinates over an 80 ps interfacial trajectory window.",
+      zhFigureAlt: "界面轨迹 80 ps 窗口内负缺陷与正缺陷位置坐标的未平滑演化。",
+      figureCaption:
+        "Representative 80 ps window from the published 256-water slab enhanced-sampling trajectory, sampled every 0.1 ps without smoothing. The two curves follow the OH⁻ and H₃O⁺ defects along the interface normal. Short drops toward zero illustrate why these unnormalized positions must be interpreted together with defect activity. Archived zm05 and zp05 values are the paper-code counterparts of the current VORONOI_POSITION inputs above.",
+      zhFigureCaption:
+        "取自论文 256 水分子 slab 增强采样轨迹的代表性 80 ps 窗口，每 0.1 ps 抽样且不做平滑。两条曲线沿界面法向跟随 OH⁻ 与 H₃O⁺ 缺陷；短时降至零附近也说明未归一化位置必须与缺陷活性共同判读。归档输出 zm05 与 zp05 是上方当前 VORONOI_POSITION 输入在论文旧代码中的对应量。",
+      links: [
+        {
+          label: "Paper",
+          zhLabel: "论文",
+          href: "https://doi.org/10.1021/acs.langmuir.4c05004",
+        },
+        {
+          label: "Paper-specific reproduction input",
+          zhLabel: "论文专用复现输入",
+          href: "https://github.com/Zhang-pchao/OilWaterInterface/tree/main/Molecular_Dynamics/Enhanced_Sampling/DPMD/air_water_slab",
+        },
+      ],
+    },
+  ],
+  legacyMappings: [
+    {
+      legacy: "VORONOIS1",
+      current: "VORONOI_COORDINATION",
+      detail: "POWER=1 with explicit COEFFICIENTS reproduces the signed glycine protonation reduction.",
+      zhDetail: "使用 POWER=1 与明确 COEFFICIENTS，重写甘氨酸有符号质子化坐标。",
+    },
+    {
+      legacy: "VORONOIC0",
+      current: "VORONOI_COORDINATION",
+      detail: "POWER=2 gives the water self-ion activity without a hard-coded water/glycine convention.",
+      zhDetail: "使用 POWER=2 得到水自解离离子活性，不再依赖硬编码的水/甘氨酸约定。",
+    },
+    {
+      legacy: "VORONOID1 / VORONOID2",
+      current: "VORONOI_DISTANCE",
+      detail: "Explicit GROUP1/GROUP2 selections replace NRX and atom-list-position rules; COMBINE joins physically distinct terms.",
+      zhDetail: "由明确的 GROUP1/GROUP2 取代 NRX 与原子列表位置规则，再用 COMBINE 组合不同物理项。",
+    },
+    {
+      legacy: "VORONOIIMZ / VORONOIIPZ",
+      current: "VORONOI_POSITION",
+      detail: "SIGN, AXIS, and ORIGIN replace positive/negative special classes and legacy atom-index moments.",
+      zhDetail: "用 SIGN、AXIS 与 ORIGIN 取代正/负专用类及旧的原子序号矩。",
+    },
+  ],
   outputRows: [
     {
       state: "Neutral water",
@@ -376,41 +616,6 @@ DUMPDERIVATIVES ARG=ionization FILE=DERIVATIVES STRIDE=1`,
       zhText: "当指定缺陷权重低于 TOLERANCE 时，NORMALIZE 会主动停止，而不是返回不稳定数值。",
     },
   ],
-  applications: [
-    {
-      title: "Intramolecular and Water Mediated Tautomerism of Solvated Glycine",
-      zhTitle: "Intramolecular and Water Mediated Tautomerism of Solvated Glycine",
-      year: "2024",
-      doi: "https://doi.org/10.1021/acs.jcim.4c00273",
-      code: "https://github.com/Zhang-pchao/GlycineTautomerism/tree/main/Voronoi_collective_variables",
-      description:
-        "Water–glycine and intramolecular defect-distance terms can now be written with explicit center groups instead of hard-coded atom-list positions.",
-      zhDescription:
-        "水-甘氨酸及分子内缺陷距离项现在可用明确的中心分组表达，无需硬编码原子列表位置。",
-    },
-    {
-      title: "Propensity of Water Self-Ions at Air(Oil)–Water Interfaces Revealed by Deep Potential Molecular Dynamics with Enhanced Sampling",
-      zhTitle: "Propensity of Water Self-Ions at Air(Oil)–Water Interfaces Revealed by Deep Potential Molecular Dynamics with Enhanced Sampling",
-      year: "2025",
-      doi: "https://doi.org/10.1021/acs.langmuir.4c05004",
-      code: "https://github.com/Zhang-pchao/OilWaterInterface/tree/main/Voronoi_CVs",
-      description:
-        "Positive and negative defects can be selected explicitly and resolved along a physical slab axis; legacy index observables remain only as paper-reproduction archives.",
-      zhDescription:
-        "可分别选择正、负缺陷并沿真实 slab 轴解析其位置；旧的原子序号观测量仅作为论文复现归档保留。",
-    },
-    {
-      title: "Solvent Effect on the Electrocatalytic Nitrogen Reduction Reaction: A Deep Potential Molecular Dynamics Simulation with Enhanced Sampling for the Case of the Ruthenium Single Atom Catalyst",
-      zhTitle: "Solvent Effect on the Electrocatalytic Nitrogen Reduction Reaction: A Deep Potential Molecular Dynamics Simulation with Enhanced Sampling for the Case of the Ruthenium Single Atom Catalyst",
-      year: "2026",
-      doi: "https://doi.org/10.1039/D5TA09029F",
-      code: "https://github.com/Zhang-pchao/research/tree/main/OPES-DPMD-NRR/Voronoi_collective_variables",
-      description:
-        "Water oxygen atoms and a reactive N site become explicit centers, so the chemistry can be changed through selections and references rather than a new C++ Action.",
-      zhDescription:
-        "将水氧和反应 N 位点明确设为中心后，可通过选择范围和参考占据数改变化学定义，无需另写 C++ Action。",
-    },
-  ],
   references: [
     {
       authors: "Emanuele Grifoni, GiovanniMaria Piccini, and Michele Parrinello",
@@ -435,12 +640,6 @@ DUMPDERIVATIVES ARG=ionization FILE=DERIVATIVES STRIDE=1`,
       title: "Propensity of Water Self-Ions at Air(Oil)–Water Interfaces Revealed by Deep Potential Molecular Dynamics with Enhanced Sampling",
       details: "Langmuir 2025, 41, 3675–3683",
       doi: "https://doi.org/10.1021/acs.langmuir.4c05004",
-    },
-    {
-      authors: "Pengchao Zhang and Xuefei Xu",
-      title: "Modulation of Electric Field and Interface on Competitive Reaction Mechanisms",
-      details: "J. Chem. Theory Comput. 2025, 21, 6584–6593",
-      doi: "https://doi.org/10.1021/acs.jctc.5c00705",
     },
     {
       authors: "Bowen Zhang, Pengchao Zhang, and Xuefei Xu",
