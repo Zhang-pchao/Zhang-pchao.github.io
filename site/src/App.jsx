@@ -270,6 +270,16 @@ const COPY = {
       minimalExample: "Minimal water example",
       caseStudies: "Three paper-based worked cases",
       caseSetup: "Define the chemical mapping",
+      referenceChoice: "Map REFERENCE to CENTERS",
+      centerAtoms: "CENTER atoms",
+      chemicalSite: "Chemical site",
+      referenceValue: "REFERENCE",
+      referenceReason: "Baseline rationale",
+      exampleStructure: "Numbered example structure",
+      atomMapping: "Atom-selection map",
+      atomNumbers: "Atoms",
+      selectionRole: "Selection and role",
+      downloadXyz: "Download XYZ",
       currentInput: "Current generic input",
       paperBias: "Published biasing pattern",
       readOutput: "How to read the output",
@@ -485,6 +495,16 @@ const COPY = {
       minimalExample: "水体系最小示例",
       caseStudies: "三个基于论文的完整案例",
       caseSetup: "定义化学映射",
+      referenceChoice: "将 REFERENCE 对应到 CENTERS",
+      centerAtoms: "CENTER 原子",
+      chemicalSite: "化学位点",
+      referenceValue: "REFERENCE",
+      referenceReason: "基准态依据",
+      exampleStructure: "带编号的示例结构",
+      atomMapping: "原子选择对应表",
+      atomNumbers: "原子编号",
+      selectionRole: "选择与作用",
+      downloadXyz: "下载 XYZ",
       currentInput: "当前通用输入",
       paperBias: "论文中的偏置方式",
       readOutput: "如何判读输出",
@@ -1347,6 +1367,72 @@ function MathDisplay({ kind }) {
   );
 }
 
+function ReferenceTable({ rows, copy, language }) {
+  return (
+    <div className="table-scroll reference-table-wrap">
+      <table className="guide-table reference-table">
+        <thead>
+          <tr>
+            <th>{copy.code.centerAtoms}</th>
+            <th>{copy.code.chemicalSite}</th>
+            <th>{copy.code.referenceValue}</th>
+            <th>{copy.code.referenceReason}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row) => (
+            <tr key={`${row.centers}-${row.value}`}>
+              <td><code>{row.centers}</code></td>
+              <td>{localized(row, "Site", language)}</td>
+              <td><code>{row.value}</code></td>
+              <td>{localized(row, "Reason", language)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function StructureExample({ structure, copy, language, heading = "h3" }) {
+  const Heading = heading;
+
+  return (
+    <div className="structure-example">
+      <Heading>{copy.code.exampleStructure}</Heading>
+      <p>{localized(structure, "Text", language)}</p>
+      <div className="structure-file-bar">
+        <code>{structure.filename}</code>
+        <a href={structure.href} download>
+          {copy.code.downloadXyz}
+        </a>
+      </div>
+      <pre className="structure-code"><code>{structure.xyz}</code></pre>
+      <p className="structure-mapping-title"><strong>{copy.code.atomMapping}</strong></p>
+      <div className="table-scroll">
+        <table className="guide-table structure-table">
+          <thead>
+            <tr>
+              <th>{copy.code.atomNumbers}</th>
+              <th>{copy.code.selectionRole}</th>
+              <th>{copy.code.referenceValue}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {structure.mappings.map((mapping) => (
+              <tr key={`${mapping.atoms}-${mapping.selection}`}>
+                <td><code>{mapping.atoms}</code></td>
+                <td>{localized(mapping, "Selection", language)}</td>
+                <td><code>{mapping.reference}</code></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
 function ReactiveVoronoiPage({ copy, language }) {
   const guide = reactiveVoronoiGuide;
 
@@ -1443,6 +1529,15 @@ function ReactiveVoronoiPage({ copy, language }) {
                 </tbody>
               </table>
             </div>
+            <div className="reference-guidance">
+              <h3>{localized(guide, "ReferenceTitle", language)}</h3>
+              <p>{localized(guide, "ReferenceText", language)}</p>
+              <ol className="guide-list">
+                {guide.referenceGuidance.map((item) => (
+                  <li key={item.text}>{localized(item, "Text", language)}</li>
+                ))}
+              </ol>
+            </div>
             <div className="kappa-guidance">
               <h3>{localized(guide, "KappaTitle", language)}</h3>
               <p>{localized(guide, "KappaText", language)}</p>
@@ -1468,6 +1563,11 @@ function ReactiveVoronoiPage({ copy, language }) {
           <section id="quick-start" className="guide-section">
             <h2>{copy.code.minimalExample}</h2>
             <p>{localized(guide, "ExampleText", language)}</p>
+            <StructureExample
+              structure={guide.minimalStructure}
+              copy={copy}
+              language={language}
+            />
             <pre className="large-code-block">
               <code>{guide.minimalExample}</code>
             </pre>
@@ -1491,6 +1591,23 @@ function ReactiveVoronoiPage({ copy, language }) {
 
                 <h4>{copy.code.caseSetup}</h4>
                 <p>{localized(caseStudy, "Setup", language)}</p>
+
+                <h4>{copy.code.referenceChoice}</h4>
+                <p>{localized(caseStudy, "ReferenceText", language)}</p>
+                <ReferenceTable
+                  rows={caseStudy.referenceRows}
+                  copy={copy}
+                  language={language}
+                />
+
+                {caseStudy.structure && (
+                  <StructureExample
+                    structure={caseStudy.structure}
+                    copy={copy}
+                    language={language}
+                    heading="h4"
+                  />
+                )}
 
                 <h4>{copy.code.currentInput}</h4>
                 <pre className="large-code-block"><code>{caseStudy.code}</code></pre>

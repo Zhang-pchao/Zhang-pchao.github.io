@@ -870,6 +870,7 @@ pre {
   font-size: 0.78rem;
 }
 
+.reference-guidance,
 .kappa-guidance,
 .nlist-guidance {
   margin-top: 24px;
@@ -878,22 +879,30 @@ pre {
   background: #f5f8fb;
 }
 
+.reference-guidance {
+  border-left-color: #8575a1;
+  background: #f8f6fa;
+}
+
 .nlist-guidance {
   border-left-color: #6f8e75;
   background: #f6f9f6;
 }
 
+.reference-guidance h3,
 .kappa-guidance h3,
 .nlist-guidance h3 {
   margin-bottom: 8px;
 }
 
+.reference-guidance p,
 .kappa-guidance p,
 .nlist-guidance p {
   margin-bottom: 10px;
   color: #3f4850;
 }
 
+.reference-guidance .guide-list,
 .kappa-guidance .guide-list,
 .nlist-guidance .guide-list {
   margin-bottom: 0;
@@ -902,6 +911,64 @@ pre {
 .nlist-guidance .math-display {
   margin: 15px 0;
   background: #fff;
+}
+
+.reference-table-wrap {
+  margin-top: 10px;
+}
+
+.reference-table td:first-child,
+.reference-table td:nth-child(3),
+.structure-table td:first-child,
+.structure-table td:last-child {
+  white-space: nowrap;
+}
+
+.reference-table code,
+.structure-table code {
+  color: #173b65;
+  font-size: 0.78rem;
+}
+
+.structure-example {
+  margin-top: 26px;
+}
+
+.structure-example > h3,
+.structure-example > h4 {
+  margin-bottom: 8px;
+}
+
+.structure-example > p {
+  max-width: 790px;
+  margin-bottom: 10px;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.structure-file-bar {
+  display: flex;
+  padding: 9px 12px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid #d4d9df;
+  border-bottom: 0;
+  background: #eef2f5;
+}
+
+.structure-file-bar code,
+.structure-file-bar a {
+  font-size: 0.82rem;
+}
+
+.structure-code {
+  max-height: 430px;
+  border-top: 0;
+}
+
+.structure-mapping-title {
+  margin-top: 14px;
 }
 
 .large-code-block {

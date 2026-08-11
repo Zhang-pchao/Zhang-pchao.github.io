@@ -204,8 +204,10 @@ plumed mklib ReactiveVoronoi.cpp`,
       keyword: "REFERENCE",
       actions: "All",
       zhActions: "全部",
-      description: "One occupancy reference for broadcast, or one per CENTER in the same order.",
-      zhDescription: "可给出一个统一参考占据数，或按 CENTERS 顺序逐一给出。",
+      description:
+        "The declared baseline occupancy νᵢ: one value broadcasts to every CENTER, or a vector follows CENTERS in exactly the same order.",
+      zhDescription:
+        "人为定义的基准占据数 νᵢ：一个数会广播到全部 CENTER；向量则必须与 CENTERS 保持完全相同的顺序。",
     },
     {
       keyword: "NLIST · NL_CUTOFF · NL_STRIDE",
@@ -250,6 +252,34 @@ plumed mklib ReactiveVoronoi.cpp`,
       zhActions: "全部",
       description: "Disable minimum-image distances or repeat work per MPI rank for debugging only.",
       zhDescription: "关闭最小镜像距离；或仅为调试在各 MPI rank 重复计算。",
+    },
+  ],
+  referenceTitle: "Choosing REFERENCE from the baseline chemical state",
+  zhReferenceTitle: "如何从基准化学态设置 REFERENCE",
+  referenceText:
+    "REFERENCE supplies νᵢ in qᵢ=nᵢ−νᵢ. It is not inferred from element names or bonding: the user declares the intended occupancy of the transferable ASSIGNED atoms around every CENTER. One number is concise only when all centers share the same baseline occupancy; chemically different centers require one value per center.",
+  zhReferenceText:
+    "REFERENCE 给出 qᵢ=nᵢ−νᵢ 中的 νᵢ。程序不会根据元素名称或成键关系自动推断它；用户需要声明基准化学态下，每个 CENTER 周围应归属多少个可转移的 ASSIGNED 原子。只有当所有中心具有相同基准占据数时，单个数值才适合广播；化学环境不同的中心必须逐一给值。",
+  referenceGuidance: [
+    {
+      text: "Choose a chemically explicit baseline state, then count only atoms included in ASSIGNED. Hydrogens that are present in the coordinate file but excluded from ASSIGNED, such as glycine C–H atoms here, do not contribute to nᵢ or REFERENCE.",
+      zhText:
+        "先明确基准化学态，再只统计纳入 ASSIGNED 的原子。坐标文件中存在但未纳入 ASSIGNED 的氢，例如本例甘氨酸的 C–H，不参与 nᵢ，也不计入 REFERENCE。",
+    },
+    {
+      text: "REFERENCE=2 broadcasts 2 to every CENTER. Thus two water O centers use the internal vector (2,2), and 58 water O centers use 58 copies of 2; the input is short because the sites are chemically equivalent, not because only one center exists.",
+      zhText:
+        "REFERENCE=2 会把 2 广播到每个 CENTER。因此两个水 O 的内部向量是 (2,2)，58 个水 O 则得到 58 个 2；写法简短是因为这些位点化学等价，并不是因为体系只有一个中心。",
+    },
+    {
+      text: "For mixed sites, provide one value per CENTER in CENTERS order and reorder the vector whenever CENTERS is reordered. Fractional values are allowed when the model deliberately shares a baseline occupancy over symmetry-equivalent sites.",
+      zhText:
+        "对混合位点，应按 CENTERS 的顺序为每个中心给出一个数；只要 CENTERS 重排，REFERENCE 也必须同步重排。当模型需要在对称等价位点之间共享基准占据时，可以使用分数。",
+    },
+    {
+      text: "As a baseline sanity check, Σᵢνᵢ should equal Nassigned when the intended reference state has zero total coordination defect. If not, Σᵢqᵢ has a fixed offset; that may be intentional, but it must be stated and validated.",
+      zhText:
+        "基准检查中，若目标参考态的总配位缺陷应为零，则 Σᵢνᵢ 应等于 Nassigned；否则 Σᵢqᵢ 会带有固定偏移。该偏移可以是有意设计，但必须明确说明并验证。",
     },
   ],
   kappaTitle: "Choosing KAPPA for monitoring and sampling",
@@ -307,11 +337,41 @@ plumed mklib ReactiveVoronoi.cpp`,
         "小型或中等体系以及导数验证应优先使用精确模式。NLIST 会改变归一化候选集合，因此即使没有触发 CENTER 缺失错误，成员变化仍可能引入小的不连续；最终应报告截断距离、更新步长、收敛容差及与精确模式的比较。",
     },
   ],
+  minimalStructure: {
+    filename: "two-water.xyz",
+    href: "/assets/reactive-voronoi/examples/two-water.xyz",
+    text:
+      "This standard XYZ contains two complete neutral water molecules in O–H–H order. It is an atom-index and REFERENCE teaching fixture, not an autoionization transition state. XYZ atom numbers follow the six coordinate lines after the two-line header.",
+    zhText:
+      "这个标准 XYZ 按 O–H–H 顺序包含两个完整的中性水分子，用于说明原子编号与 REFERENCE，而不是水自解离过渡态。XYZ 原子编号对应两行文件头之后六行坐标的先后顺序。",
+    xyz: `6
+Two neutral water molecules; atom order O H H O H H; cubic box 12.028 A
+O 10.338000 8.941000 3.203000
+H 9.920000 9.817000 3.189000
+H 9.608000 8.312000 3.405000
+O 6.467000 1.712000 3.340000
+H 5.935000 1.117000 2.786000
+H 5.900000 1.948000 4.101000`,
+    mappings: [
+      {
+        atoms: "1, 4",
+        selection: "WaterO · CENTERS",
+        zhSelection: "WaterO · 中心",
+        reference: "2 → (2, 2)",
+      },
+      {
+        atoms: "2, 3, 5, 6",
+        selection: "WaterH · ASSIGNED",
+        zhSelection: "WaterH · 待归属原子",
+        reference: "—",
+      },
+    ],
+  },
   minimalExample: `LOAD FILE=./ReactiveVoronoi.so
 
 UNITS LENGTH=A
-WaterO: GROUP ATOMS=1-4
-WaterH: GROUP ATOMS=5-12
+WaterO: GROUP ATOMS=1,4
+WaterH: GROUP ATOMS=2,3,5,6
 
 sa: VORONOI_COORDINATION CENTERS=WaterO ASSIGNED=WaterH KAPPA=5 REFERENCE=2 POWER=2
 st: VORONOI_DISTANCE CENTERS=WaterO ASSIGNED=WaterH KAPPA=5 REFERENCE=2 GROUP1=WaterO
@@ -333,19 +393,113 @@ DUMPDERIVATIVES ARG=sa,st FILE=DERIVATIVES STRIDE=1`,
       zhQuestion:
         "这里的科学任务不只是计数离子，而是用一对坐标区分中性型 [N]、两性离子型 [Z]、阴离子甘氨酸–H₃O⁺ 和阳离子甘氨酸–OH⁻，同时容纳分子内与水介导的质子转移。",
       setup:
-        "Use every water O together with glycine N and the two carboxyl O atoms as CENTERS; use all transferable water and glycine H atoms as ASSIGNED. The paper-consistent references are 2 for water O, 2 for glycine N, and 0.5 for each equivalent carboxyl O. The compact input below uses two water molecules only to keep the ordered REFERENCE vector readable.",
+        "Use every water O together with glycine N and the two carboxyl O atoms as CENTERS; use all transferable water, N–H, and carboxyl O–H atoms as ASSIGNED. The compact structure below starts from zwitterionic [Z] glycine and retains one complete water near the ammonium group and one near the carboxylate group. The C atoms and nontransferable C–H atoms remain in the file so that the molecular topology is readable.",
       zhSetup:
-        "CENTERS 包含全部水 O、甘氨酸 N 和两个羧基 O，ASSIGNED 包含所有可参与转移的水 H 与甘氨酸 H。与论文定义一致的参考占据数分别为：水 O 取 2、甘氨酸 N 取 2、两个等价羧基 O 各取 0.5。为便于看清 REFERENCE 的顺序，下面的紧凑示例只写两个水分子。",
+        "CENTERS 包含全部水 O、甘氨酸 N 和两个羧基 O；ASSIGNED 包含可转移的水 H、N–H 与羧基 O–H。下方紧凑结构从两性离子型 [Z] 甘氨酸出发，分别保留一个靠近铵基和一个靠近羧酸根的完整水分子。文件中同时保留 C 原子与不可转移的 C–H，便于读者核对分子拓扑。",
+      referenceText:
+        "Centers expands to atoms (1,4,7,15,16), so the five REFERENCE entries map to (water O, water O, glycine N, glycine O, glycine O). REFERENCE defines the neutral [N] chemical origin even though this coordinate fixture is zwitterionic [Z]: two water values are 2, the N value is 2, and the single neutral-state carboxyl proton is shared as 0.5+0.5 over the symmetry-related O labels. In an ideal [Z] frame the corresponding defects are therefore approximately (0,0,+1,−0.5,−0.5). The five references sum to 7, matching the four water H and three transferable glycine H atoms in AllH, so the total defect remains zero. Do not copy the fractional partition to nonequivalent sites.",
+      zhReferenceText:
+        "Centers 展开后依次为原子 (1,4,7,15,16)，所以五个 REFERENCE 数值依次对应（水 O、水 O、甘氨酸 N、甘氨酸 O、甘氨酸 O）。虽然这个坐标示例是两性离子型 [Z]，REFERENCE 定义的却是中性型 [N] 化学原点：两个水 O 均为 2，N 为 2，而中性型羧基的一个质子在对称相关的两个 O 标签上以 0.5+0.5 共享。因此理想 [Z] 构型中的缺陷约为 (0,0,+1,−0.5,−0.5)。五个参考值之和为 7，恰好等于 AllH 中四个水 H 与三个甘氨酸可转移 H，所以总缺陷仍为零。分数参考值不能照搬到不等价位点。",
+      referenceRows: [
+        {
+          centers: "1, 4",
+          site: "Water O",
+          zhSite: "水 O",
+          value: "2, 2",
+          reason: "Two transferable H per neutral water O.",
+          zhReason: "每个中性水 O 对应两个可转移 H。",
+        },
+        {
+          centers: "7",
+          site: "Glycine N",
+          zhSite: "甘氨酸 N",
+          value: "2",
+          reason: "Neutral [N] reference: two N–H; the [Z] fixture has three, so the N-site defect is approximately +1.",
+          zhReason: "中性型 [N] 参考态有两个 N–H；[Z] 示例中有三个，所以 N 位点缺陷约为 +1。",
+        },
+        {
+          centers: "15, 16",
+          site: "Equivalent carboxyl O pair",
+          zhSite: "等价羧基 O 对",
+          value: "0.5, 0.5",
+          reason: "Neutral [N] reference: one O–H shared over two labels; [Z] has none, so each O-site defect is approximately −0.5.",
+          zhReason: "中性型 [N] 参考态的一个 O–H 在两个标签间共享；[Z] 中无 O–H，所以每个 O 位点缺陷约为 −0.5。",
+        },
+      ],
+      structure: {
+        filename: "glycine-two-water.xyz",
+        href: "/assets/reactive-voronoi/examples/glycine-two-water.xyz",
+        text:
+          "This translated and renumbered excerpt comes from an optimized 128-water zwitterionic geometry. It retains the closest complete water to glycine N and the closest complete water to a carboxyl O. It is provided to audit atom selections, the [Z] bonding pattern, and REFERENCE order; two waters alone cannot reproduce condensed-phase thermodynamics.",
+        zhText:
+          "这个平移并重新编号的片段取自优化后的 128 水两性离子构型，分别保留了距甘氨酸 N 最近的完整水分子和距某个羧基 O 最近的完整水分子。它用于核对原子选择、[Z] 成键模式与 REFERENCE 顺序；仅有两个水分子不能复现凝聚相热力学。",
+        xyz: `16
+Zwitterionic glycine plus two nearby waters; translated excerpt; source box 15.813 A
+O 3.945000 2.472000 4.511000
+H 3.345000 2.469000 3.734000
+H 4.805000 2.138000 4.225000
+O 7.315000 6.164000 8.804000
+H 6.752000 6.903000 8.369000
+H 7.769000 5.749000 8.066000
+N 5.000000 5.000000 5.000000
+H 4.729000 5.459000 4.128000
+H 5.103000 3.991000 4.812000
+H 4.277000 5.099000 5.704000
+C 6.292000 5.507000 5.495000
+H 6.878000 5.847000 4.638000
+H 6.113000 6.345000 6.164000
+C 7.053000 4.332000 6.192000
+O 6.587000 3.199000 5.985000
+O 8.155000 4.638000 6.756000`,
+        mappings: [
+          {
+            atoms: "1, 4",
+            selection: "WaterO · CENTERS",
+            zhSelection: "WaterO · 中心",
+            reference: "2, 2",
+          },
+          {
+            atoms: "2, 3, 5, 6",
+            selection: "WaterH · ASSIGNED",
+            zhSelection: "WaterH · 待归属原子",
+            reference: "—",
+          },
+          {
+            atoms: "7",
+            selection: "GlyN · CENTER",
+            zhSelection: "GlyN · 中心",
+            reference: "2",
+          },
+          {
+            atoms: "8, 9, 10",
+            selection: "GlyH · ASSIGNED",
+            zhSelection: "GlyH · 待归属原子",
+            reference: "—",
+          },
+          {
+            atoms: "11–14",
+            selection: "Glycine framework · not selected",
+            zhSelection: "甘氨酸骨架 · 不参与选择",
+            reference: "—",
+          },
+          {
+            atoms: "15, 16",
+            selection: "GlyO1, GlyO2 · CENTERS",
+            zhSelection: "GlyO1、GlyO2 · 中心",
+            reference: "0.5, 0.5",
+          },
+        ],
+      },
       code: `LOAD FILE=./ReactiveVoronoi.so
 UNITS LENGTH=A
 
-# Compact topology: two H2O molecules plus glycine reactive sites
+# Atom order matches glycine-two-water.xyz
 WaterO: GROUP ATOMS=1,4
 WaterH: GROUP ATOMS=2,3,5,6
 GlyN: GROUP ATOMS=7
-GlyO1: GROUP ATOMS=8
-GlyO2: GROUP ATOMS=9
-GlyH: GROUP ATOMS=10-12
+GlyO1: GROUP ATOMS=15
+GlyO2: GROUP ATOMS=16
+GlyH: GROUP ATOMS=8,9,10
 AllH: GROUP ATOMS=WaterH,GlyH
 Centers: GROUP ATOMS=WaterO,GlyN,GlyO1,GlyO2
 
@@ -375,6 +529,10 @@ opes: OPES_METAD ARG=sp,sd TEMP=300 PACE=500 BARRIER=35`,
       zhBiasText:
         "论文生产模拟同时偏置 sₚ 与 s_d。TEMP、PACE、BARRIER、核宽度、限制势和重启设置属于该论文体系的模拟选择，并不是这些 CV 的默认参数。",
       interpretation: [
+        {
+          text: "A full-pair PLUMED driver check of the downloadable [Z] fixture gives sp=0.0073, sd_water=0.0354 Å, sd_internal=2.9789 Å, and sd=3.0143 Å, consistent with the expected zwitterionic basin.",
+          zhText: "对可下载 [Z] 构型进行全配对 PLUMED driver 检验，得到 sp=0.0073、sd_water=0.0354 Å、sd_internal=2.9789 Å 和 sd=3.0143 Å，与两性离子态相符。",
+        },
         {
           text: "sₚ ≈ 0 contains [N] and [Z]; s_d separates them, with [N] near 0 Å and [Z] near 3 Å.",
           zhText: "sₚ ≈ 0 同时包含 [N] 与 [Z]；s_d 将两者分开，[N] 接近 0 Å，[Z] 接近 3 Å。",
@@ -418,9 +576,23 @@ opes: OPES_METAD ARG=sp,sd TEMP=300 PACE=500 BARRIER=35`,
       zhQuestion:
         "水自解离需要两个互补坐标：缺陷活性判断水自解离离子是否出现，缺陷加权距离再区分接触离子对与分离离子。",
       setup:
-        "Use all water O atoms as CENTERS, all water H atoms as ASSIGNED, and REFERENCE=2. The 58-water atom ranges below match the published topology. KAPPA=5 gives the smoother activity used for sampling; KAPPA=8 was used for the separation coordinate in the paper.",
+        "Use all water O atoms as CENTERS and all water H atoms as ASSIGNED. Because every neutral water O has the same baseline occupancy, REFERENCE=2 broadcasts one value to all 58 centers in the published topology. KAPPA=5 gives the smoother activity used for sampling; KAPPA=8 was used for the separation coordinate in the paper.",
       zhSetup:
-        "将全部水 O 设为 CENTERS、全部水 H 设为 ASSIGNED，并取 REFERENCE=2。下方 58 水分子的原子范围与论文拓扑一致。采样中的平滑活性使用 KAPPA=5，论文中的分离坐标使用 KAPPA=8。",
+        "将全部水 O 设为 CENTERS、全部水 H 设为 ASSIGNED。由于每个中性水 O 的基准占据数相同，REFERENCE=2 会把一个数广播到论文拓扑中的全部 58 个中心。采样中的平滑活性使用 KAPPA=5，论文中的分离坐标使用 KAPPA=8。",
+      referenceText:
+        "The one-number input is shorthand for a 58-entry vector (2,2,…,2), not a one-center calculation. Its sum is 116, matching the 116 ASSIGNED water H atoms in the neutral baseline. The downloadable two-water fixture in the minimal example uses the identical rule on two O centers: REFERENCE=2 becomes (2,2). A mixed solvent or reactive solute requires separate values whenever its centers do not share water's occupancy.",
+      zhReferenceText:
+        "单个数值只是 58 维向量 (2,2,…,2) 的简写，并不表示体系只有一个中心。其总和为 116，与中性基准态中的 116 个 ASSIGNED 水 H 相等。最小示例提供的两水坐标使用完全相同的规则：对两个 O 中心，REFERENCE=2 展开为 (2,2)。混合溶剂或反应性溶质中的中心若不具有水的占据数，就必须分别设置。",
+      referenceRows: [
+        {
+          centers: "1–172:3 (58 O atoms)",
+          site: "Water O",
+          zhSite: "水 O",
+          value: "2 → 58 copies",
+          reason: "Two transferable H per neutral water O; Σᵢνᵢ=116=Nassigned.",
+          zhReason: "每个中性水 O 对应两个可转移 H；Σᵢνᵢ=116=Nassigned。",
+        },
+      ],
       code: `LOAD FILE=./ReactiveVoronoi.so
 UNITS LENGTH=A
 
@@ -496,6 +668,20 @@ opes: OPES_METAD ARG=st_log,sa TEMP=300 PACE=500 BARRIER=75`,
         "For a slab normal to z, use the same water O/H assignment and define a fixed physical ORIGIN at the slab midplane. SIGN selects H₃O⁺ or OH⁻ and ABSOLUTE folds the two equivalent sides. The published air–water input used ORIGIN=53 Å for its own cell; users must determine the corresponding reference from their equilibrated geometry rather than copy this number.",
       zhSetup:
         "对于法向为 z 的 slab，沿用水 O/H 的归属定义，并在 slab 中面设置固定物理 ORIGIN。SIGN 区分 H₃O⁺ 与 OH⁻，ABSOLUTE 折叠两个等价界面。论文的气–水输入针对其特定晶胞使用 ORIGIN=53 Å；用户必须根据自己的平衡构型确定参考面，不能直接照搬该数值。",
+      referenceText:
+        "This position case reuses the water occupancy model: 256 water O centers all receive the broadcast value 2, while 512 water H atoms are ASSIGNED. REFERENCE therefore expands to 256 copies whose sum is 512. ORIGIN=53 Å belongs to the spatial position definition and has no role in choosing REFERENCE.",
+      zhReferenceText:
+        "这个位置案例沿用水的占据模型：256 个水 O 中心都接收广播值 2，ASSIGNED 中则有 512 个水 H。因此 REFERENCE 展开为 256 个 2，总和为 512。ORIGIN=53 Å 属于空间位置定义，与 REFERENCE 的取值无关。",
+      referenceRows: [
+        {
+          centers: "1–766:3 (256 O atoms)",
+          site: "Water O",
+          zhSite: "水 O",
+          value: "2 → 256 copies",
+          reason: "Same neutral-water baseline as the bulk case; Σᵢνᵢ=512=Nassigned.",
+          zhReason: "与体相水相同的中性基准；Σᵢνᵢ=512=Nassigned。",
+        },
+      ],
       code: `LOAD FILE=./ReactiveVoronoi.so
 UNITS LENGTH=A
 
