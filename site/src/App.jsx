@@ -1428,6 +1428,15 @@ function ReactiveVoronoiPage({ copy, language }) {
                 </tbody>
               </table>
             </div>
+            <div className="kappa-guidance">
+              <h3>{localized(guide, "KappaTitle", language)}</h3>
+              <p>{localized(guide, "KappaText", language)}</p>
+              <ul className="guide-list">
+                {guide.kappaGuidance.map((item) => (
+                  <li key={item.text}>{localized(item, "Text", language)}</li>
+                ))}
+              </ul>
+            </div>
           </section>
 
           <section id="quick-start" className="guide-section">

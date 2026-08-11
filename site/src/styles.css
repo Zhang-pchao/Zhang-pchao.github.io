@@ -647,12 +647,20 @@ h3 {
 }
 
 .guide-layout {
-  max-width: 940px;
+  display: grid;
+  grid-template-columns: 190px minmax(0, 1fr);
+  gap: 44px;
+  width: min(1120px, calc(100% - 40px));
+  max-width: none;
 }
 
 .guide-toc {
-  margin-bottom: 32px;
-  padding: 16px 18px;
+  position: sticky;
+  top: 18px;
+  max-height: calc(100vh - 36px);
+  padding: 16px 17px;
+  overflow-y: auto;
+  align-self: start;
   border: 1px solid var(--line);
   background: var(--soft);
 }
@@ -860,6 +868,26 @@ pre {
   overflow-wrap: anywhere;
   color: #173b65;
   font-size: 0.78rem;
+}
+
+.kappa-guidance {
+  margin-top: 24px;
+  padding: 18px 20px;
+  border-left: 3px solid #6e8fb2;
+  background: #f5f8fb;
+}
+
+.kappa-guidance h3 {
+  margin-bottom: 8px;
+}
+
+.kappa-guidance p {
+  margin-bottom: 10px;
+  color: #3f4850;
+}
+
+.kappa-guidance .guide-list {
+  margin-bottom: 0;
 }
 
 .large-code-block {
@@ -1213,6 +1241,20 @@ pre {
   justify-content: center;
   padding: 22px 0;
   font-size: 0.82rem;
+}
+
+@media (max-width: 900px) {
+  .guide-layout {
+    display: block;
+    width: var(--shell);
+  }
+
+  .guide-toc {
+    position: static;
+    max-height: none;
+    margin-bottom: 32px;
+    overflow: visible;
+  }
 }
 
 @media (max-width: 760px) {

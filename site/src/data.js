@@ -195,8 +195,10 @@ plumed mklib ReactiveVoronoi.cpp`,
       keyword: "KAPPA",
       actions: "All",
       zhActions: "全部",
-      description: "Positive assignment sharpness in inverse PLUMED length units.",
-      zhDescription: "正的归属陡峭度，单位为 PLUMED 长度单位的倒数。",
+      description:
+        "Positive assignment sharpness in inverse PLUMED length units: larger values approach a hard nearest-center assignment, while smaller values distribute weight more smoothly among nearby centers.",
+      zhDescription:
+        "正的归属陡峭度，单位为 PLUMED 长度单位的倒数：数值越大越接近最近中心的硬归属，数值越小则越平滑地在邻近中心之间分配权重。",
     },
     {
       keyword: "REFERENCE",
@@ -246,6 +248,29 @@ plumed mklib ReactiveVoronoi.cpp`,
       zhActions: "全部",
       description: "Disable minimum-image distances or repeat work per MPI rank for debugging only.",
       zhDescription: "关闭最小镜像距离；或仅为调试在各 MPI rank 重复计算。",
+    },
+  ],
+  kappaTitle: "Choosing KAPPA for monitoring and sampling",
+  zhKappaTitle: "如何为监测与采样选择 KAPPA",
+  kappaText:
+    "KAPPA controls the tradeoff between chemical-state resolution and CV smoothness. It is a model parameter to validate on the target system, not a universal constant to copy from an example.",
+  zhKappaText:
+    "KAPPA 控制化学状态分辨率与 CV 平滑性之间的取舍。它是需要针对目标体系验证的模型参数，并不是可以从示例中直接照搬的通用常数。",
+  kappaGuidance: [
+    {
+      text: "Monitoring and structural diagnosis: a larger KAPPA makes one nearby CENTER dominate, so the output approaches a discrete proton assignment. This is useful when printing sharper state labels or locating an established defect, but host switching can become steeper and noisier.",
+      zhText:
+        "监测与结构诊断：较大的 KAPPA 使最近的 CENTER 占据主导，输出更接近离散的质子归属，适合打印较清晰的状态标签或定位已经形成的缺陷；代价是载体切换会更陡峭，也可能更噪。",
+    },
+    {
+      text: "Biased sampling: a smaller KAPPA shares the assignment over nearby CENTERS and usually produces smoother CV and bias-force changes through proton transfer. If it is too small, however, neutral and ionized basins can become blurred.",
+      zhText:
+        "偏置采样：较小的 KAPPA 会在邻近 CENTER 之间分摊归属，通常可使质子转移过程中的 CV 与偏置力变化更平滑；但若过小，中性态与离子态盆地会被过度模糊。",
+    },
+    {
+      text: "Practical choice: scan several values on neutral, transition, product, and host-switching frames. Confirm state separation, continuity, and analytical derivatives before biasing. The paper examples use KAPPA=5 for smoother sampling and KAPPA=100 for sharper structural diagnosis, but these values are system-specific.",
+      zhText:
+        "实际选择：在中性态、过渡态、产物态和载体切换构型上扫描多个数值；施加偏置前检查状态区分、连续性与解析导数。论文示例使用 KAPPA=5 进行较平滑采样、使用 KAPPA=100 做较尖锐的结构诊断，但这些数值只适用于对应体系。",
     },
   ],
   minimalExample: `LOAD FILE=./ReactiveVoronoi.so
