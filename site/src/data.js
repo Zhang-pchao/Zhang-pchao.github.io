@@ -54,33 +54,402 @@ export const tutorials = [
 
 export const codeResources = [
   {
-    title: "Voronoi CVs for glycine tautomerism",
-    zhTitle: "甘氨酸互变异构的 Voronoi CVs",
+    title: "Paper-specific Voronoi CVs for glycine tautomerism",
+    zhTitle: "论文专用实现：甘氨酸互变异构 Voronoi CVs",
     href: "https://github.com/Zhang-pchao/GlycineTautomerism/tree/main/Voronoi_collective_variables",
+    paperHref: "https://doi.org/10.1021/acs.jcim.4c00273",
     description:
-      "PLUMED source files for Voronoi-based solvation, proton-transfer, and autoionization CVs used in solvated glycine tautomerism.",
+      "Archived PLUMED source files used for the published solvation and proton-transfer coordinates. Keep these files for reproducing the paper; use the generic implementation for new systems.",
     zhDescription:
-      "用于溶液中甘氨酸互变异构研究的 PLUMED 源文件，包含基于 Voronoi 的溶剂化、质子转移和自解离 CV。",
+      "论文中溶剂化与质子转移坐标所用的 PLUMED 源文件归档。复现原论文时保留这些文件；新体系优先使用通用实现。",
   },
   {
-    title: "Voronoi CVs for water self-ions at interfaces",
-    zhTitle: "界面水自解离离子的 Voronoi CVs",
+    title: "Paper-specific Voronoi CVs for water self-ions at interfaces",
+    zhTitle: "论文专用实现：界面水自解离离子 Voronoi CVs",
     href: "https://github.com/Zhang-pchao/OilWaterInterface/tree/main/Voronoi_CVs",
+    paperHref: "https://doi.org/10.1021/acs.langmuir.4c05004",
     description:
-      "PLUMED CVs for ion charge, OH⁻/H₃O⁺ distance, ion identity, and ion location in slab systems.",
+      "Archived PLUMED CVs for ion activity, OH⁻/H₃O⁺ separation, identity diagnostics, and slab-location observables used in the interface study.",
     zhDescription:
-      "用于 slab 体系中离子电荷、OH⁻/H₃O⁺ 距离、离子身份和位置判别的 PLUMED CV。",
+      "界面研究中用于离子活性、OH⁻/H₃O⁺ 分离、身份诊断和 slab 位置观测量的 PLUMED CV 归档。",
   },
   {
-    title: "Voronoi CVs for OPES-DPMD nitrogen reduction",
-    zhTitle: "OPES-DPMD 氮还原反应的 Voronoi CVs",
+    title: "Paper-specific Voronoi CV for OPES-DPMD nitrogen reduction",
+    zhTitle: "论文专用实现：OPES-DPMD 氮还原 Voronoi CV",
     href: "https://github.com/Zhang-pchao/research/tree/main/OPES-DPMD-NRR/Voronoi_collective_variables",
+    paperHref: "https://doi.org/10.1039/D5TA09029F",
     description:
-      "Custom PLUMED VoronoiD3 code for reactive Voronoi environments in OPES-DPMD simulations of nitrogen reduction.",
+      "Archived VoronoiD3 source used with OPES-DPMD for proton-transfer environments around a Ru single-atom nitrogen-reduction catalyst.",
     zhDescription:
-      "用于氮还原 OPES-DPMD 模拟的自定义 PLUMED VoronoiD3 代码，描述反应过程中的 Voronoi 局域环境。",
+      "用于 Ru 单原子催化氮还原 OPES-DPMD 模拟的 VoronoiD3 源码归档，描述质子转移局域环境。",
   },
 ];
+
+export const reactiveVoronoiGuide = {
+  title: "Reactive Soft-Voronoi Collective Variables",
+  zhTitle: "Reactive Soft-Voronoi 集体变量",
+  summary:
+    "A general PLUMED implementation for reactive systems whose proton donor, acceptor, or ionic identity changes during a trajectory. One smooth assignment is reduced into coordination activity, defect separation, and physical position.",
+  zhSummary:
+    "面向质子供体、受体或离子身份会随轨迹改变的反应体系。该通用 PLUMED 实现以同一套平滑归属为基础，分别描述配位缺陷活性、缺陷分离程度和物理空间位置。",
+  status: "Upstream proposal: PLUMED PR #1442",
+  zhStatus: "上游提案：PLUMED PR #1442",
+  reviewedCommit: "f13bead9f6df0d152906f66102139fabe7edafd1",
+  links: [
+    {
+      label: "Project branch",
+      zhLabel: "项目分支",
+      href: "https://github.com/Zhang-pchao/plumed2/tree/performance/reactive-voronoi-scaling",
+    },
+    {
+      label: "Source",
+      zhLabel: "源码",
+      href: "https://github.com/Zhang-pchao/plumed2/blob/performance/reactive-voronoi-scaling/src/colvar/ReactiveVoronoi.cpp",
+    },
+    {
+      label: "Manual overview",
+      zhLabel: "手册概览",
+      href: "https://github.com/Zhang-pchao/plumed2/blob/performance/reactive-voronoi-scaling/src/colvar/module.md#reactive-soft-voronoi-collective-variables",
+    },
+    {
+      label: "Official regtest",
+      zhLabel: "官方回归测试",
+      href: "https://github.com/Zhang-pchao/plumed2/tree/performance/reactive-voronoi-scaling/regtest/basic/rt-reactive-voronoi",
+    },
+    {
+      label: "Upstream PR #1442",
+      zhLabel: "上游 PR #1442",
+      href: "https://github.com/plumed/plumed2/pull/1442",
+    },
+  ],
+  principleSteps: [
+    {
+      label: "Candidate centers",
+      zhLabel: "候选中心",
+      detail: "Atoms that can receive a transferable atom, commonly O or N.",
+      zhDetail: "可能接收可转移原子的中心，质子转移中通常为 O 或 N。",
+    },
+    {
+      label: "Soft assignment",
+      zhLabel: "平滑归属",
+      detail: "Each ASSIGNED atom is distributed continuously across all CENTERS.",
+      zhDetail: "每个 ASSIGNED 原子在全部 CENTERS 之间连续分配。",
+    },
+    {
+      label: "Occupancy defect",
+      zhLabel: "占据数缺陷",
+      detail: "The smooth occupancy is compared with a declared reference value.",
+      zhDetail: "将平滑占据数与明确给定的参考占据数比较。",
+    },
+    {
+      label: "Physical reduction",
+      zhLabel: "物理约化",
+      detail: "Reduce the same defects into activity, separation, or position.",
+      zhDetail: "将同一组缺陷约化为活性、分离程度或空间位置。",
+    },
+  ],
+  principleText:
+    "For center i and assigned atom j, the normalized weight wᵢⱼ uses a distance-based softmax. The occupancy nᵢ = Σⱼwᵢⱼ and defect qᵢ = nᵢ − νᵢ are smooth functions of atomic coordinates. These geometric defects are useful reaction descriptors, but they are not formal electronic charges.",
+  zhPrincipleText:
+    "对中心 i 和待归属原子 j，归一化权重 wᵢⱼ 由距离 softmax 给出；占据数 nᵢ = Σⱼwᵢⱼ，缺陷 qᵢ = nᵢ − νᵢ，均为原子坐标的平滑函数。这类几何缺陷适合作为反应描述符，但不等同于严格的电子电荷。",
+  formula: "wᵢⱼ = exp(−κdᵢⱼ) / Σₖ exp(−κdₖⱼ)    ·    nᵢ = Σⱼwᵢⱼ    ·    qᵢ = nᵢ − νᵢ",
+  installText:
+    "The Actions belong to PLUMED's default colvar module and have no external library dependency. Until the upstream proposal is merged and released, use the reviewed source snapshot either as a runtime plugin or in an isolated PLUMED source build.",
+  zhInstallText:
+    "三个 Action 属于 PLUMED 默认的 colvar 模块，不依赖外部程序库。在上游提案合并并随正式版本发布之前，可将已审阅源码编译为运行时插件，或放入独立的 PLUMED 源码构建中。",
+  runtimeInstall: `curl -L -o ReactiveVoronoi.cpp \\
+  https://raw.githubusercontent.com/Zhang-pchao/plumed2/f13bead9f6df0d152906f66102139fabe7edafd1/src/colvar/ReactiveVoronoi.cpp
+plumed mklib ReactiveVoronoi.cpp`,
+  inTreeInstall: `cp ReactiveVoronoi.cpp /path/to/plumed/src/colvar/
+cd /path/to/plumed
+./configure --prefix=/path/to/plumed-install
+make -j4
+make install
+source /path/to/plumed-install/lib/plumed/sourceme.sh`,
+  installCaution:
+    "Compile the plugin with the same PLUMED executable, compiler, and ABI used by the target simulation. Rebuild after changing any of them. Test with plumed driver before a short molecular-dynamics smoke test.",
+  zhInstallCaution:
+    "插件必须使用目标模拟所调用的同一 PLUMED 可执行文件、编译器和 ABI 编译；其中任一项变化后都应重新构建。先用 plumed driver 检查，再进行短程分子动力学冒烟测试。",
+  actions: [
+    {
+      name: "VORONOI_COORDINATION",
+      purpose: "How much reactive coordination-defect activity is present?",
+      zhPurpose: "体系中存在多少反应性配位缺陷？",
+      description:
+        "Reduces selected defects with POWER=1 or 2, optional sign filtering, and optional coefficients. POWER=2 is often the smoother activity measure near qᵢ = 0.",
+      zhDescription:
+        "通过 POWER=1 或 2、可选的正负号筛选和权重系数约化指定缺陷。qᵢ = 0 附近，POWER=2 通常是更平滑的活性度量。",
+    },
+    {
+      name: "VORONOI_DISTANCE",
+      purpose: "How far apart are correlated coordination defects?",
+      zhPurpose: "相关配位缺陷彼此分离多远？",
+      description:
+        "Combines defect products with explicit within-group or cross-group center distances. GROUP1 and GROUP2 are chemical selections, not positions in an atom list.",
+      zhDescription:
+        "将缺陷乘积与组内或跨组中心距离结合。GROUP1 与 GROUP2 表示明确的化学选择，而不是原子列表中的位置。",
+    },
+    {
+      name: "VORONOI_POSITION",
+      purpose: "Where is a selected defect in a declared Cartesian frame?",
+      zhPurpose: "指定缺陷在明确的笛卡尔参考系中位于何处？",
+      description:
+        "Reports a defect-weighted X, Y, or Z displacement from a fixed ORIGIN. SELECT limits possible hosts; NORMALIZE is valid only while a selected defect remains present.",
+      zhDescription:
+        "给出缺陷加权的 X、Y 或 Z 方向相对固定 ORIGIN 的位移。SELECT 限定可能载体；仅在指定缺陷始终存在时才可使用 NORMALIZE。",
+    },
+  ],
+  keywords: [
+    {
+      keyword: "CENTERS",
+      actions: "All",
+      zhActions: "全部",
+      description: "Atoms that can receive the smooth assignment.",
+      zhDescription: "可接收平滑归属的候选中心原子。",
+    },
+    {
+      keyword: "ASSIGNED",
+      actions: "All",
+      zhActions: "全部",
+      description: "Transferable atoms distributed across CENTERS.",
+      zhDescription: "在 CENTERS 之间进行分配的可转移原子。",
+    },
+    {
+      keyword: "KAPPA",
+      actions: "All",
+      zhActions: "全部",
+      description: "Positive assignment sharpness in inverse PLUMED length units.",
+      zhDescription: "正的归属陡峭度，单位为 PLUMED 长度单位的倒数。",
+    },
+    {
+      keyword: "REFERENCE",
+      actions: "All",
+      zhActions: "全部",
+      description: "One occupancy reference for broadcast, or one per CENTER in the same order.",
+      zhDescription: "可给出一个统一参考占据数，或按 CENTERS 顺序逐一给出。",
+    },
+    {
+      keyword: "NLIST · NL_CUTOFF · NL_STRIDE",
+      actions: "All",
+      zhActions: "全部",
+      description: "Optional approximate truncation; converge values and forces against exact mode.",
+      zhDescription: "可选的近似截断；必须以精确模式为基准收敛 CV 数值和力。",
+    },
+    {
+      keyword: "SELECT · COEFFICIENTS · POWER · SIGN",
+      actions: "COORDINATION",
+      zhActions: "COORDINATION",
+      description: "Choose defects and their scalar reduction.",
+      zhDescription: "选择参与约化的缺陷并定义标量约化方式。",
+    },
+    {
+      keyword: "GROUP1 · GROUP2",
+      actions: "DISTANCE",
+      zhActions: "DISTANCE",
+      description: "Explicit, nonempty center subsets for within-group or cross-group pairs.",
+      zhDescription: "明确且非空的中心子集，用于构建组内或跨组配对。",
+    },
+    {
+      keyword: "SELECT · AXIS · ORIGIN",
+      actions: "POSITION",
+      zhActions: "POSITION",
+      description: "Choose defect hosts and the fixed Cartesian reference.",
+      zhDescription: "选择缺陷载体和固定的笛卡尔参考。",
+    },
+    {
+      keyword: "SIGN · ABSOLUTE · NORMALIZE · TOLERANCE",
+      actions: "POSITION",
+      zhActions: "POSITION",
+      description: "Control defect sign, spatial magnitude, normalization, and fail-closed threshold.",
+      zhDescription: "控制缺陷正负、空间位移形式、归一化及失效关闭阈值。",
+    },
+    {
+      keyword: "NOPBC · SERIAL",
+      actions: "All",
+      zhActions: "全部",
+      description: "Disable minimum-image distances or repeat work per MPI rank for debugging only.",
+      zhDescription: "关闭最小镜像距离；或仅为调试在各 MPI rank 重复计算。",
+    },
+  ],
+  minimalExample: `LOAD FILE=./ReactiveVoronoi.so
+
+UNITS LENGTH=A
+WaterO: GROUP ATOMS=1-4
+WaterH: GROUP ATOMS=5-12
+
+ionization: VORONOI_COORDINATION ...
+  CENTERS=WaterO ASSIGNED=WaterH KAPPA=5 REFERENCE=2 POWER=2
+  ...
+ion_distance: VORONOI_DISTANCE ...
+  CENTERS=WaterO ASSIGNED=WaterH KAPPA=5 REFERENCE=2 GROUP1=WaterO
+  ...
+h3o_z: VORONOI_POSITION ...
+  CENTERS=WaterO ASSIGNED=WaterH KAPPA=5 REFERENCE=2
+  AXIS=Z ORIGIN=5 SIGN=POSITIVE ABSOLUTE
+  ...
+
+PRINT ARG=ionization,ion_distance,h3o_z FILE=COLVAR STRIDE=1
+DUMPDERIVATIVES ARG=ionization FILE=DERIVATIVES STRIDE=1`,
+  exampleText:
+    "This compact input monitors water autoionization, ion-pair separation, and positive-defect location. Atom numbers, KAPPA, ORIGIN, and every production setting are system-specific; begin from labeled structures and exact full-pair mode.",
+  zhExampleText:
+    "该最小输入同时监测水自解离活性、离子对分离和正缺陷位置。原子编号、KAPPA、ORIGIN 以及所有生产参数都依赖具体体系；应从带标注的结构和精确全配对模式开始。",
+  outputRows: [
+    {
+      state: "Neutral water",
+      zhState: "中性水",
+      expectation: "ionization approaches 0; position terms vanish as the selected defect disappears.",
+      zhExpectation: "ionization 接近 0；指定缺陷消失时，未归一化位置项趋近 0。",
+    },
+    {
+      state: "One H₃O⁺/OH⁻ pair",
+      zhState: "一对 H₃O⁺/OH⁻",
+      expectation: "For well-localized defects, total POWER=2 activity approaches 2; positive and negative branches each approach 1.",
+      zhExpectation: "缺陷充分局域时，POWER=2 总活性接近 2，正、负分支分别接近 1。",
+    },
+    {
+      state: "Proton transfer",
+      zhState: "质子转移过程",
+      expectation: "Intermediate soft values are expected; inspect continuity and derivatives, not only endpoints.",
+      zhExpectation: "中间态出现连续的软数值是正常现象；除端点外还需检查连续性与导数。",
+    },
+  ],
+  validation: [
+    {
+      text: "Check CENTERS, ASSIGNED, REFERENCE, selections, and vector order against a labeled structure.",
+      zhText: "依据带标注结构检查 CENTERS、ASSIGNED、REFERENCE、选择范围和向量顺序。",
+    },
+    {
+      text: "Verify Σᵢnᵢ = Nassigned and Σᵢqᵢ = Nassigned − Σᵢνᵢ on neutral and reactive frames.",
+      zhText: "在中性与反应帧验证 Σᵢnᵢ = Nassigned 和 Σᵢqᵢ = Nassigned − Σᵢνᵢ。",
+    },
+    {
+      text: "Compare analytical and numerical coordinate and box derivatives away from cusps and periodic branch cuts.",
+      zhText: "避开尖点和周期分支切面，对比解析与数值的坐标及盒子导数。",
+    },
+    {
+      text: "Test lattice translation and consistent atom-list reordering invariance.",
+      zhText: "检查晶格平移不变性，以及原子列表与配套向量同步重排后的不变性。",
+    },
+    {
+      text: "If NLIST is used, converge values and forces against exact mode before increasing NL_STRIDE.",
+      zhText: "若使用 NLIST，先以精确模式收敛数值和力，再增大 NL_STRIDE。",
+    },
+    {
+      text: "Compare serial and intended MPI/OpenMP execution, then run a short fixed-seed MD smoke test before biasing.",
+      zhText: "对比串行与预期 MPI/OpenMP 结果；施加偏置前进行短程固定随机种子 MD 冒烟测试。",
+    },
+  ],
+  performance: [
+    {
+      text: "Exact mode evaluates Ncenters × Nassigned pairs per step; for water this is 2Nwater².",
+      zhText: "精确模式每步计算 Ncenters × Nassigned 个配对；对水体系即 2Nwater²。",
+    },
+    {
+      text: "OpenMP and MPI reduce elapsed CPU time but do not change the quadratic exact-mode scaling.",
+      zhText: "OpenMP 与 MPI 可缩短 CPU 用时，但不会改变精确模式的二次复杂度。",
+    },
+    {
+      text: "The Actions run on CPUs even when the molecular-dynamics force model runs on a GPU; allocate and benchmark host CPU cores without oversubscription.",
+      zhText: "即使分子动力学力模型运行在 GPU 上，这些 Action 仍由 CPU 执行；应合理分配并实测主机 CPU 核数，避免过度订阅。",
+    },
+    {
+      text: "A converged NLIST reduces retained pairs for large systems, but it is an approximation and can introduce membership discontinuities.",
+      zhText: "对大体系，经过收敛验证的 NLIST 可减少保留配对，但它属于近似，并可能引入成员变化不连续。",
+    },
+  ],
+  limitations: [
+    {
+      text: "The implementation does not infer elements, molecules, water, or reactive sites; chemical selections are the user's model definition.",
+      zhText: "实现不会自动推断元素、分子、水或反应位点；化学选择本身就是用户的模型定义。",
+    },
+    {
+      text: "POWER=1 sign filters, ABSOLUTE positions, periodic branch cuts, and NLIST membership changes are not globally smooth bias coordinates.",
+      zhText: "POWER=1 符号筛选、ABSOLUTE 位置、周期分支切面及 NLIST 成员变化都不是全局平滑的偏置坐标。",
+    },
+    {
+      text: "ORIGIN is fixed: VORONOI_POSITION does not unwrap trajectories or locate a drifting interface, droplet, or pore.",
+      zhText: "ORIGIN 是固定坐标；VORONOI_POSITION 不负责轨迹展开，也不会自动定位漂移的界面、液滴或孔道。",
+    },
+    {
+      text: "NORMALIZE intentionally stops when its selected defect weight is below TOLERANCE instead of returning an unstable value.",
+      zhText: "当指定缺陷权重低于 TOLERANCE 时，NORMALIZE 会主动停止，而不是返回不稳定数值。",
+    },
+  ],
+  applications: [
+    {
+      title: "Intramolecular and Water Mediated Tautomerism of Solvated Glycine",
+      zhTitle: "Intramolecular and Water Mediated Tautomerism of Solvated Glycine",
+      year: "2024",
+      doi: "https://doi.org/10.1021/acs.jcim.4c00273",
+      code: "https://github.com/Zhang-pchao/GlycineTautomerism/tree/main/Voronoi_collective_variables",
+      description:
+        "Water–glycine and intramolecular defect-distance terms can now be written with explicit center groups instead of hard-coded atom-list positions.",
+      zhDescription:
+        "水-甘氨酸及分子内缺陷距离项现在可用明确的中心分组表达，无需硬编码原子列表位置。",
+    },
+    {
+      title: "Propensity of Water Self-Ions at Air(Oil)–Water Interfaces Revealed by Deep Potential Molecular Dynamics with Enhanced Sampling",
+      zhTitle: "Propensity of Water Self-Ions at Air(Oil)–Water Interfaces Revealed by Deep Potential Molecular Dynamics with Enhanced Sampling",
+      year: "2025",
+      doi: "https://doi.org/10.1021/acs.langmuir.4c05004",
+      code: "https://github.com/Zhang-pchao/OilWaterInterface/tree/main/Voronoi_CVs",
+      description:
+        "Positive and negative defects can be selected explicitly and resolved along a physical slab axis; legacy index observables remain only as paper-reproduction archives.",
+      zhDescription:
+        "可分别选择正、负缺陷并沿真实 slab 轴解析其位置；旧的原子序号观测量仅作为论文复现归档保留。",
+    },
+    {
+      title: "Solvent Effect on the Electrocatalytic Nitrogen Reduction Reaction: A Deep Potential Molecular Dynamics Simulation with Enhanced Sampling for the Case of the Ruthenium Single Atom Catalyst",
+      zhTitle: "Solvent Effect on the Electrocatalytic Nitrogen Reduction Reaction: A Deep Potential Molecular Dynamics Simulation with Enhanced Sampling for the Case of the Ruthenium Single Atom Catalyst",
+      year: "2026",
+      doi: "https://doi.org/10.1039/D5TA09029F",
+      code: "https://github.com/Zhang-pchao/research/tree/main/OPES-DPMD-NRR/Voronoi_collective_variables",
+      description:
+        "Water oxygen atoms and a reactive N site become explicit centers, so the chemistry can be changed through selections and references rather than a new C++ Action.",
+      zhDescription:
+        "将水氧和反应 N 位点明确设为中心后，可通过选择范围和参考占据数改变化学定义，无需另写 C++ Action。",
+    },
+  ],
+  references: [
+    {
+      authors: "Emanuele Grifoni, GiovanniMaria Piccini, and Michele Parrinello",
+      title: "Microscopic Description of Acid-Base Equilibrium",
+      details: "Proc. Natl. Acad. Sci. U. S. A. 2019, 116, 4054–4057",
+      doi: "https://doi.org/10.1073/pnas.1819771116",
+    },
+    {
+      authors: "Emanuele Grifoni, GiovanniMaria Piccini, and Michele Parrinello",
+      title: "Tautomeric Equilibrium in Condensed Phases",
+      details: "J. Chem. Theory Comput. 2020, 16, 6027–6031",
+      doi: "https://doi.org/10.1021/acs.jctc.0c00519",
+    },
+    {
+      authors: "Pengchao Zhang, Axel Tosello Gardini, Xuefei Xu, and Michele Parrinello",
+      title: "Intramolecular and Water Mediated Tautomerism of Solvated Glycine",
+      details: "J. Chem. Inf. Model. 2024, 64, 3599–3604",
+      doi: "https://doi.org/10.1021/acs.jcim.4c00273",
+    },
+    {
+      authors: "Pengchao Zhang and Xuefei Xu",
+      title: "Propensity of Water Self-Ions at Air(Oil)–Water Interfaces Revealed by Deep Potential Molecular Dynamics with Enhanced Sampling",
+      details: "Langmuir 2025, 41, 3675–3683",
+      doi: "https://doi.org/10.1021/acs.langmuir.4c05004",
+    },
+    {
+      authors: "Pengchao Zhang and Xuefei Xu",
+      title: "Modulation of Electric Field and Interface on Competitive Reaction Mechanisms",
+      details: "J. Chem. Theory Comput. 2025, 21, 6584–6593",
+      doi: "https://doi.org/10.1021/acs.jctc.5c00705",
+    },
+    {
+      authors: "Bowen Zhang, Pengchao Zhang, and Xuefei Xu",
+      title: "Solvent Effect on the Electrocatalytic Nitrogen Reduction Reaction: A Deep Potential Molecular Dynamics Simulation with Enhanced Sampling for the Case of the Ruthenium Single Atom Catalyst",
+      details: "J. Mater. Chem. A 2026, 14, 7109–7120",
+      doi: "https://doi.org/10.1039/D5TA09029F",
+    },
+  ],
+};
 
 export const technicalNotes = [
   {
