@@ -10,6 +10,10 @@ const distAssets = resolve(dist, "assets");
 await copyFile(resolve(dist, "index.html"), resolve(dist, "404.html"));
 await writeFile(resolve(dist, ".nojekyll"), "");
 
+const reactiveVoronoiRoute = resolve(dist, "code/reactive-voronoi");
+await mkdir(reactiveVoronoiRoute, { recursive: true });
+await copyFile(resolve(dist, "index.html"), resolve(reactiveVoronoiRoute, "index.html"));
+
 for (const file of await readdir(rootAssets)) {
   if (/^index-.*\.(css|js)$/.test(file)) {
     await rm(resolve(rootAssets, file));

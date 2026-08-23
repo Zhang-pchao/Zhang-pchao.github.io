@@ -92,7 +92,7 @@ export const reactiveVoronoiGuide = {
     "A general PLUMED implementation for proton-transfer systems whose donor, acceptor, or ionic identity changes during a trajectory. This guide starts from the shared soft assignment, then shows how to construct and interpret glycine tautomerism, bulk-water autoionization, and interfacial ion-location coordinates with the current API.",
   zhSummary:
     "面向质子供体、受体或离子身份随轨迹改变的反应体系。本指南从共用的平滑归属出发，依次说明如何使用当前 API 构建并判读甘氨酸互变异构、体相水自解离和界面离子位置集体变量。",
-  reviewedCommit: "2a14d86bb32f6a9d0735ef0f9111f6f375221770",
+  reviewedCommit: "df7b675695411a85cc0d95bc68d3b272f0f35fb4",
   links: [
     {
       label: "Source",
