@@ -10,8 +10,8 @@
     "convergence": {
       "type": "fixed-levels",
       "conv_accuracy": 0.9,
-      "level_f_lo": 0.01,
-      "level_f_hi": 1.0
+      "level_f_lo": 0.05,
+      "level_f_hi": 0.1
     },
     "max_numb_iter": 1,
     "configurations": [
@@ -27,7 +27,7 @@
           "type": "lmp-template",
           "lmp_template_fname": "config/template.lammps",
           "plm_template_fname": "config/template.plumed",
-          "revisions": {"V_NSTEPS": [2000], "V_TEMP": [300]},
+          "revisions": {"V_NSTEPS": [20000], "V_TEMP": [300]},
           "traj_freq": 10,
           "conf_idx": [0],
           "n_sample": 1
@@ -38,20 +38,27 @@
     "cv_filter": {
       "regions": [
         {
-          "name": "short_separation_segment",
+          "name": "transition_segment",
           "conditions": {
-            "separation": [0.2, 1.0],
-            "reaction_progress": [0.2, 2.0]
+            "separation": [1.0, 2.0],
+            "reaction_progress": [0.25, 1.5]
           }
         },
         {
-          "name": "long_separation_segment",
+          "name": "separated_segment",
           "conditions": {
-            "separation": [1.4, 2.0],
-            "reaction_progress": [0.2, 2.0]
+            "separation": [6.0, 8.0],
+            "reaction_progress": [1.0, 1.75]
           }
         }
       ],
+      "sampling": {
+        "mode": "grid",
+        "grid": {"reaction_progress": 10, "separation": 10},
+        "within_bin": "max_deviation",
+        "seed": 20260823,
+        "min_frame_gap": 0
+      },
       "time_alignment": {"start": 0.0, "step": 0.01, "atol": 1e-8}
     }
   }

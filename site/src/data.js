@@ -978,7 +978,7 @@ export const dpgen2CvFilterGuide = {
   title: "CV-Aware Candidate Selection in DPGEN2",
   zhTitle: "DPGEN2 中基于 PLUMED CV 的候选构型筛选",
   summary:
-    "An active-learning workflow that keeps the original model-deviation trust window, then restricts candidates to user-defined PLUMED collective-variable regions and spreads the final labeling budget across the selected CV space. The worked example follows a short water-autoionization trajectory and links directly to the Reactive Soft-Voronoi guide used to define the reaction coordinates.",
+    "An active-learning workflow that keeps the original model-deviation trust window, then restricts candidates to user-defined PLUMED collective-variable regions and spreads the final labeling budget across the selected CV space. The worked example follows a 20 ps water-autoionization trajectory and links directly to the Reactive Soft-Voronoi guide used to define the reaction coordinates.",
   zhSummary:
     "该主动学习流程保留原有的模型偏差可信区间，随后用用户定义的 PLUMED 集体变量区域筛选候选构型，并在指定 CV 空间内分配最终标注预算。完整示例采用短时间水自电离轨迹，并与定义反应坐标的 Reactive Soft-Voronoi 教程直接联动。",
   reviewedCommit: "26f9c7608f3ed6642ca855cf22ed528463c2b394",
@@ -1080,26 +1080,36 @@ dpgen2 submit input.json`,
   },
   "convergence": {
     "type": "fixed-levels",
-    "level_f_lo": 0.01,
-    "level_f_hi": 1.0
+    "level_f_lo": 0.05,
+    "level_f_hi": 0.10
   },
   "cv_filter": {
     "regions": [
       {
-        "name": "short_separation_segment",
+        "name": "transition_segment",
         "conditions": {
-          "separation": [0.2, 1.0],
-          "reaction_progress": [0.2, 2.0]
+          "separation": [1.0, 2.0],
+          "reaction_progress": [0.25, 1.50]
         }
       },
       {
-        "name": "long_separation_segment",
+        "name": "separated_segment",
         "conditions": {
-          "separation": [1.4, 2.0],
-          "reaction_progress": [0.2, 2.0]
+          "separation": [6.0, 8.0],
+          "reaction_progress": [1.0, 1.75]
         }
       }
     ],
+    "sampling": {
+      "mode": "grid",
+      "grid": {
+        "reaction_progress": 10,
+        "separation": 10
+      },
+      "within_bin": "max_deviation",
+      "seed": 20260823,
+      "min_frame_gap": 0
+    },
     "time_alignment": {
       "start": 0.0,
       "step": 0.01,
@@ -1183,8 +1193,8 @@ PRINT ARG=reaction_progress,separation STRIDE=10 FILE=COLVAR RESTART=NO`,
     },
     {
       mode: "grid",
-      use: "Explicit two-CV grid, optional region weights, reproducible seed, and minimum frame gap.",
-      zhUse: "显式指定二维 CV 网格，并可设置区域权重、可复现随机种子及最小帧间隔。",
+      use: "Explicit two-CV grid, optional region weights, reproducible seed, and minimum frame gap. With a nonzero gap, inspect regional counts and underfilled_quota rather than assuming the requested quota is filled.",
+      zhUse: "显式指定二维 CV 网格，并可设置区域权重、可复现随机种子及最小帧间隔。使用非零间隔时，应检查各区域数量与 underfilled_quota，不能默认总配额一定填满。",
     },
     {
       mode: "random",
@@ -1198,28 +1208,31 @@ PRINT ARG=reaction_progress,separation STRIDE=10 FILE=COLVAR RESTART=NO`,
     },
   ],
   waterCaseIntro:
-    "A bounded one-iteration smoke test reused four existing committee models and one model to drive a 2000-step PLUMED/LAMMPS trajectory. All 201 aligned frames passed the broad model-deviation trust window; only three entered the two target CV regions, and the inferred two-CV grid selected all three.",
+    "A bounded one-iteration smoke test reused four committee models and one model to drive a 20 ps PLUMED/LAMMPS trajectory. Of 2001 aligned frames, 723 passed the 0.05–0.10 eV Å⁻¹ model-deviation trust gate, 192 entered the two target CV regions, and an explicit 10 × 10 grid selected 40 frames with equal 20-frame region quotas. The table below shows the three highest-deviation selections from each region.",
   zhWaterCaseIntro:
-    "一次有界的一轮 smoke test 复用了四个已有委员会模型，并用其中一个模型驱动 2000 步 PLUMED/LAMMPS 轨迹。201 个对齐帧全部通过宽松的模型偏差可信区间，其中仅 3 帧进入两个目标 CV 区域，自动推断的二维网格最终选择了这 3 帧。",
+    "一次有界的一轮 smoke test 复用了四个委员会模型，并用其中一个模型驱动 20 ps 的 PLUMED/LAMMPS 轨迹。2001 个对齐帧中，723 帧通过 0.05–0.10 eV Å⁻¹ 的模型偏差可信区间，192 帧进入两个目标 CV 区域，显式 10 × 10 网格最终按两个区域各 20 帧的配额选择 40 帧。下表列出每个区域中模型偏差最高的 3 个入选帧。",
   metrics: [
-    { value: "201", label: "Aligned trust candidates", zhLabel: "对齐且通过模型偏差的候选帧" },
-    { value: "3", label: "CV-eligible frames", zhLabel: "满足 CV 区域的帧" },
-    { value: "3", label: "Selected frames", zhLabel: "最终选择帧" },
-    { value: "2", label: "Disjoint named regions", zhLabel: "不连续命名区域" },
+    { value: "2001", label: "Aligned trajectory frames", zhLabel: "对齐轨迹帧" },
+    { value: "723", label: "Trust-window candidates", zhLabel: "模型偏差可信区间候选帧" },
+    { value: "192", label: "CV-eligible frames", zhLabel: "满足 CV 区域的帧" },
+    { value: "40", label: "Grid-selected frames", zhLabel: "网格最终选择帧" },
   ],
   figure: "/assets/dpgen2-cv-filter/water-autoionization-selection.png",
   figureAlt:
-    "Scatter plot of water-autoionization reaction progress against ion-pair separation, with two CV regions and three selected frames highlighted.",
+    "Three-stage DPGEN2 candidate-selection figure showing the model-deviation trust gate, two water-autoionization CV regions, and the final grid-selected frames.",
   zhFigureAlt:
-    "水自电离反应进度与离子对距离散点图，标出两个 CV 区域及三个最终选择帧。",
+    "DPGEN2 三阶段候选筛选图，依次展示模型偏差可信区间、两个水自电离 CV 区域及最终网格选择帧。",
   figureCaption:
-    "Verified integration run 152876. Point color is maximum force model deviation; hatching distinguishes the two disjoint CV regions; stars mark frames 0, 163, and 164. The smoke test demonstrates workflow plumbing and provenance, not physical convergence.",
+    "Verified integration run 153664 at reviewed commit 26f9c760. The pipeline is 2001 trajectory frames → 723 trust candidates → 192 CV-eligible frames → 40 selected frames. The two regions receive equal 20-frame quotas; within each selected 10 × 10 grid cell, the frame with the largest force model deviation is retained. Offline gap checks selected 40/40/40/34 frames at 0/5/10/20-frame gaps; reversing region order produced identical frame IDs at every tested gap. This teacher-label smoke test demonstrates workflow plumbing and provenance, not first-principles labeling or physical convergence.",
   zhFigureCaption:
-    "来自已验证的集成测试 run 152876。点颜色表示最大模型力偏差，两种阴影区分不连续 CV 区域，星号标记第 0、163 和 164 帧。该 smoke test 只验证工作流联通与来源记录，不代表物理收敛。",
+    "来自已验证的集成测试 run 153664，对应核对 commit 26f9c760。筛选流程为 2001 个轨迹帧 → 723 个模型偏差候选帧 → 192 个满足 CV 区域的帧 → 40 个最终选择帧。两个区域各分配 20 帧；在 10 × 10 网格的每个入选单元中保留最大模型力偏差帧。离线间隔检查在 0/5/10/20 帧间隔下分别选择 40/40/40/34 帧；反转区域顺序后，各间隔下的入选帧 ID 均完全一致。该 teacher-label smoke test 只验证工作流联通与来源记录，不代表第一性原理标注或物理收敛。",
   selectedRows: [
-    { frame: "0", time: "0.00", progress: "1.105815", separation: "1.942283", deviation: "0.04961590", region: "long_separation_segment" },
-    { frame: "163", time: "1.63", progress: "0.900866", separation: "1.529703", deviation: "0.05331458", region: "long_separation_segment" },
-    { frame: "164", time: "1.64", progress: "0.479359", separation: "0.598038", deviation: "0.05883975", region: "short_separation_segment" },
+    { frame: "846", time: "8.46", progress: "0.788062", separation: "1.372506", deviation: "0.09676630", region: "transition_segment" },
+    { frame: "851", time: "8.51", progress: "1.083560", separation: "1.889583", deviation: "0.09152147", region: "transition_segment" },
+    { frame: "993", time: "9.93", progress: "1.220774", separation: "1.787615", deviation: "0.08296670", region: "transition_segment" },
+    { frame: "1399", time: "13.99", progress: "1.407387", separation: "7.588436", deviation: "0.07545070", region: "separated_segment" },
+    { frame: "1820", time: "18.20", progress: "1.237747", separation: "6.834163", deviation: "0.06811833", region: "separated_segment" },
+    { frame: "1468", time: "14.68", progress: "1.005526", separation: "6.772462", deviation: "0.06803741", region: "separated_segment" },
   ],
   auditIntro:
     "The selector writes machine-readable audit files beside the selected DeepMD dataset. These records are the first place to check whether a selection rule behaved as intended.",
@@ -1238,9 +1251,9 @@ PRINT ARG=reaction_progress,separation STRIDE=10 FILE=COLVAR RESTART=NO`,
     },
   ],
   auditCode: `traj_idx,frame_idx,time,max_devi_f,region_names,cell_or_bin,...
-0,0,0.00,0.04961590,long_separation_segment,...
-0,163,1.63,0.05331458,long_separation_segment,...
-0,164,1.64,0.05883975,short_separation_segment,...`,
+0,846,8.46,0.09676630,transition_segment,"transition_segment:reaction_progress=4,separation=3",...
+0,851,8.51,0.09152147,transition_segment,"transition_segment:reaction_progress=6,separation=8",...
+0,1399,13.99,0.07545070,separated_segment,"separated_segment:reaction_progress=5,separation=7",...`,
   reproducibilitySteps: [
     {
       text: "Clone Zhang-pchao/dpgen2 at branch plumed-cv-filter and install the checkout in editable mode with python -m pip install -e .",
