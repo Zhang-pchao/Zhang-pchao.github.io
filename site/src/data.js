@@ -92,7 +92,7 @@ export const reactiveVoronoiGuide = {
     "A general PLUMED implementation for proton-transfer systems whose donor, acceptor, or ionic identity changes during a trajectory. This guide starts from the shared soft assignment, then shows how to construct and interpret glycine tautomerism, bulk-water autoionization, and interfacial ion-location coordinates with the current API.",
   zhSummary:
     "面向质子供体、受体或离子身份随轨迹改变的反应体系。本指南从共用的平滑归属出发，依次说明如何使用当前 API 构建并判读甘氨酸互变异构、体相水自解离和界面离子位置集体变量。",
-  reviewedCommit: "c3e88b33515f58ea2e3360a22249adbc1c288195",
+  reviewedCommit: "2a14d86bb32f6a9d0735ef0f9111f6f375221770",
   links: [
     {
       label: "Source",
@@ -254,8 +254,10 @@ plumed mklib ReactiveVoronoi.cpp
       keyword: "NOPBC · SERIAL",
       actions: "All",
       zhActions: "全部",
-      description: "Disable minimum-image distances or repeat work per MPI rank for debugging only.",
-      zhDescription: "关闭最小镜像距离；或仅为调试在各 MPI rank 重复计算。",
+      description:
+        "NOPBC uses direct coordinate differences and therefore requires a consistent unwrapped image convention. SERIAL repeats work per MPI rank for debugging only.",
+      zhDescription:
+        "NOPBC 使用直接坐标差，因此要求输入坐标采用一致的展开镜像约定；SERIAL 仅用于调试，会在各 MPI rank 重复计算。",
     },
   ],
   referenceTitle: "Choosing REFERENCE from the baseline chemical state",
@@ -312,9 +314,9 @@ plumed mklib ReactiveVoronoi.cpp
   nlistTitle: "Choosing NL_CUTOFF, NL_SKIN, and NL_STRIDE",
   zhNlistTitle: "如何选择 NL_CUTOFF、NL_SKIN 与 NL_STRIDE",
   nlistText:
-    "Omitting NLIST uses the exact full-pair definition; there is no hidden default cutoff. With NLIST, NL_CUTOFF is the true CENTER–ASSIGNED evaluation cutoff in the active PLUMED length units, NL_STRIDE controls scheduled list rebuilds, and optional NL_SKIN adds a Verlet buffer to the candidate list when NL_STRIDE is greater than one. None of these distances is a bond cutoff or a transferable water constant.",
+    "Omitting NLIST uses the exact full-pair definition; there is no hidden default cutoff. With NLIST, NL_CUTOFF is the true CENTER–ASSIGNED evaluation cutoff in the active PLUMED length units, NL_STRIDE controls scheduled list rebuilds, and optional NL_SKIN adds a Verlet buffer to the candidate list when NL_STRIDE is greater than one. NLIST changes only assignment candidates; it never removes GROUP1/GROUP2 center-center reduction pairs. None of these distances is a bond cutoff or a transferable water constant.",
   zhNlistText:
-    "不写 NLIST 时使用精确的全配对定义，并不存在隐藏的默认截断距离。启用 NLIST 后，NL_CUTOFF 是当前 PLUMED 长度单位下真正参与求值的 CENTER–ASSIGNED 截断距离，NL_STRIDE 控制计划重建列表的步长；当 NL_STRIDE 大于 1 时，可选的 NL_SKIN 为候选列表增加 Verlet 缓冲。这些距离都不是成键截断，也不是可直接迁移的水体系常数。",
+    "不写 NLIST 时使用精确的全配对定义，并不存在隐藏的默认截断距离。启用 NLIST 后，NL_CUTOFF 是当前 PLUMED 长度单位下真正参与求值的 CENTER–ASSIGNED 截断距离，NL_STRIDE 控制计划重建列表的步长；当 NL_STRIDE 大于 1 时，可选的 NL_SKIN 为候选列表增加 Verlet 缓冲。NLIST 只改变归属候选项，不会删除 GROUP1/GROUP2 的中心间约化配对。这些距离都不是成键截断，也不是可直接迁移的水体系常数。",
   nlistEstimateText:
     "For an initial screening estimate, let d_min be the nearest-center distance and R=NL_CUTOFF. Requiring the relative score at the cutoff to fall below a chosen tolerance ε gives the relation below. Smaller KAPPA spreads assignment weight farther and therefore usually requires a larger R. This estimate does not replace a convergence test because several omitted centers and force derivatives can accumulate error.",
   zhNlistEstimateText:
@@ -347,10 +349,13 @@ plumed mklib ReactiveVoronoi.cpp
     },
   ],
   nlistExampleText:
-    "This input shows the validation sequence. The 2.4 Å cutoff and 0.6 Å skin were converged only for the tested water setup and are not defaults. Compare exact and trial values and derivatives first; retain only the accelerated Action in production after cutoff, skin, and stride have all passed validation.",
+    "This input shows the validation sequence, using the atom numbers of the downloadable two-water fixture below. The 2.4 Å cutoff and 0.6 Å skin were converged only for the tested water setup and are not defaults. Compare exact and trial values and derivatives first; retain only the accelerated Action in production after cutoff, skin, and stride have all passed validation.",
   zhNlistExampleText:
-    "下面的输入展示验证顺序。2.4 Å 截断与 0.6 Å skin 只在本次水体系中完成了收敛验证，并不是默认参数。应先比较 exact 与 trial 的数值和导数；只有截断、skin 与步长全部通过验证后，生产计算才只保留加速 Action。",
+    "下面的输入使用后文可下载两水构型的原子编号展示验证顺序。2.4 Å 截断与 0.6 Å skin 只在本次水体系中完成了收敛验证，并不是默认参数。应先比较 exact 与 trial 的数值和导数；只有截断、skin 与步长全部通过验证后，生产计算才只保留加速 Action。",
   nlistExample: `UNITS LENGTH=A
+
+WaterO: GROUP ATOMS=1,4
+WaterH: GROUP ATOMS=2,3,5,6
 
 # 1. Exact reference
 sa_exact: VORONOI_COORDINATION CENTERS=WaterO ASSIGNED=WaterH KAPPA=50 REFERENCE=2 POWER=2
@@ -359,7 +364,10 @@ sa_exact: VORONOI_COORDINATION CENTERS=WaterO ASSIGNED=WaterH KAPPA=50 REFERENCE
 sa_trial: VORONOI_COORDINATION CENTERS=WaterO ASSIGNED=WaterH KAPPA=50 REFERENCE=2 POWER=2 NLIST NL_CUTOFF=2.4 NL_STRIDE=1
 
 # 3. After validation, amortize rebuilds with a displacement-safe skin
-sa_fast: VORONOI_COORDINATION CENTERS=WaterO ASSIGNED=WaterH KAPPA=50 REFERENCE=2 POWER=2 NLIST NL_CUTOFF=2.4 NL_SKIN=0.6 NL_STRIDE=10`,
+sa_fast: VORONOI_COORDINATION CENTERS=WaterO ASSIGNED=WaterH KAPPA=50 REFERENCE=2 POWER=2 NLIST NL_CUTOFF=2.4 NL_SKIN=0.6 NL_STRIDE=10
+
+PRINT ARG=sa_exact,sa_trial,sa_fast FILE=COLVAR STRIDE=1
+DUMPDERIVATIVES ARG=sa_exact,sa_trial,sa_fast FILE=DERIVATIVES STRIDE=1`,
   minimalStructure: {
     filename: "two-water.xyz",
     href: "/assets/reactive-voronoi/examples/two-water.xyz",
