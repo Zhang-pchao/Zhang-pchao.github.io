@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 import {
   codeResources,
+  dpgen2CvFilterGuide,
   honors,
   outreachLinks,
   patents,
@@ -107,6 +108,8 @@ const COPY = {
       "/code": "Code | Pengchao Zhang",
       "/code/reactive-voronoi":
         "Reactive Soft-Voronoi CV Guide | Pengchao Zhang",
+      "/code/dpgen2-cv-filter":
+        "CV-Aware Candidate Selection in DPGEN2 | Pengchao Zhang",
       "/resources": "Resources | Pengchao Zhang",
       "/contact": "Contact | Pengchao Zhang",
     },
@@ -233,8 +236,8 @@ const COPY = {
     code: {
       title: "Code",
       intro:
-        "Research software and reproducible source archives. The generic Reactive Soft-Voronoi implementation is the maintained entry point for new systems; paper-specific C++ files remain available for reproducing published workflows.",
-      featured: "Primary Project",
+        "Research software and reproducible source archives. The maintained guides connect Reactive Soft-Voronoi coordinates to CV-aware active-learning selection in DPGEN2; paper-specific C++ files remain available for reproducing published workflows.",
+      featured: "Primary Projects",
       openGuide: "Open the complete guide",
       projectLinks: "Project links",
       archives: "Paper-specific Implementations and Application Examples",
@@ -339,6 +342,7 @@ const COPY = {
       "/notes": "研究札记 | 章鹏超",
       "/code": "代码 | 章鹏超",
       "/code/reactive-voronoi": "Reactive Soft-Voronoi CV 指南 | 章鹏超",
+      "/code/dpgen2-cv-filter": "DPGEN2 PLUMED CV 筛选指南 | 章鹏超",
       "/resources": "资源 | 章鹏超",
       "/contact": "联系 | 章鹏超",
     },
@@ -458,7 +462,7 @@ const COPY = {
     code: {
       title: "代码",
       intro:
-        "这里汇集科研软件与可复现源码归档。对新体系，通用 Reactive Soft-Voronoi 实现是持续维护的主要入口；论文专用 C++ 文件继续用于复现已发表工作。",
+        "这里汇集科研软件与可复现源码归档。持续维护的两份指南将 Reactive Soft-Voronoi 反应坐标与 DPGEN2 中基于 CV 的主动学习筛选连接起来；论文专用 C++ 文件继续用于复现已发表工作。",
       featured: "主要项目",
       openGuide: "打开完整指南",
       projectLinks: "项目链接",
@@ -1218,7 +1222,16 @@ function NotesPage({ copy, language }) {
 }
 
 function CodePage({ copy, language }) {
-  const guide = reactiveVoronoiGuide;
+  const featuredGuides = [
+    {
+      guide: reactiveVoronoiGuide,
+      path: "/code/reactive-voronoi",
+    },
+    {
+      guide: dpgen2CvFilterGuide,
+      path: "/code/dpgen2-cv-filter",
+    },
+  ];
 
   return (
     <main>
@@ -1228,18 +1241,22 @@ function CodePage({ copy, language }) {
 
         <section className="content-section first">
           <h2>{copy.code.featured}</h2>
-          <article className="featured-code-card">
-            <h2>{localized(guide, "Title", language)}</h2>
-            <p>{localized(guide, "Summary", language)}</p>
-            <div className="code-card-links">
-              <Link className="primary-link" to="/code/reactive-voronoi">
-                {copy.code.openGuide}
-              </Link>
-              <ExternalLink href={guide.links[0].href}>
-                {localized(guide.links[0], "Label", language)}
-              </ExternalLink>
-            </div>
-          </article>
+          <div className="featured-code-grid">
+            {featuredGuides.map(({ guide, path }) => (
+              <article className="featured-code-card" key={path}>
+                <h2>{localized(guide, "Title", language)}</h2>
+                <p>{localized(guide, "Summary", language)}</p>
+                <div className="code-card-links">
+                  <Link className="primary-link" to={path}>
+                    {copy.code.openGuide}
+                  </Link>
+                  <ExternalLink href={guide.links[0].href}>
+                    {localized(guide.links[0], "Label", language)}
+                  </ExternalLink>
+                </div>
+              </article>
+            ))}
+          </div>
         </section>
 
         <section className="content-section">
@@ -1770,6 +1787,233 @@ function ReactiveVoronoiPage({ copy, language }) {
   );
 }
 
+function Dpgen2CvFilterPage({ copy, language }) {
+  const guide = dpgen2CvFilterGuide;
+  const text = (en, zh) => (language === "zh" ? zh : en);
+
+  return (
+    <main>
+      <PageTitle>{localized(guide, "Title", language)}</PageTitle>
+      <div className="section-shell page-content guide-layout">
+        <aside className="guide-toc">
+          <Link to="/code">← {copy.code.backToIndex}</Link>
+          <h2>{copy.code.onThisPage}</h2>
+          <nav aria-label={copy.code.onThisPage}>
+            {guide.sections.map((section) => (
+              <a key={section.id} href={"#" + section.id}>
+                {localized(section, "Label", language)}
+              </a>
+            ))}
+          </nav>
+        </aside>
+
+        <div className="guide-body">
+          <section id="overview" className="guide-section first">
+            <h2>{text("Overview", "概览")}</h2>
+            <p className="guide-lead">{localized(guide, "Summary", language)}</p>
+            <div className="guide-link-panel" aria-label={copy.code.projectLinks}>
+              {guide.links.map((link) => (
+                <ExternalLink key={link.href} href={link.href}>
+                  {localized(link, "Label", language)}
+                </ExternalLink>
+              ))}
+            </div>
+            <p className="callout">
+              <strong>{text("Feature status", "功能状态")}.</strong>{" "}
+              {localized(guide, "Status", language)} {text("Reviewed commit", "核对 commit")}:{" "}
+              <code>{guide.reviewedCommit.slice(0, 7)}</code>.
+            </p>
+          </section>
+
+          <section id="logic" className="guide-section">
+            <h2>{text("Selection logic", "筛选逻辑")}</h2>
+            <p>{localized(guide, "PrincipleText", language)}</p>
+            <div className="pipeline-flow" aria-label={text("Selection pipeline", "筛选流程")}>
+              {guide.stages.map((stage) => (
+                <article className="pipeline-stage" key={stage.number}>
+                  <span>{stage.number}</span>
+                  <h3>{localized(stage, "Title", language)}</h3>
+                  <p>{localized(stage, "Text", language)}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+
+          <section id="configuration" className="guide-section">
+            <h2>{text("DPGEN2 configuration", "DPGEN2 配置")}</h2>
+            <p>{localized(guide, "ConfigIntro", language)}</p>
+            <pre className="large-code-block"><code>{guide.configCode}</code></pre>
+            <div className="table-scroll guide-table-gap">
+              <table className="guide-table keyword-table">
+                <thead>
+                  <tr>
+                    <th>{text("Key", "关键词")}</th>
+                    <th>{text("Meaning and rule", "含义与规则")}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {guide.configRows.map((row) => (
+                    <tr key={row.key}>
+                      <td><code>{row.key}</code></td>
+                      <td>{localized(row, "Meaning", language)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="plumed" className="guide-section">
+            <h2>{text("PLUMED reaction coordinates", "PLUMED 反应坐标")}</h2>
+            <p>{localized(guide, "PlumedIntro", language)}</p>
+            <div className="guide-crosslink">
+              <p>
+                {text(
+                  "Need the full CV definition, atom mapping, and validation workflow?",
+                  "需要完整的 CV 定义、原子映射与验证流程？",
+                )}
+              </p>
+              <Link className="primary-link" to="/code/reactive-voronoi">
+                {text("Open the Reactive Soft-Voronoi guide", "打开 Reactive Soft-Voronoi 指南")}
+              </Link>
+            </div>
+            <pre className="large-code-block"><code>{guide.plumedCode}</code></pre>
+            <ul className="guide-list">
+              {guide.plumedNotes.map((item) => (
+                <li key={item.text}>{localized(item, "Text", language)}</li>
+              ))}
+            </ul>
+          </section>
+
+          <section id="sampling" className="guide-section">
+            <h2>{text("Coverage and sampling policies", "覆盖与采样策略")}</h2>
+            <p>{localized(guide, "SamplingIntro", language)}</p>
+            <div className="table-scroll">
+              <table className="guide-table">
+                <thead>
+                  <tr>
+                    <th>{text("Mode", "模式")}</th>
+                    <th>{text("When and how it selects", "适用场景与选择方式")}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {guide.samplingModes.map((mode) => (
+                    <tr key={mode.mode}>
+                      <td><code>{mode.mode}</code></td>
+                      <td>{localized(mode, "Use", language)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="water-case" className="guide-section">
+            <h2>{text("Worked case: water autoionization", "实战案例：水自电离")}</h2>
+            <p>{localized(guide, "WaterCaseIntro", language)}</p>
+            <div className="guide-metric-grid">
+              {guide.metrics.map((metric) => (
+                <article className="guide-metric" key={metric.label}>
+                  <strong>{metric.value}</strong>
+                  <span>{localized(metric, "Label", language)}</span>
+                </article>
+              ))}
+            </div>
+            <figure className="cv-figure guide-evidence-figure">
+              <img
+                src={guide.figure}
+                alt={localized(guide, "FigureAlt", language)}
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>
+                <strong>{copy.code.provenance}.</strong>{" "}
+                {localized(guide, "FigureCaption", language)}
+              </figcaption>
+            </figure>
+            <div className="table-scroll guide-table-gap">
+              <table className="guide-table">
+                <thead>
+                  <tr>
+                    <th>{text("Frame", "帧")}</th>
+                    <th>{text("Time", "时间")}</th>
+                    <th>{text("Reaction progress", "反应进度")}</th>
+                    <th>{text("Separation (Å)", "距离 (Å)")}</th>
+                    <th>{text("Max force deviation", "最大模型力偏差")}</th>
+                    <th>{text("Region", "区域")}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {guide.selectedRows.map((row) => (
+                    <tr key={row.frame}>
+                      <td>{row.frame}</td>
+                      <td>{row.time}</td>
+                      <td>{row.progress}</td>
+                      <td>{row.separation}</td>
+                      <td>{row.deviation}</td>
+                      <td><code>{row.region}</code></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="audit" className="guide-section">
+            <h2>{text("Audit outputs and post-processing", "审计输出与后处理")}</h2>
+            <p>{localized(guide, "AuditIntro", language)}</p>
+            <div className="table-scroll">
+              <table className="guide-table">
+                <thead>
+                  <tr>
+                    <th>{text("File", "文件")}</th>
+                    <th>{text("Recorded evidence", "记录内容")}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {guide.auditFiles.map((item) => (
+                    <tr key={item.file}>
+                      <td><code>{item.file}</code></td>
+                      <td>{localized(item, "Content", language)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="tutorial-step">
+              <h3>{text("Selected-frame CSV excerpt", "选择帧 CSV 节选")}</h3>
+              <pre><code>{guide.auditCode}</code></pre>
+            </div>
+            <div className="guide-link-panel guide-downloads" aria-label={text("Example downloads", "示例下载")}>
+              {guide.exampleLinks.map((link) => (
+                <ExternalLink key={link.href} href={link.href}>
+                  {localized(link, "Label", language)}
+                </ExternalLink>
+              ))}
+            </div>
+          </section>
+
+          <section id="reproducibility" className="guide-section">
+            <h2>{text("Reproducibility and scientific limits", "复现步骤与科学边界")}</h2>
+            <pre className="compact-code-block"><code>{guide.installCode}</code></pre>
+            <ol className="guide-list">
+              {guide.reproducibilitySteps.map((item) => (
+                <li key={item.text}>{localized(item, "Text", language)}</li>
+              ))}
+            </ol>
+            <h3 className="subsection-heading">{text("Limits to keep explicit", "需要明确保留的边界")}</h3>
+            <ul className="guide-list">
+              {guide.limitations.map((item) => (
+                <li key={item.text}>{localized(item, "Text", language)}</li>
+              ))}
+            </ul>
+          </section>
+        </div>
+      </div>
+    </main>
+  );
+}
+
 function ResourcesPage({ copy, language }) {
   return (
     <main>
@@ -1930,6 +2174,10 @@ function AppLayout() {
         <Route
           path="/code/reactive-voronoi"
           element={<ReactiveVoronoiPage copy={copy} language={language} />}
+        />
+        <Route
+          path="/code/dpgen2-cv-filter"
+          element={<Dpgen2CvFilterPage copy={copy} language={language} />}
         />
         <Route
           path="/resources"

@@ -1,0 +1,15 @@
+# 58 waters with O,H,H atom ordering. Adapt atom selections for a new system.
+UNITS LENGTH=A
+LOAD FILE=/absolute/path/to/ReactiveVoronoi.so
+
+WaterO: GROUP ATOMS=1-172:3
+WaterH: GROUP ATOMS=2-173:3,3-174:3
+
+reaction_progress: VORONOI_COORDINATION CENTERS=WaterO ASSIGNED=WaterH KAPPA=5 REFERENCE=2 SELECT=WaterO POWER=2
+separation: VORONOI_DISTANCE CENTERS=WaterO ASSIGNED=WaterH KAPPA=8 REFERENCE=2 GROUP1=WaterO
+biased_separation: CUSTOM ARG=separation FUNC=log(x+0.03)*step(1.0-x)+(x-0.9704412)*step(x-1.0) PERIODIC=NO
+
+opes: OPES_METAD ARG=biased_separation,reaction_progress FILE=HILLS TEMP=300 PACE=100 BARRIER=75 STATE_WFILE=STATE STATE_WSTRIDE=500 STORE_STATES
+
+FLUSH STRIDE=100
+PRINT ARG=biased_separation,reaction_progress,separation,opes.* STRIDE=10 FILE=COLVAR RESTART=NO

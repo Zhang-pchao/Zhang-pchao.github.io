@@ -1,0 +1,34 @@
+variable        NSTEPS equal V_NSTEPS
+variable        TEMP equal V_TEMP
+variable        SEED equal 20260816
+
+units           metal
+boundary        p p p
+atom_style      atomic
+read_data       conf.lmp
+
+neighbor        1.0 bin
+neigh_modify    every 1 delay 0 check yes
+
+mass            1 1.008
+mass            2 12.011
+mass            3 15.999
+
+pair_style      deepmd
+pair_coeff      * *
+
+thermo_style    custom step time temp pe ke etotal press vol
+thermo          10
+thermo_modify   flush yes
+
+velocity        all create ${TEMP} ${SEED} mom yes rot yes dist gaussian
+fix             dpgen_plm
+fix             integrator all nve
+fix             thermostat all temp/csvr ${TEMP} ${TEMP} 0.040 ${SEED}
+
+dump            dpgen_dump
+dump_modify     dpgen_dump sort id
+
+timestep        0.001
+run             ${NSTEPS}
+write_data      final.data

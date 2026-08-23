@@ -1,0 +1,4 @@
+traj_idx,frame_idx,time,max_devi_f,region_names,cell_or_bin,sampling_mode,within_bin,seed,cv_reaction_progress,cv_separation
+0,0,0.0,0.0496159,long_separation_segment,"long_separation_segment:reaction_progress=5,separation=9",grid,max_deviation,0,1.105815,1.942283
+0,163,1.63,0.05331458,long_separation_segment,"long_separation_segment:reaction_progress=3,separation=2",grid,max_deviation,0,0.900866,1.529703
+0,164,1.64,0.05883975,short_separation_segment,"short_separation_segment:reaction_progress=1,separation=4",grid,max_deviation,0,0.479359,0.598038

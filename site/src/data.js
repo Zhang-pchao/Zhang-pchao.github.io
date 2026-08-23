@@ -974,6 +974,319 @@ opes: OPES_METAD ARG=oh_z,h3o_z TEMP=300 PACE=500 BARRIER=75`,
   ],
 };
 
+export const dpgen2CvFilterGuide = {
+  title: "CV-Aware Candidate Selection in DPGEN2",
+  zhTitle: "DPGEN2 中基于 PLUMED CV 的候选构型筛选",
+  summary:
+    "An active-learning workflow that keeps the original model-deviation trust window, then restricts candidates to user-defined PLUMED collective-variable regions and spreads the final labeling budget across the selected CV space. The worked example follows a short water-autoionization trajectory and links directly to the Reactive Soft-Voronoi guide used to define the reaction coordinates.",
+  zhSummary:
+    "该主动学习流程保留原有的模型偏差可信区间，随后用用户定义的 PLUMED 集体变量区域筛选候选构型，并在指定 CV 空间内分配最终标注预算。完整示例采用短时间水自电离轨迹，并与定义反应坐标的 Reactive Soft-Voronoi 教程直接联动。",
+  reviewedCommit: "26f9c7608f3ed6642ca855cf22ed528463c2b394",
+  installCode: `git clone --branch plumed-cv-filter https://github.com/Zhang-pchao/dpgen2.git
+cd dpgen2
+python -m pip install -e .
+
+# After adapting input.json and the templates:
+dpgen2 submit input.json`,
+  status:
+    "The implementation currently lives on the Zhang-pchao/dpgen2 branch plumed-cv-filter and is proposed upstream in deepmodeling/dpgen2 PR #372. Pin the branch or commit and check the PR before production use.",
+  zhStatus:
+    "当前实现位于 Zhang-pchao/dpgen2 的 plumed-cv-filter 分支，并已通过 deepmodeling/dpgen2 PR #372 向上游提交。生产使用前应固定分支或 commit，并检查 PR 的最新状态。",
+  sections: [
+    { id: "overview", label: "Overview", zhLabel: "概览" },
+    { id: "logic", label: "Selection logic", zhLabel: "筛选逻辑" },
+    { id: "configuration", label: "DPGEN2 configuration", zhLabel: "DPGEN2 配置" },
+    { id: "plumed", label: "PLUMED coordinates", zhLabel: "PLUMED 反应坐标" },
+    { id: "sampling", label: "Coverage policies", zhLabel: "覆盖策略" },
+    { id: "water-case", label: "Water case", zhLabel: "水自电离案例" },
+    { id: "audit", label: "Audit outputs", zhLabel: "审计输出" },
+    { id: "reproducibility", label: "Reproducibility", zhLabel: "复现与边界" },
+  ],
+  links: [
+    {
+      label: "Feature branch",
+      zhLabel: "功能分支",
+      href: "https://github.com/Zhang-pchao/dpgen2/tree/plumed-cv-filter",
+    },
+    {
+      label: "Selector source",
+      zhLabel: "筛选器源码",
+      href: "https://github.com/Zhang-pchao/dpgen2/blob/plumed-cv-filter/dpgen2/exploration/selector/plumed_cv_filter.py",
+    },
+    {
+      label: "Input documentation",
+      zhLabel: "输入参数文档",
+      href: "https://github.com/Zhang-pchao/dpgen2/blob/plumed-cv-filter/docs/input.md#plumed-cv-candidate-filtering",
+    },
+    {
+      label: "Focused tests",
+      zhLabel: "聚焦测试",
+      href: "https://github.com/Zhang-pchao/dpgen2/blob/plumed-cv-filter/tests/exploration/test_plumed_cv_filter.py",
+    },
+    {
+      label: "Upstream PR #372",
+      zhLabel: "上游 PR #372",
+      href: "https://github.com/deepmodeling/dpgen2/pull/372",
+    },
+    {
+      label: "Download example bundle",
+      zhLabel: "下载示例文件",
+      href: "https://github.com/Zhang-pchao/Zhang-pchao.github.io/tree/main/assets/dpgen2-cv-filter/examples",
+    },
+  ],
+  principleText:
+    "Model deviation and collective variables answer different questions. Model deviation estimates committee disagreement; a CV identifies the reaction space that matters for the scientific problem. Applying them in sequence prevents the CV window from admitting low-information frames and prevents the uncertainty gate from spending the entire labeling budget in a frequently visited, chemically uninteresting basin.",
+  zhPrincipleText:
+    "模型偏差与集体变量回答的是两个不同问题：模型偏差衡量委员会模型之间的分歧，CV 则定义当前科学问题所关注的反应空间。按顺序组合二者，既避免 CV 区间纳入信息量过低的构型，也避免不确定性筛选把全部标注预算消耗在高频访问但化学意义有限的势阱中。",
+  stages: [
+    {
+      number: "01",
+      title: "Model-deviation trust window",
+      zhTitle: "模型偏差可信区间",
+      text: "Retain frames whose maximum force model deviation lies between level_f_lo and level_f_hi.",
+      zhText: "保留最大模型力偏差位于 level_f_lo 与 level_f_hi 之间的构型。",
+    },
+    {
+      number: "02",
+      title: "Named CV regions",
+      zhTitle: "命名 CV 区域",
+      text: "Conditions inside one region are ANDed; regions are ORed. Bounds are lower-inclusive and upper-exclusive.",
+      zhText: "同一区域内的条件取交集，不同区域之间取并集；区间下界包含、上界不包含。",
+    },
+    {
+      number: "03",
+      title: "CV-space coverage",
+      zhTitle: "CV 空间覆盖",
+      text: "Spread a finite quota across one-dimensional bins or a two-dimensional grid instead of following trajectory density.",
+      zhText: "将有限候选配额分散到一维分箱或二维网格，而不是跟随轨迹自身的高密度分布。",
+    },
+    {
+      number: "04",
+      title: "Candidate dataset and audit",
+      zhTitle: "候选数据集与审计记录",
+      text: "Write selected configurations together with frame, time, CV, model-deviation, region, and bin or cell provenance.",
+      zhText: "输出候选构型，并同步记录帧号、时间、CV、模型偏差、所属区域及分箱或网格来源。",
+    },
+  ],
+  configIntro:
+    "The CV field names are not hard-coded chemistry labels. Every key in conditions must exactly match a field in the PLUMED #! FIELDS header. Keep one condition for a one-CV filter; add more conditions for an AND constraint; use several named regions for disjoint intervals or reaction classes.",
+  zhConfigIntro:
+    "CV 名称不是针对某类反应硬编码的关键词。conditions 中的每个键必须与 PLUMED #! FIELDS 表头完全一致。只保留一个 condition 即为单 CV 筛选；在同一区域增加条件表示交集；使用多个命名区域可表达不连续区间或不同反应类别。",
+  configCode: `"explore": {
+  "type": "lmp",
+  "config": {
+    "command": "lmp",
+    "plm_output_file": "COLVAR"
+  },
+  "convergence": {
+    "type": "fixed-levels",
+    "level_f_lo": 0.01,
+    "level_f_hi": 1.0
+  },
+  "cv_filter": {
+    "regions": [
+      {
+        "name": "short_separation_segment",
+        "conditions": {
+          "separation": [0.2, 1.0],
+          "reaction_progress": [0.2, 2.0]
+        }
+      },
+      {
+        "name": "long_separation_segment",
+        "conditions": {
+          "separation": [1.4, 2.0],
+          "reaction_progress": [0.2, 2.0]
+        }
+      }
+    ],
+    "time_alignment": {
+      "start": 0.0,
+      "step": 0.01,
+      "atol": 1e-8
+    }
+  }
+}`,
+  configRows: [
+    {
+      key: "plm_output_file",
+      meaning: "File written by PLUMED PRINT and collected from every LAMMPS exploration task.",
+      zhMeaning: "由 PLUMED PRINT 写出，并从每个 LAMMPS 探索任务收集的文件。",
+    },
+    {
+      key: "regions[].name",
+      meaning: "Stable label recorded in CSV/JSON audits; use it to distinguish reaction classes or disjoint windows.",
+      zhMeaning: "写入 CSV/JSON 审计文件的稳定标签，用于区分反应类别或不连续区间。",
+    },
+    {
+      key: "regions[].conditions",
+      meaning: "Exact COLVAR field names mapped to [lower, upper) intervals; conditions in one region are ANDed.",
+      zhMeaning: "将 COLVAR 精确字段名映射到 [lower, upper) 区间；同一区域内条件取交集。",
+    },
+    {
+      key: "sampling",
+      meaning: "Optional explicit random, uniform, grid, or report policy. Omit it for inferred one- or two-CV coverage.",
+      zhMeaning: "可选的 random、uniform、grid 或 report 策略；省略时自动推断一维或二维覆盖。",
+    },
+    {
+      key: "time_alignment",
+      meaning: "Fail-closed check that COLVAR time equals start + frame × step within atol.",
+      zhMeaning: "以失败关闭方式核对 COLVAR 时间是否满足 start + frame × step，误差由 atol 控制。",
+    },
+  ],
+  plumedIntro:
+    "The water example uses the Reactive Soft-Voronoi actions to describe ion formation and OH⁻/H₃O⁺ separation without fixing the identity of a particular oxygen. The PRINT labels reaction_progress and separation become the DPGEN2 condition keys.",
+  zhPlumedIntro:
+    "水体系示例使用 Reactive Soft-Voronoi Action 描述离子生成以及 OH⁻/H₃O⁺ 分离，不预先固定某个氧原子的离子身份。PRINT 中的 reaction_progress 与 separation 标签直接成为 DPGEN2 的 condition 键。",
+  plumedCode: `UNITS LENGTH=A
+LOAD FILE=/absolute/path/to/ReactiveVoronoi.so
+
+WaterO: GROUP ATOMS=1-172:3
+WaterH: GROUP ATOMS=2-173:3,3-174:3
+
+reaction_progress: VORONOI_COORDINATION ...
+separation: VORONOI_DISTANCE ...
+
+PRINT ARG=reaction_progress,separation STRIDE=10 FILE=COLVAR RESTART=NO`,
+  plumedNotes: [
+    {
+      text: "Match PRINT STRIDE to the DPGEN2 trajectory frequency so every trajectory frame has one COLVAR row.",
+      zhText: "使 PRINT STRIDE 与 DPGEN2 轨迹输出频率一致，保证每个轨迹帧对应一行 COLVAR。",
+    },
+    {
+      text: "The condition key follows the label before the colon and is independent of PRINT column order.",
+      zhText: "condition 键来自冒号前的 PLUMED 标签，与 PRINT 中的列顺序无关。",
+    },
+    {
+      text: "Region bounds use the units written to COLVAR. This example explicitly uses angstroms through UNITS LENGTH=A.",
+      zhText: "区域边界采用 COLVAR 实际写出的单位；本例通过 UNITS LENGTH=A 明确使用 Å。",
+    },
+    {
+      text: "Compile a custom Action with the same PLUMED installation used by LAMMPS, then load the resulting shared library with LOAD.",
+      zhText: "自定义 Action 应使用与 LAMMPS 相同的 PLUMED 安装编译，再通过 LOAD 载入共享库。",
+    },
+  ],
+  samplingIntro:
+    "Uniform CV coverage is the default because random frame selection reproduces the trajectory density and may over-sample a single basin. Explicit policies remain available when density-weighted sampling or the original report behavior is desired.",
+  zhSamplingIntro:
+    "默认采用均匀 CV 覆盖，因为随机按帧抽取会复现轨迹密度，容易在单个势阱中重复取样。当确实需要密度加权抽样或原始 report 行为时，仍可显式选择对应策略。",
+  samplingModes: [
+    {
+      mode: "default",
+      use: "One shared CV → 10 bins; two shared CVs → 10 × 10 grid. Pick the largest force deviation in each populated bin or cell.",
+      zhUse: "一个公共 CV → 10 个分箱；两个公共 CV → 10 × 10 网格；每个非空分箱或网格内优先取最大力偏差。",
+    },
+    {
+      mode: "uniform",
+      use: "Explicit one-CV field and bin count, with random or maximum-deviation selection inside each bin.",
+      zhUse: "显式指定一维 CV 字段和分箱数，并在每个分箱内随机或按最大模型偏差选择。",
+    },
+    {
+      mode: "grid",
+      use: "Explicit two-CV grid, optional region weights, reproducible seed, and minimum frame gap.",
+      zhUse: "显式指定二维 CV 网格，并可设置区域权重、可复现随机种子及最小帧间隔。",
+    },
+    {
+      mode: "random",
+      use: "Randomly sample CV-eligible candidate frames. Reproducible with a seed, but follows trajectory density.",
+      zhUse: "从满足 CV 条件的候选帧中随机抽取；可用 seed 复现，但会跟随轨迹密度。",
+    },
+    {
+      mode: "report",
+      use: "Retain the original convergence report's maximum-deviation or random candidate policy after CV filtering.",
+      zhUse: "在 CV 筛选后继续使用原 convergence report 的最大偏差或随机候选策略。",
+    },
+  ],
+  waterCaseIntro:
+    "A bounded one-iteration smoke test reused four existing committee models and one model to drive a 2000-step PLUMED/LAMMPS trajectory. All 201 aligned frames passed the broad model-deviation trust window; only three entered the two target CV regions, and the inferred two-CV grid selected all three.",
+  zhWaterCaseIntro:
+    "一次有界的一轮 smoke test 复用了四个已有委员会模型，并用其中一个模型驱动 2000 步 PLUMED/LAMMPS 轨迹。201 个对齐帧全部通过宽松的模型偏差可信区间，其中仅 3 帧进入两个目标 CV 区域，自动推断的二维网格最终选择了这 3 帧。",
+  metrics: [
+    { value: "201", label: "Aligned trust candidates", zhLabel: "对齐且通过模型偏差的候选帧" },
+    { value: "3", label: "CV-eligible frames", zhLabel: "满足 CV 区域的帧" },
+    { value: "3", label: "Selected frames", zhLabel: "最终选择帧" },
+    { value: "2", label: "Disjoint named regions", zhLabel: "不连续命名区域" },
+  ],
+  figure: "/assets/dpgen2-cv-filter/water-autoionization-selection.png",
+  figureAlt:
+    "Scatter plot of water-autoionization reaction progress against ion-pair separation, with two CV regions and three selected frames highlighted.",
+  zhFigureAlt:
+    "水自电离反应进度与离子对距离散点图，标出两个 CV 区域及三个最终选择帧。",
+  figureCaption:
+    "Verified integration run 152876. Point color is maximum force model deviation; hatching distinguishes the two disjoint CV regions; stars mark frames 0, 163, and 164. The smoke test demonstrates workflow plumbing and provenance, not physical convergence.",
+  zhFigureCaption:
+    "来自已验证的集成测试 run 152876。点颜色表示最大模型力偏差，两种阴影区分不连续 CV 区域，星号标记第 0、163 和 164 帧。该 smoke test 只验证工作流联通与来源记录，不代表物理收敛。",
+  selectedRows: [
+    { frame: "0", time: "0.00", progress: "1.105815", separation: "1.942283", deviation: "0.04961590", region: "long_separation_segment" },
+    { frame: "163", time: "1.63", progress: "0.900866", separation: "1.529703", deviation: "0.05331458", region: "long_separation_segment" },
+    { frame: "164", time: "1.64", progress: "0.479359", separation: "0.598038", deviation: "0.05883975", region: "short_separation_segment" },
+  ],
+  auditIntro:
+    "The selector writes machine-readable audit files beside the selected DeepMD dataset. These records are the first place to check whether a selection rule behaved as intended.",
+  zhAuditIntro:
+    "筛选器会在最终 DeepMD 数据集旁写出机器可读的审计文件。判断筛选规则是否符合预期时，应优先检查这些记录。",
+  auditFiles: [
+    {
+      file: "cv_selection.csv",
+      content: "One row per selected frame: trajectory and frame index, PLUMED time, CV values, maximum force deviation, matched regions, and bin or cell provenance.",
+      zhContent: "每个选择帧一行：轨迹与帧号、PLUMED 时间、CV 数值、最大模型力偏差、命名区域及分箱或网格来源。",
+    },
+    {
+      file: "cv_selection_summary.json",
+      content: "Global counts, interval semantics, sampling policy, region populations, selected cells, frame-gap rejections, and underfilled quota.",
+      zhContent: "全局计数、区间语义、采样策略、各区域样本量、选择网格、帧间隔拒绝数及未填满配额。",
+    },
+  ],
+  auditCode: `traj_idx,frame_idx,time,max_devi_f,region_names,cell_or_bin,...
+0,0,0.00,0.04961590,long_separation_segment,...
+0,163,1.63,0.05331458,long_separation_segment,...
+0,164,1.64,0.05883975,short_separation_segment,...`,
+  reproducibilitySteps: [
+    {
+      text: "Clone Zhang-pchao/dpgen2 at branch plumed-cv-filter and install the checkout in editable mode with python -m pip install -e .",
+      zhText: "克隆 Zhang-pchao/dpgen2 的 plumed-cv-filter 分支，并用 python -m pip install -e . 进行开发者模式安装。",
+    },
+    {
+      text: "Prepare committee models, a structure, matching LAMMPS/PLUMED templates, and a COLVAR PRINT stride identical to traj_freq.",
+      zhText: "准备委员会模型、初始结构及相互匹配的 LAMMPS/PLUMED 模板，并使 COLVAR PRINT stride 与 traj_freq 一致。",
+    },
+    {
+      text: "Start with one short iteration, run dpgen2 submit input.json, and verify trajectory, model-deviation, and COLVAR frame counts before interpreting candidates.",
+      zhText: "先运行一轮短测试，执行 dpgen2 submit input.json，并在解释候选结果前核对轨迹、模型偏差与 COLVAR 帧数。",
+    },
+    {
+      text: "Inspect cv_selection.csv and cv_selection_summary.json, then visualize CV coverage before increasing MD length or labeling cost.",
+      zhText: "检查 cv_selection.csv 与 cv_selection_summary.json，并先可视化 CV 覆盖，再增加 MD 长度或标注成本。",
+    },
+  ],
+  limitations: [
+    {
+      text: "A CV filter focuses an existing uncertainty signal; it does not prove that the chosen CV is complete or that selected frames are chemically independent.",
+      zhText: "CV 筛选只是聚焦已有的不确定性信号；它不能证明所选 CV 完备，也不能证明候选构型在化学上相互独立。",
+    },
+    {
+      text: "The water run used a DeePMD teacher for a functional labeling smoke test. Replace it with a validated first-principles FP stage for scientific dataset generation.",
+      zhText: "水体系测试使用 DeePMD teacher 验证标注链路；正式生成科学数据集时应替换为经过验证的第一性原理 FP 阶段。",
+    },
+    {
+      text: "Time, units, field names, and frame counts fail closed. Do not bypass these checks to accept a partially aligned trajectory.",
+      zhText: "时间、单位、字段名与帧数均采用失败关闭检查；不要绕过这些检查去接受部分对齐的轨迹。",
+    },
+    {
+      text: "More than two coverage dimensions require an explicit sampling design; a dense high-dimensional grid is not inferred automatically.",
+      zhText: "超过二维的覆盖空间需要显式设计采样策略；程序不会自动推断稠密的高维网格。",
+    },
+  ],
+  exampleLinks: [
+    { label: "JSON fragment", zhLabel: "JSON 配置片段", href: "/assets/dpgen2-cv-filter/examples/explore.cv-filter.fragment.json" },
+    { label: "PLUMED template", zhLabel: "PLUMED 模板", href: "/assets/dpgen2-cv-filter/examples/template.plumed" },
+    { label: "LAMMPS template", zhLabel: "LAMMPS 模板", href: "/assets/dpgen2-cv-filter/examples/template.lammps" },
+    { label: "Audit CSV", zhLabel: "审计 CSV", href: "/assets/dpgen2-cv-filter/examples/cv_selection.example.csv" },
+    { label: "Audit summary", zhLabel: "审计汇总", href: "/assets/dpgen2-cv-filter/examples/cv_selection_summary.example.json" },
+    { label: "Plot script", zhLabel: "绘图脚本", href: "/assets/dpgen2-cv-filter/examples/plot_cv_selection.py" },
+  ],
+};
+
 export const technicalNotes = [
   {
     title: "Water self-ions at interfaces: from double layers to Voronoi CVs",

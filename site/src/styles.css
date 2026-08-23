@@ -579,6 +579,12 @@ h3 {
   background: #f8fafc;
 }
 
+.featured-code-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
 .featured-code-card h2 {
   margin-bottom: 8px;
 }
@@ -721,6 +727,103 @@ h3 {
   padding: 12px 14px;
   border: 1px solid var(--line);
   background: var(--soft);
+}
+
+.pipeline-flow {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.pipeline-stage {
+  position: relative;
+  padding: 17px 15px;
+  border: 1px solid #c8d3df;
+  border-top: 3px solid #47759f;
+  background: #f7f9fb;
+}
+
+.pipeline-stage > span {
+  display: block;
+  margin-bottom: 8px;
+  color: #47759f;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.pipeline-stage h3 {
+  margin-bottom: 7px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.94rem;
+}
+
+.pipeline-stage p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+
+.guide-crosslink {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 18px;
+  align-items: center;
+  justify-content: space-between;
+  margin: 18px 0;
+  padding: 14px 16px;
+  border-left: 3px solid #8575a1;
+  background: #f8f6fa;
+}
+
+.guide-crosslink p {
+  margin: 0;
+  color: #42404a;
+}
+
+.guide-crosslink .primary-link {
+  padding: 7px 10px;
+  border: 1px solid var(--link);
+  color: #fff;
+  background: var(--link);
+  font-size: 0.86rem;
+}
+
+.guide-metric-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.guide-metric {
+  padding: 14px;
+  border: 1px solid var(--line);
+  background: var(--soft);
+}
+
+.guide-metric strong {
+  display: block;
+  margin-bottom: 5px;
+  color: #173b65;
+  font-size: 1.5rem;
+}
+
+.guide-metric span {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.guide-evidence-figure img {
+  width: 100%;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.guide-table-gap,
+.guide-downloads {
+  margin-top: 20px;
 }
 
 .math-display {
@@ -1325,6 +1428,11 @@ pre {
 }
 
 @media (max-width: 900px) {
+  .pipeline-flow,
+  .guide-metric-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .guide-layout {
     display: block;
     width: var(--shell);
@@ -1402,6 +1510,10 @@ pre {
     grid-template-columns: 1fr;
   }
 
+  .featured-code-grid {
+    grid-template-columns: 1fr;
+  }
+
   .guide-toc {
     padding: 14px;
   }
@@ -1467,6 +1579,11 @@ pre {
 
   .featured-code-card {
     padding: 18px;
+  }
+
+  .pipeline-flow,
+  .guide-metric-grid {
+    grid-template-columns: 1fr;
   }
 
   .reference-list article {

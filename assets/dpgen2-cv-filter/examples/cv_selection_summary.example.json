@@ -1,0 +1,67 @@
+{
+  "cv_eligible_candidates": 3,
+  "cv_fields": [
+    "reaction_progress",
+    "separation"
+  ],
+  "interval_semantics": "lower-inclusive, upper-exclusive",
+  "min_frame_gap": 0,
+  "min_frame_gap_rejects": 0,
+  "per_region": {
+    "long_separation_segment": {
+      "eligible": 2,
+      "nonempty_cells": 2,
+      "selected": 2,
+      "selected_cells": 2
+    },
+    "short_separation_segment": {
+      "eligible": 1,
+      "nonempty_cells": 1,
+      "selected": 1,
+      "selected_cells": 1
+    }
+  },
+  "regions": [
+    {
+      "conditions": {
+        "reaction_progress": [
+          0.2,
+          2.0
+        ],
+        "separation": [
+          0.2,
+          1.0
+        ]
+      },
+      "name": "short_separation_segment",
+      "weight": 1.0
+    },
+    {
+      "conditions": {
+        "reaction_progress": [
+          0.2,
+          2.0
+        ],
+        "separation": [
+          1.4,
+          2.0
+        ]
+      },
+      "name": "long_separation_segment",
+      "weight": 1.0
+    }
+  ],
+  "requested": 3,
+  "sampling_inferred": true,
+  "sampling_mode": "grid",
+  "seed": 0,
+  "selected": 3,
+  "time_alignment": {
+    "atol": 1e-08,
+    "start": 0.0,
+    "step": 0.01
+  },
+  "trust_candidates": 201,
+  "underfilled_quota": 0,
+  "within_bin": "max_deviation"
+}
