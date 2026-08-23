@@ -92,7 +92,7 @@ export const reactiveVoronoiGuide = {
     "A general PLUMED implementation for proton-transfer systems whose donor, acceptor, or ionic identity changes during a trajectory. This guide starts from the shared soft assignment, then shows how to construct and interpret glycine tautomerism, bulk-water autoionization, and interfacial ion-location coordinates with the current API.",
   zhSummary:
     "面向质子供体、受体或离子身份随轨迹改变的反应体系。本指南从共用的平滑归属出发，依次说明如何使用当前 API 构建并判读甘氨酸互变异构、体相水自解离和界面离子位置集体变量。",
-  reviewedCommit: "2ddc114d62fd704681ed2e840c7edfa379248ae1",
+  reviewedCommit: "c3e88b33515f58ea2e3360a22249adbc1c288195",
   links: [
     {
       label: "Source",
@@ -100,9 +100,9 @@ export const reactiveVoronoiGuide = {
       href: "https://github.com/Zhang-pchao/plumed2/blob/performance/reactive-voronoi-scaling/src/colvar/ReactiveVoronoi.cpp",
     },
     {
-      label: "Manual overview",
-      zhLabel: "手册概览",
-      href: "https://github.com/Zhang-pchao/plumed2/blob/performance/reactive-voronoi-scaling/src/colvar/module.md#reactive-soft-voronoi-collective-variables",
+      label: "Action documentation",
+      zhLabel: "Action 文档",
+      href: "https://github.com/Zhang-pchao/plumed2/blob/performance/reactive-voronoi-scaling/src/colvar/ReactiveVoronoi.cpp#L739",
     },
   ],
   regtestHref:
@@ -130,20 +130,24 @@ export const reactiveVoronoiGuide = {
   zhPrincipleText:
     "对中心 i 和待归属原子 j，归一化的距离 softmax 给出归属权重；权重求和得到平滑占据数，再减去指定参考值得到配位缺陷。该缺陷可在 Grotthuss 质子转移中追踪不断变化的离子身份，无需指定某个永久的 H₃O⁺ 或 OH⁻ 分子。它是几何反应描述符，不等同于严格的电子电荷。",
   installText:
-    "The three Actions belong to PLUMED's default colvar module and need no external library. Before they are available in a released PLUMED version, compile the reviewed source as a runtime plugin for the shortest installation and testing path.",
+    "The three Actions belong to PLUMED's default colvar module. Once they are included in your PLUMED installation, use them directly without a LOAD line. Until they enter a released version, a runtime plugin remains an optional pre-release testing path.",
   zhInstallText:
-    "三个 Action 属于 PLUMED 默认的 colvar 模块，不依赖外部程序库。在正式 PLUMED 版本提供这些 Action 之前，建议先把已审阅源码编译为运行时插件，这是最短的安装与测试路径。",
-  runtimeInstall: `curl -L -o ReactiveVoronoi.cpp \\
-  https://raw.githubusercontent.com/Zhang-pchao/plumed2/2ddc114d62fd704681ed2e840c7edfa379248ae1/src/colvar/ReactiveVoronoi.cpp
-plumed mklib ReactiveVoronoi.cpp`,
+    "三个 Action 属于 PLUMED 默认的 colvar 模块。若当前 PLUMED 安装已经包含它们，可直接使用而无需 LOAD；在进入正式发布版前，运行时插件仅作为可选的预发布测试路径。",
+  runtimeInstall: `# Installed PLUMED: use the Actions directly; no LOAD line is needed.
+
+# Optional pre-release plugin test
+curl -L -o ReactiveVoronoi.cpp \\
+  https://raw.githubusercontent.com/Zhang-pchao/plumed2/performance/reactive-voronoi-scaling/src/colvar/ReactiveVoronoi.cpp
+plumed mklib ReactiveVoronoi.cpp
+# Add LOAD FILE=./ReactiveVoronoi.so only to plugin-test inputs.`,
   driverTest: `plumed driver \\
   --plumed plumed.dat \\
   --ixyz trajectory.xyz \\
   --box 3.0,3.0,3.0`,
   installCaution:
-    "Compile the plugin with the same PLUMED executable, compiler, and ABI used by the target simulation. Rebuild it after any of these change. The CVs do not require OPES, but the later bias examples need PLUMED's optional opes module. A successful driver run proves parsing and evaluation on the supplied frames; it does not yet validate forces, a bias, or a production setup.",
+    "For installed use, verify that the MD engine and plumed driver load the same PLUMED kernel. For the optional plugin fallback, compile with that executable, compiler, and ABI, and rebuild after any of them changes. The CVs do not require OPES, but the later bias examples need the optional opes module. A successful driver run proves parsing and evaluation on the supplied frames; it does not yet validate forces, a bias, or a production setup.",
   zhInstallCaution:
-    "插件必须使用目标模拟所调用的同一 PLUMED 可执行文件、编译器和 ABI 编译；其中任一项变化后都应重新构建。CV 本身不依赖 OPES，但后文偏置示例需要 PLUMED 的可选 opes 模块。driver 成功只说明输入能够解析并在给定构型上求值，尚不能证明力、偏置或生产参数正确。",
+    "正式安装使用时，应确认 MD 引擎与 plumed driver 加载同一个 PLUMED kernel。可选插件路径必须使用该可执行文件对应的编译器和 ABI 构建，任一项变化后都应重新编译。CV 本身不依赖 OPES，但后文偏置示例需要可选的 opes 模块。driver 成功只说明输入能够解析并在给定构型上求值，尚不能证明力、偏置或生产参数正确。",
   actions: [
     {
       name: "VORONOI_COORDINATION",
@@ -161,9 +165,9 @@ plumed mklib ReactiveVoronoi.cpp`,
       purpose: "How far apart are correlated coordination defects?",
       zhPurpose: "相关配位缺陷彼此分离多远？",
       description:
-        "Use one GROUP for unique pairs within a pool, such as H₃O⁺–OH⁻ separation among water O atoms. Use GROUP1 and GROUP2 for cross terms, such as water–glycine distances. The result naturally goes to zero when the defects disappear and is therefore not a normalized geometric distance.",
+        "Use GROUP1 alone for unique pairs within a pool, such as H₃O⁺–OH⁻ separation among water O atoms. Add GROUP2 for cross terms, such as water–glycine distances. The result naturally goes to zero when the defects disappear and is therefore not a normalized geometric distance.",
       zhDescription:
-        "使用一个 GROUP 计算同一候选池内的唯一配对，例如水 O 中 H₃O⁺–OH⁻ 的分离；使用 GROUP1 与 GROUP2 构建跨组项，例如水–甘氨酸距离。缺陷消失时输出自然趋近零，因此它不是归一化的几何距离。",
+        "只设置 GROUP1 可计算同一候选池内的唯一配对，例如水 O 中 H₃O⁺–OH⁻ 的分离；再添加 GROUP2 可构建跨组项，例如水–甘氨酸距离。缺陷消失时输出自然趋近零，因此它不是归一化的几何距离。",
     },
     {
       name: "VORONOI_POSITION",
@@ -386,9 +390,7 @@ H 5.900000 1.948000 4.101000`,
       },
     ],
   },
-  minimalExample: `LOAD FILE=./ReactiveVoronoi.so
-
-UNITS LENGTH=A
+  minimalExample: `UNITS LENGTH=A
 WaterO: GROUP ATOMS=1,4
 WaterH: GROUP ATOMS=2,3,5,6
 
@@ -509,8 +511,7 @@ O 8.155000 4.638000 6.756000`,
           },
         ],
       },
-      code: `LOAD FILE=./ReactiveVoronoi.so
-UNITS LENGTH=A
+      code: `UNITS LENGTH=A
 
 # Atom order matches glycine-two-water.xyz
 WaterO: GROUP ATOMS=1,4
@@ -612,8 +613,7 @@ opes: OPES_METAD ARG=sp,sd TEMP=300 PACE=500 BARRIER=35`,
           zhReason: "每个中性水 O 对应两个可转移 H；Σᵢνᵢ=116=Nassigned。",
         },
       ],
-      code: `LOAD FILE=./ReactiveVoronoi.so
-UNITS LENGTH=A
+      code: `UNITS LENGTH=A
 
 WaterO: GROUP ATOMS=1-172:3
 WaterH: GROUP ATOMS=2-173:3,3-174:3
@@ -701,8 +701,7 @@ opes: OPES_METAD ARG=st_log,sa TEMP=300 PACE=500 BARRIER=75`,
           zhReason: "与体相水相同的中性基准；Σᵢνᵢ=512=Nassigned。",
         },
       ],
-      code: `LOAD FILE=./ReactiveVoronoi.so
-UNITS LENGTH=A
+      code: `UNITS LENGTH=A
 
 WaterO: GROUP ATOMS=1-766:3
 WaterH: GROUP ATOMS=2-767:3,3-768:3
