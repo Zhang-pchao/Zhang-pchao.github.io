@@ -59,7 +59,7 @@
         "seed": 20260823,
         "min_frame_gap": 0
       },
-      "time_alignment": {"start": 0.0, "step": 0.01, "atol": 1e-8}
+      "time_alignment": {"start": 0.0, "step": 0.01, "atol": 1e-6}
     }
   }
 }

@@ -981,7 +981,7 @@ export const dpgen2CvFilterGuide = {
     "An active-learning workflow that keeps the original model-deviation trust window, then restricts candidates to user-defined PLUMED collective-variable regions and spreads the final labeling budget across the selected CV space. The worked example follows a 20 ps water-autoionization trajectory and links directly to the Reactive Soft-Voronoi guide used to define the reaction coordinates.",
   zhSummary:
     "该主动学习流程保留原有的模型偏差可信区间，随后用用户定义的 PLUMED 集体变量区域筛选候选构型，并在指定 CV 空间内分配最终标注预算。完整示例采用短时间水自电离轨迹，并与定义反应坐标的 Reactive Soft-Voronoi 教程直接联动。",
-  reviewedCommit: "26f9c7608f3ed6642ca855cf22ed528463c2b394",
+  reviewedCommit: "b528c1c51cbeaa8f5488f7cf6f14431c81e49351",
   installCode: `git clone --branch plumed-cv-filter https://github.com/Zhang-pchao/dpgen2.git
 cd dpgen2
 python -m pip install -e .
@@ -1113,15 +1113,15 @@ dpgen2 submit input.json`,
     "time_alignment": {
       "start": 0.0,
       "step": 0.01,
-      "atol": 1e-8
+      "atol": 1e-6
     }
   }
 }`,
   configRows: [
     {
       key: "plm_output_file",
-      meaning: "File written by PLUMED PRINT and collected from every LAMMPS exploration task.",
-      zhMeaning: "由 PLUMED PRINT 写出，并从每个 LAMMPS 探索任务收集的文件。",
+      meaning: "File written by PLUMED PRINT and collected from every LAMMPS exploration task. It defaults to COLVAR and must be a file name, not a path.",
+      zhMeaning: "由 PLUMED PRINT 写出，并从每个 LAMMPS 探索任务收集的文件；默认为 COLVAR，且必须是文件名而不是路径。",
     },
     {
       key: "regions[].name",
@@ -1140,8 +1140,8 @@ dpgen2 submit input.json`,
     },
     {
       key: "time_alignment",
-      meaning: "Fail-closed check that COLVAR time equals start + frame × step within atol.",
-      zhMeaning: "以失败关闭方式核对 COLVAR 时间是否满足 start + frame × step，误差由 atol 控制。",
+      meaning: "Required fail-closed check that COLVAR time equals start + frame × step; atol defaults to 1e-6.",
+      zhMeaning: "必填的失败关闭检查，核对 COLVAR 时间是否满足 start + frame × step；atol 默认为 1e-6。",
     },
   ],
   plumedIntro:
@@ -1160,8 +1160,8 @@ separation: VORONOI_DISTANCE ...
 PRINT ARG=reaction_progress,separation STRIDE=10 FILE=COLVAR RESTART=NO`,
   plumedNotes: [
     {
-      text: "Match PRINT STRIDE to the DPGEN2 trajectory frequency so every trajectory frame has one COLVAR row.",
-      zhText: "使 PRINT STRIDE 与 DPGEN2 轨迹输出频率一致，保证每个轨迹帧对应一行 COLVAR。",
+      text: "Match PRINT STRIDE to the DPGEN2 trajectory frequency, then set time_alignment.start and step so every COLVAR row is bound to the correct trajectory frame.",
+      zhText: "使 PRINT STRIDE 与 DPGEN2 轨迹输出频率一致，并设置 time_alignment.start 和 step，使每行 COLVAR 与正确的轨迹帧对齐。",
     },
     {
       text: "The condition key follows the label before the colon and is independent of PRINT column order.",
@@ -1177,9 +1177,9 @@ PRINT ARG=reaction_progress,separation STRIDE=10 FILE=COLVAR RESTART=NO`,
     },
   ],
   samplingIntro:
-    "Uniform CV coverage is the default because random frame selection reproduces the trajectory density and may over-sample a single basin. Explicit policies remain available when density-weighted sampling or the original report behavior is desired.",
+    "Uniform CV coverage is the default because random frame selection reproduces the trajectory density and may over-sample a single basin. If a region has fewer eligible frames than its nominal share, the remaining quota is redistributed to regions that can still supply candidates. Explicit policies remain available when density-weighted sampling or the original report behavior is desired.",
   zhSamplingIntro:
-    "默认采用均匀 CV 覆盖，因为随机按帧抽取会复现轨迹密度，容易在单个势阱中重复取样。当确实需要密度加权抽样或原始 report 行为时，仍可显式选择对应策略。",
+    "默认采用均匀 CV 覆盖，因为随机按帧抽取会复现轨迹密度，容易在单个势阱中重复取样。如果某个区域的合格帧少于名义配额，剩余名额会重新分配给仍有候选帧的区域。当确实需要密度加权抽样或原始 report 行为时，仍可显式选择对应策略。",
   samplingModes: [
     {
       mode: "default",
@@ -1260,8 +1260,8 @@ PRINT ARG=reaction_progress,separation STRIDE=10 FILE=COLVAR RESTART=NO`,
       zhText: "克隆 Zhang-pchao/dpgen2 的 plumed-cv-filter 分支，并用 python -m pip install -e . 进行开发者模式安装。",
     },
     {
-      text: "Prepare committee models, a structure, matching LAMMPS/PLUMED templates, and a COLVAR PRINT stride identical to traj_freq.",
-      zhText: "准备委员会模型、初始结构及相互匹配的 LAMMPS/PLUMED 模板，并使 COLVAR PRINT stride 与 traj_freq 一致。",
+      text: "Prepare committee models, a structure, matching LAMMPS/PLUMED templates, a COLVAR PRINT stride identical to traj_freq, and explicit time-alignment start and step values.",
+      zhText: "准备委员会模型、初始结构及相互匹配的 LAMMPS/PLUMED 模板，使 COLVAR PRINT stride 与 traj_freq 一致，并显式填写时间对齐的 start 和 step。",
     },
     {
       text: "Start with one short iteration, run dpgen2 submit input.json, and verify trajectory, model-deviation, and COLVAR frame counts before interpreting candidates.",
