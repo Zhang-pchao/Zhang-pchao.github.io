@@ -1817,6 +1817,17 @@ export const publications = [
   {
     year: "2026",
     journal: "J. Am. Chem. Soc.",
+    title: "Interfacial Electric Fields in Water Nanodroplets Are Weakly Dependent on Curvature and pH",
+    authors: "Gabriele Amante, Fortunata Panzera, Pengchao Zhang, Gabriele Centi, Jing Xie, Ali Hassanali, A. Marco Saitta, and Giuseppe Cassone",
+    details: "Journal of the American Chemical Society, published online October 8, 2026.",
+    zhDetails: "Journal of the American Chemical Society，2026 年 10 月 8 日在线发表。",
+    doi: "https://doi.org/10.1021/jacs.6c09391",
+    pdf: "https://pubs.acs.org/jacsat/article-pdf/doi/10.1021/jacs.6c09391/68792499/jacs.6c09391.pdf",
+    toc: "/assets/toc/jacs-2026-nanodroplet-electric-fields.png",
+  },
+  {
+    year: "2026",
+    journal: "J. Am. Chem. Soc.",
     title: "Ion-Modulated Ostwald Ripening Dynamics of Nitrogen Nanobubble Pairs",
     authors: "Xiangdang Guo, Pengchao Zhang*, Chao Sun*, and Xuefei Xu*",
     details:
