@@ -135,6 +135,7 @@ const COPY = {
       sharedCopy: "Shared copy",
       codeData: "Code & data",
       graphicalAbstract: "Graphical abstract for",
+      publishedOnline: "Online",
     },
     home: {
       name: "Pengchao Zhang",
@@ -188,6 +189,7 @@ const COPY = {
     publications: {
       title: "Publications",
       papers: "Papers",
+      dateNote: "Dates below each year indicate first online publication, which can precede the journal issue date.",
       patents: "Patents",
       paperPages: "Paper pages",
       granted: "granted",
@@ -368,6 +370,7 @@ const COPY = {
       sharedCopy: "共享全文",
       codeData: "代码与数据",
       graphicalAbstract: "图文摘要：",
+      publishedOnline: "在线发表",
     },
     home: {
       name: "章鹏超",
@@ -418,6 +421,7 @@ const COPY = {
     publications: {
       title: "论文",
       papers: "论文",
+      dateNote: "年份下方记录首次在线发表日期，可能早于期刊整期出版日期。",
       patents: "专利",
       paperPages: "论文分页",
       granted: "授权",
@@ -716,7 +720,17 @@ function PublicationEntry({ publication, copy, language = "en", compact = false 
         !compact && publication.toc ? "has-toc" : "",
       ].filter(Boolean).join(" ")}
     >
-      <div className="publication-year">{publication.year}</div>
+      <div className="publication-year">
+        {publication.year}
+        {!compact && publication.publishedOnline && (
+          <span className="publication-date">
+            <span>{copy.publicationLinks.publishedOnline}</span>
+            <time dateTime={publication.publishedOnline}>
+              {publication.publishedOnline}
+            </time>
+          </span>
+        )}
+      </div>
       <div className="publication-copy">
         <h2>{title}</h2>
         {!compact && (
@@ -930,6 +944,7 @@ function PublicationsPage({ copy, language }) {
       <div className="section-shell page-content">
         <section className="publication-section" id="papers">
           <h2>{copy.publications.papers}</h2>
+          <p className="section-note">{copy.publications.dateNote}</p>
           <div className="publication-stack full">
             {visiblePapers.map((publication) => (
               <PublicationEntry
